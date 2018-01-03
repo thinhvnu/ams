@@ -1,0 +1,6 @@
+#ignore node_modules
+/node_modules
+
+#ignore some config variable local
+.env
+/config/main.js

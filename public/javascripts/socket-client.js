@@ -1,7 +1,12 @@
-const socket = io('http://chat.thinhnv.net');
+const socket = io('http://192.168.1.154:6888');
 // const adminSocket = io('/admin');
 
 socket.on('connect', () => {
+
+    socket.on('hello_world', (data) => {
+        console.log(data)
+    });
+
     let data = localStorage.getItem('account');
 
     data = data ? JSON.parse(data) : null;

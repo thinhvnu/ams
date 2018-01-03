@@ -4,8 +4,13 @@ const Room = require('./../models/Room');
 
 const passport = require('./../middleware/passport');
 
+var count = 0;
+
 var ioEvents = function(io) {
     io.on('connection', function(socket){
+        count++;
+        console.log('count++', count);
+        socket.emit('hello_world', 'hello world');
         /**
          * Event only for admin identify: if user loged in allow chat else show popup login
          */
@@ -164,6 +169,8 @@ var ioEvents = function(io) {
          */
         socket.on('disconnect', () => {
             console.log('reason');
+            count--;
+            console.log('count--', count);
         });
     });
 }

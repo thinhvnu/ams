@@ -24,7 +24,7 @@ block content
 						tr
 							th.hidden-xs ID
 							th Role Name
-							th Ident
+							th Role Code
 							th Description
 							th.text-center Status
 							th.text-center
@@ -35,7 +35,7 @@ block content
 							tr
 								td.hidden-xs #{i}
 								td #{role.name}
-								td #{role.ident}
+								td #{role.roleCode}
 								td #{role.description}
 								td.text-center #{role.status ? 'Active' : 'Inactive'}
 								td(align='center')

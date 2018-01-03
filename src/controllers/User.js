@@ -15,7 +15,7 @@ const passport = require('./../middleware/passport');
  * Index page.
  */
 exports.getIndex = (req, res) => {
-  User.find({}).populate('roles').exec(function (err, users) {
+  User.find({}).exec(function (err, users) {
 		if (err) {
 			console.log('err', err)
 			return done(err);

@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     lastName: {type: String},
     address: {type: String},
 
-    roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+    roles: [{type: String, unique: true}],
     status: { type: Number }, // active, block, reported
     isOnline: { type: Boolean },
     rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]

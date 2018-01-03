@@ -68,7 +68,7 @@ block content
               label.control-label(for='role', style='display: block;text-align: left;') Role
               select.select-role.form-control(name='role', data-placeholder='Role', style='width: 100px;display: block;')
                 each role in roles
-                  option(value=role._id) #{role.name}
+                  option(value=role.roleCode) #{role.name}
             .col-lg-4
               label.control-label(for='status', style='display: block;text-align: left;') Status
               select.chosen-status.form-control(name='status', data-placeholder='Status', style='width: 100px;display: block;')

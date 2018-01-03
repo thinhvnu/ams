@@ -28,7 +28,7 @@ exports.postCreate = function (req, res) {
 	* Validate create category
 	*/ 
   req.checkBody('name', 'Role name không được để trống').notEmpty();
-  req.checkBody('ident', 'Ident không được để trống').notEmpty();
+  req.checkBody('roleCode', 'Mã không được để trống').notEmpty();
 
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
@@ -48,7 +48,7 @@ exports.postCreate = function (req, res) {
 	var newRole = new Role();
 	
 		newRole.name = req.body.name;
-		newRole.ident = req.body.ident.toUpperCase();
+		newRole.roleCode = req.body.roleCode.toUpperCase();
 		newRole.description = req.body.description;
 		newRole.status = req.body.status;
 		// save the user

@@ -26,6 +26,7 @@ block content
 							th UserName
 							th Email
 							th Gender
+							th Role Code
 							th.text-center Status
 							th.text-center
 								em.fa.fa-cog
@@ -37,6 +38,7 @@ block content
 								td #{user.userName}
 								td #{user.email}
 								td #{(user.gender === 1) ? 'Male' : ((user.gender === 2) ? 'Female' : 'Other')}
+								td #{user.roles}
 								td.text-center #{user.status ? 'Active' : 'Inactive'}
 								td(align='center')
 									a.btn.btn-default

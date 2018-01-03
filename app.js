@@ -22,7 +22,6 @@ var index = require('./src/routes/index');
 var user = require('./src/routes/user');
 var role = require('./src/routes/role');
 var room = require('./src/routes/room');
-var setting = require('./src/routes/setting');
 var apiAuth = require('./src/apis/routes/authenticate');
 var apiChat = require('./src/apis/routes/chat');
 
@@ -66,7 +65,6 @@ app.use('/', index);
 app.use('/user', user);
 app.use('/role', role);
 app.use('/room', room);
-app.use('/setting', setting);
 app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
 

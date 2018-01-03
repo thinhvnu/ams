@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
  */
 const roleSchema = new mongoose.Schema({
     name: {type: String},
-    ident: {type: String, unique: true},
+    roleCode: {type: String, unique: true},
     description: {type: String},
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},

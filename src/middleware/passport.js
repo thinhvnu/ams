@@ -10,7 +10,7 @@ exports.isAuthenticated = (req, res, next) => {
         next();
     } else {
         // check header or url parameters or post parameters for token
-        var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies['rtcs_token'];
+        var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies[process.env.TOKEN_KEY];
     
         /** Verify token => userId */
         this.jwtVerifyToken(token, user => {

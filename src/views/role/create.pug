@@ -31,11 +31,11 @@ block content
               if errors && errors.name
                 .help-block #{errors.name.msg}
           .form-group(class=errors && errors.name && 'has-error')
-            label.control-label.col-lg-4(for='ident') Identification
+            label.control-label.col-lg-4(for='roleCode') Role Code
             .col-lg-8
-              input#ident.form-control(type='text', name='ident', value=data && data.ident, placeholder='Identification')  
-              if errors && errors.ident
-                .help-block #{errors.ident.msg}
+              input#roleCode.form-control(type='text', name='roleCode', value=data && data.roleCode, placeholder='Role Code')  
+              if errors && errors.roleCode
+                .help-block #{errors.roleCode.msg}
           .form-group
             label.control-label.col-lg-4(for='description') Description
             .col-lg-8

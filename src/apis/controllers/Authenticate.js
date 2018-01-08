@@ -11,28 +11,30 @@ const Role = require('./../../models/Role');
 const passport = require('./../../middleware/passport');
 
 /**
- * POST /login
- * Sign in using email and password.
+ * POST username/password and server gen accesstoken using for login
+ * Sign in using username and password.
  */
-exports.postLogin = (req, res, next) => {
-    req.checkBody('email', 'Email is invalid').isEmail();
+exports.accessToken = (req, res, next) => {
+    req.checkBody('userName', 'UserName cannot be blank').notEmpty();
     req.checkBody('password', 'Password cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-  
+
     req.getValidationResult().then(function(errors) {
       if (!errors.isEmpty()) {
+        /**
+         * Case error login
+         */
         return res.json({
             success: false,
-            code: 1,
+            errorCode: 001,
             message: 'Email or password is empty'
         })
       } else {
         User.findOne({
-          email: req.body.email
+          userName: req.body.userName
         }, (err, user) => {
           if (err) throw err;
           if (!user) {
-            return res.json({ success: false, code: 2, message: 'Authentication failed. User not found.' });
+            return res.json({ success: false, errorCode: 002, message: 'Authentication failed. User not found.' });
           } else {
             // check if password matches
             user.comparePassword(req.body.password, (err, isMatch) => {
@@ -47,7 +49,9 @@ exports.postLogin = (req, res, next) => {
                 // res.cookie('rtcs_chat_token', token, { httpOnly: false});
                 return res.json({
                     success: true,
-                    token: token
+                    errorCode: 0,
+                    token: token,
+                    message: 'Get access token successfully'
                 });
               } else {
                 return res.json({ success: false, code: 3, message: 'Authentication failed. Wrong email or password.' });

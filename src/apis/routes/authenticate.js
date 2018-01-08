@@ -3,7 +3,7 @@ var router = express.Router();
 var authenticateController = require('./../controllers/Authenticate');
 
 /* GET users listing. */
-router.post('/login', authenticateController.postLogin);
+router.post('/access-token', authenticateController.accessToken);
 
 
 module.exports = router;

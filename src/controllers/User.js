@@ -129,7 +129,6 @@ exports.postCreate = (req, res, next) => {
   req.getValidationResult().then(function(errors) {
     if (!errors.isEmpty()) {
       var errors = errors.mapped();
-      console.log('errors', errors);
       Role.find({}, function(err, roles) {
         res.render('user/create', {
           title: 'Create Account',
@@ -140,7 +139,6 @@ exports.postCreate = (req, res, next) => {
       })
     } else {
       const user = new User();
-
       user.firstName = req.body.firstName;
       user.lastName = req.body.lastName;
       user.userName = req.body.userName;
@@ -159,13 +157,16 @@ exports.postCreate = (req, res, next) => {
           return res.redirect('/create');
         }
         user.save((err) => {
-          if (err) { return next(err); }
-          req.logIn(user, (err) => {
-            if (err) {
-              return next(err);
-            }
-            res.redirect('/');
-          });
+          if (err) { 
+            console.log('error create new user', err);
+            return next(err); 
+          }
+          /**
+           * Using json web token gen token for client
+           */
+          var token = passport.jwtCreateToken(user.id);
+          res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
+          res.redirect('/');
         });
       });
     }

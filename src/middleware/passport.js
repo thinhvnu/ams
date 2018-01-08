@@ -26,7 +26,6 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 exports.jwtCreateToken = (data) => {
-    console.log('data', data);
     let token = jwt.sign(data, process.env.JWT_SECRET);
 
     return token;

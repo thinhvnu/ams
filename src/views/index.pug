@@ -3,6 +3,9 @@ block stylesheets
 block content
 	h1= title
 	p Welcome to #{title} abc
+	input#message-input(type='text')
+	button#send-message Send
+	#message-container
 block scripts
 	script(src='/socket.io/socket.io.js')
 	script(src='/javascripts/socket-client.js')

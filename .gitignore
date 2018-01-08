@@ -1,6 +1,10 @@
 #ignore node_modules
 /node_modules
 
+#ignore media
+/media/images/slider/origin/*
+/media/images/slider/thumb/*
+
 #ignore some config variable local
 .env
 /config/main.js

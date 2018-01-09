@@ -17,11 +17,11 @@ sliderSchema.set('toJSON', {
 });
 // Get full image url with media config
 sliderSchema.virtual('thumbnail').get(function () {
-  return process.env.mediaUrl + '/images/slider/thumb/' + this.image;
+  return process.env.MEDIA_URL + '/images/slider/thumb/' + this.image;
 });
 
 sliderSchema.virtual('original').get(function () {
-  return process.env.mediaUrl + '/images/slider/thumb/' + this.image;
+  return process.env.MEDIA_URL + '/images/slider/origin/' + this.image;
 });
 
 sliderSchema.virtual('originalAlt').get(function () {

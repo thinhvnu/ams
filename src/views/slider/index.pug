@@ -38,7 +38,7 @@ block content
 								td.hidden-xs #{i}
 								td #{slider.name}
 								td
-									img.img-responsive(src='/media/images/slider/thumb/' + slider.image, style='width: 128px;')
+									img.img-responsive(src=process.env.MEDIA_URL + '/images/slider/thumb/' + slider.image, style='width: 128px;')
 								td #{slider.link}
 								td.text-center #{slider.status ? 'Public' : 'Draft'}
 								td(align='center')

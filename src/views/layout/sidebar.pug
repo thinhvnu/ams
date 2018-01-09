@@ -25,6 +25,20 @@
         i.fa.fa-dashboard
         span.link-title  Dashboard
     li.nav-divider
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='slider') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-picture-o
+        span.link-title  Ảnh slide
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='slider') && 'in')
+        li(class=(Array.isArray(current) && current[0]=='slider' && current[1]=='index') && 'current-route')
+          a(href='/slider')
+            i.fa.fa-list
+            |   Tất cả ảnh slide
+        li(class=(Array.isArray(current) && current[0]=='slider' && current[1]=='create') && 'current-route')
+          a(href='/slider/create')
+            i.fa.fa-plus
+            |   Thêm slide mới
     li.menu-dropdown(class=(Array.isArray(current) && current[0]=='room') && 'active')
       a(href='javascript:void(0);')
         i.fa.fa-comments-o

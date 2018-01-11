@@ -27,6 +27,7 @@ var media = require('./src/routes/media');
 var apiAuth = require('./src/apis/routes/authenticate');
 var apiChat = require('./src/apis/routes/chat');
 var apiSlider = require('./src/apis/routes/slider');
+var apiPost = require('./src/apis/routes/post');
 
 var app = express();
 var io = require('socket.io')();
@@ -77,6 +78,7 @@ app.use('/media', media);
 app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
 app.use('/api/slider', apiSlider);
+app.use('/api/post', apiPost);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

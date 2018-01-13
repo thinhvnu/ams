@@ -1,0 +1,27 @@
+.login-page {
+    width: 100%;
+    height: 100%;
+    display: table;
+    background: url(./../images/apartment_bg.png) center center / cover;
+}
+.login-page .box {
+    border-radius: 5px;
+    background: rgba(255,255,255, 1);
+}
+.login-page .box header {
+    border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.login-page .box h5 {
+    width: calc(100% - 88px);
+    text-align: center;
+}
+.login-page .login-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+.login-page .login-container {
+    max-width: 666px;
+    margin: auto;
+    float: none;
+}

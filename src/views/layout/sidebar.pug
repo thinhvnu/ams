@@ -46,25 +46,25 @@
         span.fa.arrow
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='zone-apartment') && 'in')
         li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='index') && 'current-route')
-          a(href='/zone-apartment')
+          a(href='/apartment-building-group')
             i.fa.fa-list
             |   Danh sách khu chung cư
         li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='create') && 'current-route')
-          a(href='/zone-apartment/create')
+          a(href='/apartment-building-group/create')
             i.fa.fa-plus
             |   Thêm mới
-    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='zone-apartment') && 'active')
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='apartment-building') && 'active')
       a(href='javascript:void(0);')
         i.fa.fa-building
         span.link-title  Quản lý tòa nhà
         span.fa.arrow
       ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='zone-apartment') && 'in')
-        li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='index') && 'current-route')
-          a(href='/zone-apartment')
+        li(class=(Array.isArray(current) && current[0]=='apartment-building' && current[1]=='index') && 'current-route')
+          a(href='/apartment-building')
             i.fa.fa-list
             |   Danh sách tòa nhà
-        li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='create') && 'current-route')
-          a(href='/zone-apartment/create')
+        li(class=(Array.isArray(current) && current[0]=='apartment-building' && current[1]=='create') && 'current-route')
+          a(href='/apartment-building/create')
             i.fa.fa-plus
             |   Thêm mới
     li.menu-dropdown(class=(Array.isArray(current) && current[0]=='zone-apartment') && 'active')

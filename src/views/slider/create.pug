@@ -17,8 +17,8 @@ block scripts
 			selector : 'slider-image',
 			uploadDir: '/media/images/slider/',
 			prefixFileName: 'slide',
-			thumbWidth: 900,
-			thumbHeight: 420,
+			thumbWidth: 640,
+			thumbHeight: 360,
 			toolbars: {
 				crop : true,
 				zoomIn: true,
@@ -29,9 +29,8 @@ block scripts
 			},
 			clientOptions: {
 				viewMode: 1,
-				cropBoxResizable: false,
-				minContainerWidth: 600,
-				minContainerHeight: 400,
+				dragMode: 'move',
+				cropBoxResizable: false
 			}
 		});
 		cropperEditor.init();

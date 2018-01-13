@@ -29,11 +29,13 @@ img {
     display: table;
 }
 .cropper-editor-popup-container {
+    position: relative;
     text-align: center;
     width: 100%;
+    height: calc(100% - 100px);
     left: 0;
     top: 0;
-    padding: 25px 8px;
+    padding: 15px;
     box-sizing: border-box;
     display: table-cell;
     vertical-align: middle;

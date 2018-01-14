@@ -67,7 +67,7 @@ exports.getMessages = (req, res, next) => {
             return res.json({
                 success: true,
                 errorCode: 0,
-                data: messages,
+                data: messages.reverse(),
                 message: 'Get message successfully'
             });
         }

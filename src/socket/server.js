@@ -1,6 +1,6 @@
 const User = require('./../models/User');
-const ClientAccount = require('./../models/ClientAccount');
 const Room = require('./../models/Room');
+const Message = require('./../models/Message');
 
 const passport = require('./../middleware/passport');
 
@@ -46,18 +46,32 @@ var ioEvents = function(io) {
          * Event send message
          */
         socket.on('send_message', (data) => {
-            
             console.log('data', data.sender.room);
-            /**
-             * Send message to sender
-             */
-            io.to(data.sender.room).emit('owner_message', data);
-
             /**
              * Send message to recipient
              */
             
             io.to(data.to.room).emit('message', data);
+
+            /**
+             * Save message to database
+             */
+            let newMessage = new Message();
+            newMessage.sender = data.sender.room;
+            newMessage.recipient = data.to.room;
+            newMessage.messageContent = data.messageContent;
+            newMessage.status = 1;
+
+            newMessage.save((err, newMessage) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    /**
+                     * Send message to sender in order to confirm message send successfully
+                     */
+                    io.to(data.sender.room).emit('owner_message', data);
+                }
+            });
         })
         /**
          * Event client disconnect

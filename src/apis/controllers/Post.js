@@ -37,7 +37,7 @@ exports.getIndex = function (req, res) {
 
 exports.postCreateNew = (req, res, next) => {
     req.checkBody('content', 'Nội dung không được để trống').notEmpty();
-	console.log('ttt', req.body);
+	
     var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
             return res.json({
@@ -49,8 +49,6 @@ exports.postCreateNew = (req, res, next) => {
 		} else {
 			var data = req.body;
 			var newPost = new Post();
-
-			console.log('data', data);
 			
 			newPost.title = data.title;
 			newPost.alias = data.alias;

@@ -9,9 +9,16 @@ exports.isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         next();
     } else {
+        console.log('tttt', req.headers['authorization']);
         // check header or url parameters or post parameters for token
-        var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['Authorization'] || req.cookies[process.env.TOKEN_KEY];
+        var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['Authorization'] || req.headers['authorization'] || req.cookies[process.env.TOKEN_KEY];
     
+        /**
+         * Remove bearer or basic
+         */
+        token = token.split(' ');
+        token = token[token.length - 1];
+
         /** Verify token => userId */
         this.jwtVerifyToken(token, user => {
             if (user) {

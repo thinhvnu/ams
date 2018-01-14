@@ -1,4 +1,4 @@
-const Post = require('../../models/Post');
+const Post = require('./../../models/Post');
 
 // Get all posts
 exports.getIndex = function (req, res) {
@@ -37,20 +37,20 @@ exports.getIndex = function (req, res) {
 
 exports.postCreateNew = (req, res, next) => {
     req.checkBody('content', 'Nội dung không được để trống').notEmpty();
-
+	console.log('ttt', req.body);
     var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
-			let resData = {
+            return res.json({
                 success: false,
                 errorCode: 010,
                 message: errors,
                 data: req.body
-            }
-
-            return res.json(resData);
+            });
 		} else {
 			var data = req.body;
 			var newPost = new Post();
+
+			console.log('data', data);
 			
 			newPost.title = data.title;
 			newPost.alias = data.alias;
@@ -59,21 +59,21 @@ exports.postCreateNew = (req, res, next) => {
 			newPost.content = data.content;
 			newPost.category = data.categoryId ? data.categoryId : null;
 			newPost.status = data.status;
-			newPost.isHot = data.isHot;
+			newPost.pinPost = data.pinPost;
 			newPost.save(function (err, newPost) {
 				if (err) {
-					res.json({
+					return res.json({
                         success: false,
                         errorCode: 010,
                         message: errors,
                         data: req.body
                     })
 				} else {
-					let resData = {
+					return res.json({
                         success: true,
                         errorCode: 0,
                         message: 'Đăng bài viết thành công'
-                    }
+                    });
 				}
 			})
 		}

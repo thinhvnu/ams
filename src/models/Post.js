@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
         metaKeyWords: {type: String}
     },
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
-    isHot: {type: Boolean},
+    pinPost: {type: Boolean},
     views: {type: Number},
     status: {type: Boolean},
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}

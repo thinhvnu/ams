@@ -6,12 +6,13 @@ const User = require('./../models/User');
  */
 exports.isAuthenticated = (req, res, next) => {
     if (req.session.user) {
+        console.log('verify successfully');
         res.locals.user = req.session.user;
         next();
     } else {
         // check header or url parameters or post parameters for token
         var token = req.query.token || req.headers['x-access-token'] || req.headers['Authorization'] || req.headers['authorization'] || req.cookies[process.env.TOKEN_KEY];
-    
+        
         /**
          * Remove bearer or basic
          */
@@ -19,10 +20,11 @@ exports.isAuthenticated = (req, res, next) => {
             token = token.split(' ');
             token = token[token.length - 1];
         }
-
+        console.log('token', token);
         /** Verify token => userId */
         this.jwtVerifyToken(token, user => {
             if (user) {
+                console.log('verify successfully');
                 req.session.user = user;
                 res.locals.user = user;
                 next();

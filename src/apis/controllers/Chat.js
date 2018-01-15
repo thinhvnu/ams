@@ -13,7 +13,7 @@ exports.getClients = (req, res, next) => {
 
         // cacheKey = cacheKey.toString();
 
-    client.get(cacheKey, (err, users) => {
+    client.get('clients_test123', (err, users) => {
         if (err) {
 			console.log('err', err);
 			throw err;
@@ -47,7 +47,7 @@ exports.getClients = (req, res, next) => {
                 /**
                  * Set redis cache data
                  */
-                client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
+                client.set('clients_test123', JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
             });
         }
     });

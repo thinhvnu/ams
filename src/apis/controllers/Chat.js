@@ -1,26 +1,51 @@
 const jwt = require('jsonwebtoken');
 const User = require('./../../models/User');
 const Message = require('./../../models/Message');
+const redis = require('redis');
+const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
 /**
  * GET /api/chat/clients
  */
 exports.getClients = (req, res, next) => {
-    let user = req.session.user;
-    console.log('user', user);
-    User.find({_id: { $ne: user._id }}, (err, users) => {
+    let user = req.session.user,
+        cacheKey = 'clients_' + user.id;
+
+
+    client.get(cacheKey, (err, users) => {
         if (err) {
-            return res.json({
-                success: false,
-                errorCode: 0004,
-                message: 'Error'
-            });
-        } else {
-            return res.json({
+			console.log('err', err);
+			throw err;
+        }
+        
+        if (users) {
+			return res.json({
                 success: true,
                 errorCode: 0,
-                data: users,
+                data: JSON.parse(users),
                 message: 'Get list clients successfully'
+            });
+		} else {
+            User.find({_id: { $ne: user._id }}, (err, users) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                        errorCode: 0004,
+                        message: 'Error'
+                    });
+                } else {
+                    /**
+                     * Set redis cache data
+                     */
+                    client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
+
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        data: users,
+                        message: 'Get list clients successfully'
+                    });
+                }
             });
         }
     });
@@ -38,7 +63,6 @@ exports.getMessages = (req, res, next) => {
         }
     }
 
-    console.log('pageSize', page, pageSize);
     Message.find({
         $or:[ {'recipient': req.params.roomId}, {'sender': req.params.roomId} ]
     }, {

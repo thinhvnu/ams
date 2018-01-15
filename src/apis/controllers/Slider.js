@@ -4,7 +4,6 @@ var client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
 // Get all active sliders
 exports.getHomeSlider = function (req, res) {
-	console.log('get home slider');
 	client.get('homeSliders', (err, sliders) => {
 		if (err) {
 			console.log('err', err);
@@ -40,7 +39,7 @@ exports.getHomeSlider = function (req, res) {
 				/**
 				 * Set redis cache data
 				 */
-				client.set('homeSliders', JSON.stringify(sliders), 'EX', 86400);
+				client.set('homeSliders', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
 			});
 		}
 	});

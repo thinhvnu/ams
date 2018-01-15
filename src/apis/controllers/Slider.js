@@ -38,7 +38,7 @@ exports.getHomeSlider = function (req, res) {
 				/**
 				 * Set redis cache data
 				 */
-				client.set('home_slidess', JSON.stringify(sliders));
+				client.set('home_slides', JSON.stringify(sliders));
 			});
 		}
 	});

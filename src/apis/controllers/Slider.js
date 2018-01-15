@@ -9,7 +9,7 @@ exports.getHomeSlider = function (req, res) {
 			console.log('err', err);
 			throw err;
 		}
-		if (sliders && false) {
+		if (sliders) {
 			return res.json({
 				success: true,
 				errorCode: 0,

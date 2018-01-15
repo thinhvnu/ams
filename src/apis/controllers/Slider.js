@@ -30,16 +30,16 @@ exports.getHomeSlider = function (req, res) {
 					return done(err);
 				}
 
-				res.json({
-					success: true,
-					errorCode: 0,
-					data: sliders
-				});
-
 				/**
 				 * Set redis cache data
 				 */
 				client.set('homeSliders', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
+				
+				return res.json({
+					success: true,
+					errorCode: 0,
+					data: sliders
+				});
 			});
 		}
 	});

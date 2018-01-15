@@ -9,7 +9,7 @@ exports.getHomeSlider = function (req, res) {
 			console.log('err', err);
 			throw err;
 		}
-		if (sliders) {
+		if (sliders && false) {
 			return res.json({
 				success: true,
 				errorCode: 0,
@@ -35,11 +35,10 @@ exports.getHomeSlider = function (req, res) {
 					errorCode: 0,
 					data: sliders
 				});
-
 				/**
 				 * Set redis cache data
 				 */
-				client.set('home_slides', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
+				client.set('home_slidess', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
 			});
 		}
 	});

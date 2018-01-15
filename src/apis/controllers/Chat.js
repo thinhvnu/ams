@@ -11,7 +11,7 @@ exports.getClients = (req, res, next) => {
     let user = req.session.user,
         cacheKey = 'clients_' + user.id;
 
-
+    console.log('cacheKey', cacheKey);
     client.get(cacheKey, (err, users) => {
         if (err) {
 			console.log('err', err);

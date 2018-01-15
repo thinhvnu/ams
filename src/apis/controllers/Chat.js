@@ -9,9 +9,9 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
  */
 exports.getClients = (req, res, next) => {
     let user = req.session.user,
-        cacheKey = 'clients_' + user.id;
-        
-        cacheKey = cacheKey.toString();
+        cacheKey = 'clients_test123';
+
+        // cacheKey = cacheKey.toString();
 
     client.get(cacheKey, (err, users) => {
         if (err) {

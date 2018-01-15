@@ -9,11 +9,9 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
  */
 exports.getClients = (req, res, next) => {
     let user = req.session.user,
-        cacheKey = 'clients_test123';
+        cacheKey = 'chat_clients_' + user.id;
 
-        // cacheKey = cacheKey.toString();
-
-    client.get('clients_test123', (err, users) => {
+    client.get(cacheKey, (err, users) => {
         if (err) {
 			console.log('err', err);
 			throw err;
@@ -47,7 +45,7 @@ exports.getClients = (req, res, next) => {
                 /**
                  * Set redis cache data
                  */
-                client.set('clients_test123', JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
+                client.set(cacheKey, JSON.stringify(users.toJSON()), 'EX', process.env.REDIS_CACHE_TIME);
             });
         }
     });

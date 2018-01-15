@@ -5,7 +5,7 @@ var chatController = require('./../controllers/Chat');
 /**
  * Passport
  */
-const passport = require('./../../middleware/passport');
+const passport = require('./../../middleware/apiPassport');
 
 /* GET users listing. */
 router.get('/clients', passport.isAuthenticated, chatController.getClients);

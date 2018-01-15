@@ -5,7 +5,7 @@ var sliderController = require('./../controllers/Slider');
 /**
  * API keys and Passport configuration.
  */
-const passport = require('./../../middleware/passport');
+const passport = require('./../../middleware/apiPassport');
 
 
 /* GET users listing. */

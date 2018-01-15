@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('./../models/User');
 
-const publicUrl = '/user/login';
 /**
  * Login Required middleware.
  */
@@ -27,7 +26,11 @@ exports.isAuthenticated = (req, res, next) => {
                 res.locals.user = user;
                 next();
             } else {
-                return res.redirect(publicUrl);
+                return res.json({
+                    success: false,
+                    errorCode: 401,
+                    message: 'Authenticate failed'
+                });
             }
         });
     }
@@ -60,4 +63,3 @@ exports.jwtVerifyToken = (token, cb) => {
         }
     });
 }
-

@@ -6,20 +6,17 @@ var client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 exports.getHomeSlider = function (req, res) {
 	console.log('get home slider');
 	client.get('homeSliders', (err, sliders) => {
-		console.log('testttt');
 		if (err) {
 			console.log('err', err);
 			throw err;
 		}
 		if (sliders) {
-			console.log('slider get from cached');
 			return res.json({
 				success: true,
 				errorCode: 0,
 				data: JSON.parse(sliders)
 			});
 		} else {
-			console.log('query database');
 			Slider.find({status: 1}, {
 				'_id': 0,
 				'name': 1,

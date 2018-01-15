@@ -12,7 +12,7 @@ exports.getClients = (req, res, next) => {
         cacheKey = 'clients_ttt';
 
     console.log('cacheKey', cacheKey);
-    client.get(cacheKey, (err, users) => {
+    client.get('clients_tttt', (err, users) => {
         console.log('user', users);
         console.log('JSONUSER', users);
         if (err) {
@@ -40,7 +40,7 @@ exports.getClients = (req, res, next) => {
                     /**
                      * Set redis cache data
                      */
-                    client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
+                    client.set('clients_tttt', JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
 
                     return res.json({
                         success: true,

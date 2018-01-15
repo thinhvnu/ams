@@ -13,6 +13,8 @@ exports.getClients = (req, res, next) => {
 
     console.log('cacheKey', cacheKey);
     client.get(cacheKey, (err, users) => {
+        console.log('user', users);
+        console.log('JSONUSER', users);
         if (err) {
 			console.log('err', err);
 			throw err;

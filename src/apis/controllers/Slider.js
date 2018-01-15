@@ -29,17 +29,17 @@ exports.getHomeSlider = function (req, res) {
 					console.log('err', err)
 					return done(err);
 				}
+				
+				res.json({
+					success: true,
+					errorCode: 0,
+					data: sliders
+				});
 
 				/**
 				 * Set redis cache data
 				 */
 				client.set('homeSliders', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
-				
-				return res.json({
-					success: true,
-					errorCode: 0,
-					data: sliders
-				});
 			});
 		}
 	});

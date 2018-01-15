@@ -36,19 +36,19 @@ exports.getClients = (req, res, next) => {
                         data: [],
                         message: 'Error'
                     });
-                } else {
-                    /**
-                     * Set redis cache data
-                     */
-                    client.set('clients_tttt', JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
-
-                    return res.json({
-                        success: true,
-                        errorCode: 0,
-                        data: users,
-                        message: 'Get list clients successfully'
-                    });
                 }
+
+                res.json({
+                    success: true,
+                    errorCode: 0,
+                    data: users,
+                    message: 'Get list clients successfully'
+                });
+
+                /**
+                 * Set redis cache data
+                 */
+                client.set('clients_tttt', JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
             });
         }
     });

@@ -6,7 +6,7 @@ const User = require('./../models/User');
  */
 exports.isAuthenticated = (req, res, next) => {
     if (req.session.user) {
-        res.locals.user = user;
+        res.locals.user = req.session.user;
         next();
     } else {
         // check header or url parameters or post parameters for token

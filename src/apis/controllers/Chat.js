@@ -8,7 +8,6 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
  * GET /api/chat/clients
  */
 exports.getClients = (req, res, next) => {
-    console.log('userttt', req.session.user);
     let user = req.session.user,
         cacheKey = 'clients_' + user._id;
 

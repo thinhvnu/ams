@@ -39,17 +39,17 @@
           a(href='/slider/create')
             i.fa.fa-plus
             |   Thêm slide mới
-    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='zone-apartment') && 'active')
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='apartment-building-group') && 'active')
       a(href='javascript:void(0);')
         i.fa.fa-bank
         span.link-title  Quản lý khu chung cư
         span.fa.arrow
-      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='zone-apartment') && 'in')
-        li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='index') && 'current-route')
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='apartment-building-group') && 'in')
+        li(class=(Array.isArray(current) && current[0]=='apartment-building-group' && current[1]=='index') && 'current-route')
           a(href='/apartment-building-group')
             i.fa.fa-list
             |   Danh sách khu chung cư
-        li(class=(Array.isArray(current) && current[0]=='zone-apartment' && current[1]=='create') && 'current-route')
+        li(class=(Array.isArray(current) && current[0]=='apartment-building-group' && current[1]=='create') && 'current-route')
           a(href='/apartment-building-group/create')
             i.fa.fa-plus
             |   Thêm mới

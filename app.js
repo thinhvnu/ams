@@ -18,18 +18,19 @@ var config = require('./config/main');
 
 dotenv.config({path: '.env'});
 
-var index = require('./src/routes/index');
-var user = require('./src/routes/user');
-var role = require('./src/routes/role');
-var room = require('./src/routes/room');
-var slider = require('./src/routes/slider');
-var media = require('./src/routes/media');
+const index = require('./src/routes/index');
+const user = require('./src/routes/user');
+const role = require('./src/routes/role');
+const room = require('./src/routes/room');
+const slider = require('./src/routes/slider');
+const media = require('./src/routes/media');
+const abg = require('./src/routes/apartmentBuildingGroup');
 
-var apiMedia = require('./src/apis/routes/media');
-var apiAuth = require('./src/apis/routes/authenticate');
-var apiChat = require('./src/apis/routes/chat');
-var apiSlider = require('./src/apis/routes/slider');
-var apiPost = require('./src/apis/routes/post');
+const apiMedia = require('./src/apis/routes/media');
+const apiAuth = require('./src/apis/routes/authenticate');
+const apiChat = require('./src/apis/routes/chat');
+const apiSlider = require('./src/apis/routes/slider');
+const apiPost = require('./src/apis/routes/post');
 
 var app = express();
 var io = require('socket.io')();
@@ -73,6 +74,7 @@ app.use('/role', role);
 app.use('/room', room);
 app.use('/slider', slider);
 app.use('/media', media);
+app.use('/apartment-building-group', abg);
 
 /**
  * Api router

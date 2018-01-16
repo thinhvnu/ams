@@ -1,6 +1,6 @@
 const Slider = require('../../models/Slider');
-var redis = require('redis');
-var client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
+const redis = require('redis');
+const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
 // Get all active sliders
 exports.getHomeSlider = function (req, res) {
@@ -38,7 +38,7 @@ exports.getHomeSlider = function (req, res) {
 				/**
 				 * Set redis cache data
 				 */
-				client.set('home_slides', JSON.stringify(sliders));
+				client.set('home_slides', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
 			});
 		}
 	});

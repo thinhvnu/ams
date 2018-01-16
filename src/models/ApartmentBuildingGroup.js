@@ -14,6 +14,6 @@ const apartmentBuildingGroupSchema = new mongoose.Schema({
     status: { type: Number }, // active, inActive
 }, {timestamps: true});
 
-const ApartmentBuilding = mongoose.model('ZoneApartment', apartmentBuildingGroupSchema);
+const ApartmentBuildingGroup = mongoose.model('ApartmentBuildingGroup', apartmentBuildingGroupSchema);
 
-module.exports = ApartmentBuilding;
+module.exports = ApartmentBuildingGroup;

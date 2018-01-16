@@ -45,7 +45,7 @@ exports.getClients = (req, res, next) => {
                 /**
                  * Set redis cache data
                  */
-                client.set(cacheKey, JSON.stringify(users));
+                client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
             });
         }
     });

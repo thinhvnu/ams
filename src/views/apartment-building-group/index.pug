@@ -1,0 +1,47 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+		$('.chosen-select').chosen();
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+		$('#slider-list').DataTable();
+		});
+block content
+	.row
+		.col-lg-12
+			.box.dark
+				header
+					.icons
+						i.fa.fa-table
+					h5 #{title}
+				.user-actions
+					a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
+				table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
+					thead
+						tr
+							th.hidden-xs STT
+							th Tên căn hộ
+							th Địa chỉ
+							th Người quản lý
+							th.text-center Status
+							th.text-center.no-sort
+								em.fa.fa-cog
+					tbody
+						- var i = 1;
+						each dt in data
+							tr
+								td.hidden-xs #{i}
+								td #{dt.apartmentBuildingGroupName}
+								td #{dt.address}
+								td #{dt.address}
+								td.text-center #{dt.status ? 'Public' : 'Draft'}
+								td(align='center')
+									a.btn.btn-default
+										em.fa.fa-pencil
+									a.btn.btn-danger
+										em.fa.fa-trash

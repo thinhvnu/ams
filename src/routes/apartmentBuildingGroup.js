@@ -12,10 +12,10 @@ const passport = require('./../middleware/apiPassport');
 router.get('/', abgController.getIndex);
 
 /* API get create new abg */
-router.get('/create-new', abgController.getCreateNew);
+router.get('/create', abgController.getCreate);
 
 /* API create new abg */
-router.post('/create-new', abgController.postCreateNew);
+router.post('/create', abgController.postCreate);
 
 
 module.exports = router;

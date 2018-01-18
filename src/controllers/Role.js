@@ -18,9 +18,9 @@ exports.getIndex = function (req, res) {
 
 exports.getCreate = function (req, res) {
 	res.render('role/create', {
-    title: 'Create New Role',
-    current: ['role', 'create'],
-  });
+		title: 'Create New Role',
+		current: ['role', 'create'],
+	});
 };
 
 exports.postCreate = function (req, res) {

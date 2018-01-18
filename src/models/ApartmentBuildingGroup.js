@@ -5,12 +5,12 @@ const mongoose = require('mongoose');
  * @name apartmentBuildingGroupModel
  */
 const apartmentBuildingGroupSchema = new mongoose.Schema({
-    apartmentBuildingGroupName: { type: String, unique: true },
+    abgName: { type: String, required: true, unique: true },
     apartmentBuildings: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'}],
     district: {type: mongoose.Schema.Types.ObjectId, ref: 'District'},
     province: {type: mongoose.Schema.Types.ObjectId, ref: 'Province'},
     address: {type: String},
-    manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     status: { type: Number }, // active, inActive
 }, {timestamps: true});
 

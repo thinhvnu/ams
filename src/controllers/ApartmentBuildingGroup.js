@@ -1,4 +1,5 @@
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
+const User = require('../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -42,10 +43,16 @@ exports.getIndex = function (req, res, next) {
     });
 }
 
-exports.getCreateNew = (req, res, next) => {
-
+exports.getCreate = (req, res, next) => {
+    User.find({}, (err, users) => {
+        res.render('apartment-building-group/create', {
+            title: 'Thêm khu chung cư',
+            current: ['apartment-building-group', 'create'],
+            users: users
+        });
+    });
 }
 
-exports.postCreateNew = (req, res, next) => {
+exports.postCreate = (req, res, next) => {
 
 }

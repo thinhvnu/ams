@@ -86,8 +86,8 @@ exports.postUploadImage = (req, res, next) => {
 		if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
 				// Assign new file name
 				filename = prefixFileName + '-' + Date.now() + '.jpg';// + type.ext;
-				originPath = path.join(__dirname, '/../..' + uploadDir + 'origin/');
-                thumbPath = path.join(__dirname, '/../..' + uploadDir + 'thumb/');
+				originPath = path.join(__dirname, '/../..' + '/media' + uploadDir + 'origin/');
+                thumbPath = path.join(__dirname, '/../..' + '/media' + uploadDir + 'thumb/');
 				
 				// Upload origin image
 				sharp(file.path).toFile(originPath + filename, (err, info) => {});
@@ -95,7 +95,7 @@ exports.postUploadImage = (req, res, next) => {
 				sharp(file.path).resize(thumbWidth, thumbHeight).toFile(thumbPath + filename, (err, info) => {
 					// Response 
 					res.status(200).end(JSON.stringify({
-						path: uploadDir + 'thumb/' + filename,
+						path: process.env.MEDIA_URL + uploadDir + 'thumb/' + filename,
 						fileName: filename
 					}));
 				});

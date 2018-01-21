@@ -11,6 +11,8 @@ const apartmentBuildingGroupSchema = new mongoose.Schema({
     province: {type: mongoose.Schema.Types.ObjectId, ref: 'Province'},
     address: {type: String},
     manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    createdAt: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    updatedAt: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: { type: Number }, // active, inActive
 }, {timestamps: true});
 

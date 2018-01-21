@@ -1,5 +1,5 @@
 const token = localStorage.getItem('ams_chat_token');
-const socket = io('http://192.168.1.153:6888', {query: 'token=' + token});
+const socket = io('http://localhost:6888', {query: 'token=' + token});
 
 socket.on('connect', () => {
     let data = localStorage.getItem('account');

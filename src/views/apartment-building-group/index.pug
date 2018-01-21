@@ -25,23 +25,26 @@ block content
 					thead
 						tr
 							th.hidden-xs STT
-							th Tên căn hộ
+							th Tên chung cư
 							th Địa chỉ
 							th Người quản lý
-							th.text-center Status
-							th.text-center.no-sort
-								em.fa.fa-cog
+							th Người tạo
+							th.text-center Trạng thái
+							th.text-center.no-sort Hành động
 					tbody
 						- var i = 1;
 						each dt in data
 							tr
 								td.hidden-xs #{i}
-								td #{dt.apartmentBuildingGroupName}
+								td #{dt.abgName}
 								td #{dt.address}
-								td #{dt.address}
+								td #{dt.manager.userName}
+								td #{dt.createdAt.userName}
 								td.text-center #{dt.status ? 'Public' : 'Draft'}
 								td(align='center')
-									a.btn.btn-default
+									a.u-action.btn.btn-default
+										em.fa.fa-eye
+									a.u-action.btn.btn-default
 										em.fa.fa-pencil
-									a.btn.btn-danger
+									a.u-action.btn.btn-danger
 										em.fa.fa-trash

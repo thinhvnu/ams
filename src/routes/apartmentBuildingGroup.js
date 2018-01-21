@@ -9,13 +9,13 @@ const passport = require('./../middleware/apiPassport');
 
 
 /* GET abg listing. */
-router.get('/', abgController.getIndex);
+router.get('/', passport.isAuthenticated, abgController.getIndex);
 
 /* API get create new abg */
-router.get('/create', abgController.getCreate);
+router.get('/create', passport.isAuthenticated, abgController.getCreate);
 
 /* API create new abg */
-router.post('/create', abgController.postCreate);
+router.post('/create', passport.isAuthenticated, abgController.postCreate);
 
 
 module.exports = router;

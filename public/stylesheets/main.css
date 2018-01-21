@@ -162,3 +162,7 @@ input.mycropper-browse-file[type="file"] {
     font-size: 28px;
     margin: auto;
 }
+.u-action {
+    padding: 4px 6px;
+    margin: 0 3px;
+}

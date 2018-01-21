@@ -2,8 +2,16 @@
 /node_modules
 
 #ignore media
+#--slider--
 /media/images/slider/origin/*
 /media/images/slider/thumb/*
+/media/images/slider/origin/.gitkeep
+/media/images/slider/thumb/.gitkeep
+#--post--
+/media/images/post/origin/*
+/media/images/post/thumb/*
+/media/images/post/origin/.gitkeep
+/media/images/post/thumb/.gitkeep
 
 #ignore some config variable local
 .env

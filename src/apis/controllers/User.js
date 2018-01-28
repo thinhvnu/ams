@@ -52,7 +52,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 			return res.json({
 				success: false,
 				errorCode: 111,
-				message: 'Error happen'
+				message: JSON.stringify(err)
 			});
 		}
 
@@ -80,7 +80,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 					return res.json({
 						success: false,
 						errorCode: 111,
-						message: 'Error happen'
+						message: JSON.stringify(err)
 					});
 				}
 				return res.json({

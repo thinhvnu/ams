@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     status: { type: Number }, // active, block, reported
     isOnline: { type: Boolean },
     rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
-}, {timestamps: true});
+}, {timestamps: true, usePushEach: true});
 
 /**
  * Password hash middleware.

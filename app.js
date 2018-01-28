@@ -25,12 +25,14 @@ const room = require('./src/routes/room');
 const slider = require('./src/routes/slider');
 const media = require('./src/routes/media');
 const abg = require('./src/routes/apartmentBuildingGroup');
+const ab = require('./src/routes/apartmentBuilding');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
 const apiChat = require('./src/apis/routes/chat');
 const apiSlider = require('./src/apis/routes/slider');
 const apiPost = require('./src/apis/routes/post');
+const apiUser = require('./src/apis/routes/user');
 
 var app = express();
 var io = require('socket.io')();
@@ -75,6 +77,7 @@ app.use('/room', room);
 app.use('/slider', slider);
 app.use('/media', media);
 app.use('/apartment-building-group', abg);
+app.use('/apartment-building', ab);
 
 /**
  * Api router
@@ -84,6 +87,7 @@ app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
 app.use('/api/slider', apiSlider);
 app.use('/api/post', apiPost);
+app.use('/api/user', apiUser);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

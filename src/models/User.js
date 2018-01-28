@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     passwordResetToken: String,
     passwordResetExpires: Date,
     tokens: Array,
+    firebaseDeviceToken: Array,
 
     gender: {type: Number}, // 1: male, 2: female, 3: other
     avata: {type: String},

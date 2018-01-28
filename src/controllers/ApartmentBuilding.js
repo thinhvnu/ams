@@ -1,58 +1,68 @@
+const ApartmentBuilding = require('../models/ApartmentBuilding');
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const User = require('../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
-// Get all apartment building group
+// Get all apartment building
 exports.getIndex = function (req, res, next) {
-	client.get('get_list_abgs', (err, abgs) => {
+	client.get('get_list_abs', (err, abs) => {
 		if (err) {
 			console.log('err', err);
 			throw err;
 		}
-		if (abgs) {
-			res.render('apartment-building-group/index', {
-				title: 'Danh sách khu chung cư',
-				current: ['apartment-building-group', 'index'],
-				data: JSON.parse(abgs)
+		if (abg) {
+			res.render('apartment-building/index', {
+				title: 'Danh sách tòa nhà',
+				current: ['apartment-building', 'index'],
+				data: JSON.parse(abs)
 			});
 		} else {
-			ApartmentBuildingGroup.find({})
+			ApartmentBuilding.find({})
 				.populate('manager', {
-					'_id': 0,
+					'_id': 1,
 					'userName': 1
-				})
+                })
+                .populate('apartments', {
+                    '_id': 1
+                })
+                .populate('apartmentBuildingGroup', {
+                    '_id': 1
+                })
 				.populate('createdBy', {
 					'_id': 0,
 					'userName': 1
 				})
-				.exec(function (err, abgs) {
+				.exec(function (err, abs) {
 					if (err) {
 						console.log('err', err)
 						return next(err);
 					}
 
-					res.render('apartment-building-group/index', {
-						title: 'Danh sách khu chung cư',
-						current: ['apartment-building-group', 'index'],
-						data: abgs
+					res.render('apartment-building/index', {
+						title: 'Danh sách tòa nhà',
+						current: ['apartment-building', 'index'],
+						data: abs
 					});
 
 					/**
 					 * Set redis cache data
 					 */
-					client.set('get_list_abgs', JSON.stringify(abgs));
+					client.set('get_list_abs', JSON.stringify(abs));
 				});
 		}
 	});
 }
 
 exports.getCreate = (req, res, next) => {
-	User.find({}, (err, users) => {
-		res.render('apartment-building-group/create', {
-			title: 'Thêm khu chung cư',
-			current: ['apartment-building-group', 'create'],
-			users: users
+	ApartmentBuildingGroup.find({}, (err, abgs) => {
+		User.find({}, (err, users) => {
+			res.render('apartment-building/create', {
+				title: 'Thêm tòa nhà',
+				current: ['apartment-building', 'create'],
+				users: users,
+				abgs: abgs
+			});
 		});
 	});
 }
@@ -76,7 +86,7 @@ exports.postCreate = (req, res, next) => {
 				});
 			})
 		} else {
-			const abg = new ApartmentBuildingGroup();
+			const abg = new ApartmentBuilding();
 			abg.abgName = req.body.abgName;
 			abg.address = req.body.address;
 			abg.manager = req.body.manager;

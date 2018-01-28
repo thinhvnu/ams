@@ -21,7 +21,7 @@ block content
 					h5 #{title}
 				.user-actions
 					a.btn.btn-success(href='/slider/create') Tạo mới
-				table#post-list.table.table-responsive.display(cellspacing='0', width='100%')
+				table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 					thead
 						tr
 							th.hidden-xs ID
@@ -42,7 +42,8 @@ block content
 								td #{slider.link}
 								td.text-center #{slider.status ? 'Public' : 'Draft'}
 								td(align='center')
-									a.btn.btn-default
+									a.u-action.btn.btn-default
 										em.fa.fa-pencil
-									a.btn.btn-danger
+									a.u-action.btn.btn-danger
 										em.fa.fa-trash
+							- i += 1

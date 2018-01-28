@@ -166,3 +166,6 @@ input.mycropper-browse-file[type="file"] {
     padding: 4px 6px;
     margin: 0 3px;
 }
+.item-detail .icon, .item-detail .content {
+    display: inline-block;
+}

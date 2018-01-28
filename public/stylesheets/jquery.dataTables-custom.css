@@ -1,9 +1,10 @@
 .dataTables_wrapper {
-  -webkit-box-shadow: 2px 2px 6px #666;
-  box-shadow: 2px 2px 6px #666;
-  border-radius: 5px;
-  border: 1px solid #aaaaaa;
-  background: #cccccc;
+  /* -webkit-box-shadow: 2px 2px 6px #666; */
+  /* box-shadow: 2px 2px 6px #666; */
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  /* border: 1px solid #aaaaaa; */
+  background: #eeeded;
   color: #222222;
 }
 .dataTables_wrapper table.dataTable {

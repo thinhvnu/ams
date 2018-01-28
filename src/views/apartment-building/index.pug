@@ -9,7 +9,7 @@ block scripts
 		$(function() {
 		$('.chosen-select').chosen();
 		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#abg-list').DataTable();
+		$('#ab-list').DataTable();
 		});
 block content
 	.row
@@ -20,12 +20,12 @@ block content
 						i.fa.fa-table
 					h5 #{title}
 				.user-actions
-					a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
-				table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
+					a.btn.btn-success(href='/apartment-building/create') Tạo mới
+				table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
 					thead
 						tr
 							th.hidden-xs STT
-							th Tên chung cư
+							th Tên tòa nhà
 							th Địa chỉ
 							th Người quản lý
 							th Người tạo

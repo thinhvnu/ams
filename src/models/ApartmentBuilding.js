@@ -9,8 +9,10 @@ const apartmentBuildingModel = new mongoose.Schema({
     area: {type: Number},
     manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
-    zoneApartment: {type: mongoose.Schema.Types.ObjectId, ref: 'ZoneApartment'},
+    apartmentBuildingGroup: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuildingGroup'},
     status: { type: Number }, // active, inActive
+    createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, {timestamps: true});
 
 const ApartmentBuilding = mongoose.model('Building', apartmentBuildingModel);

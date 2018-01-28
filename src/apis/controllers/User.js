@@ -47,8 +47,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 		os = req.body.os,
 		version = req.body.version,
 		deviceName = req.body.deviceName;
-
-	User.findById(currentUser.id, (err, user) => {
+	User.findById(currentUser._id, (err, user) => {
 		if (err) {
 			return res.json({
 				success: false,
@@ -72,6 +71,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 			version: version,
 			deviceName: deviceName
 		});
+		console.log('req.user', user);
 		if (user.firebaseDeviceToken.indexOf(deviceInfo) === -1) {
 			user.firebaseDeviceToken.push(deviceInfo);
 

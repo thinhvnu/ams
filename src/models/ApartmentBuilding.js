@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
  */
 const apartmentBuildingModel = new mongoose.Schema({
     buildingName: { type: String, unique: true },
+    floor: {type: Number},
     area: {type: Number},
     manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
@@ -15,6 +16,6 @@ const apartmentBuildingModel = new mongoose.Schema({
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, {timestamps: true});
 
-const ApartmentBuilding = mongoose.model('Building', apartmentBuildingModel);
+const ApartmentBuilding = mongoose.model('ApartmentBuilding', apartmentBuildingModel);
 
 module.exports = ApartmentBuilding;

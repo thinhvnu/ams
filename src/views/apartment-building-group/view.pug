@@ -4,13 +4,12 @@ block stylesheets
 block scripts
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
-		$(function() {
-		$('.chosen-select').chosen();
-		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+		$('.chosen-select').chosen()
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true })
 block content
 	.row
 		.col-lg-12
-			.box.dark.abgs-detail
+			.box.dark.abgs-detail(style='margin-bottom: 15px;')
 				header
 					.icons
 						i.fa.fa-table
@@ -28,6 +27,18 @@ block content
 									i.fa.fa-user-o
 								.content Quản lý: #{data.manager.userName}
 
+					.row
+						.col-md-6.col-lg-6
+							.item-detail
+								.icon
+									i.fa.fa-map-marker
+								.content Địa chỉ:
+									i  #{data.address}
+						.col-md-6.col-lg-6
+							.item-detail
+								.icon
+									i.fa.fa-plus-circle
+								.content Người tạo: #{data.createdBy.userName}
 			.box.dark.apartment-buildings
 				header
 					.icons

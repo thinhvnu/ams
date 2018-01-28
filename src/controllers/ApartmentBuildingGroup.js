@@ -1,4 +1,5 @@
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
+const ApartmentBuilding = require('../models/ApartmentBuilding');
 const User = require('../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
@@ -111,7 +112,7 @@ exports.getView = (req, res, next) => {
 			console.log('err', err);
 			throw err;
 		}
-		if (abg) {
+		if (abg && process.env.CACHE_ENABLE == 1) {
 			abg = JSON.parse(abg);
 
 			res.render('apartment-building-group/view', {
@@ -122,19 +123,23 @@ exports.getView = (req, res, next) => {
 		} else {
 			ApartmentBuildingGroup.findById(req.params.abgId)
 				.populate('manager', {
-					'_id': 0,
+					'_id': 1,
 					'userName': 1
 				})
 				.populate('createdBy', {
-					'_id': 0,
+					'_id': 1,
 					'userName': 1
+				})
+				.populate('apartmentBuildings', {
+					'_id': 1,
+					'buildingName': 1
 				})
 				.exec(function (err, abg) {
 					if (err) {
 						console.log('err', err)
 						return next(err);
 					}
-			
+					console.log('abg', abg);
 					res.render('apartment-building-group/view', {
 						title: abg.abgName,
 						current: ['apartment-building-group', 'view'],

@@ -11,7 +11,8 @@ exports.getIndex = function (req, res, next) {
 			console.log('err', err);
 			throw err;
 		}
-		if (abg) {
+		if (abs && process.env.CACHE_ENABLE == 1) {
+			console.log('cache_enable', process.env.CACHE_ENABLE);
 			res.render('apartment-building/index', {
 				title: 'Danh sách tòa nhà',
 				current: ['apartment-building', 'index'],
@@ -23,11 +24,12 @@ exports.getIndex = function (req, res, next) {
 					'_id': 1,
 					'userName': 1
                 })
-                .populate('apartments', {
-                    '_id': 1
-                })
+                // .populate('apartments', {
+                //     '_id': 1
+                // })
                 .populate('apartmentBuildingGroup', {
-                    '_id': 1
+					'_id': 1,
+					'abgName': 1
                 })
 				.populate('createdBy', {
 					'_id': 0,
@@ -68,39 +70,54 @@ exports.getCreate = (req, res, next) => {
 }
 
 exports.postCreate = (req, res, next) => {
-	req.checkBody('abgName', 'Tên khu chung cư không được để trống').notEmpty();
+	req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
+	req.checkBody('apartmentBuildingGroup', 'Chọn khu chung cư').notEmpty();
+	req.checkBody('floor', 'Số tầng của tòa nhà ?').notEmpty();
 	req.checkBody('manager', 'Chọn quản lý').notEmpty();
-	req.checkBody('address', 'Địa chỉ không được để trống').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
 
-			console.log('err', errors);
-			User.find({}, (err, users) => {
-				res.render('apartment-building-group/create', {
-					title: 'Thêm khu chung cư',
-					users: users,
-					errors: errors,
-					data: req.body
+			ApartmentBuildingGroup.find({}, (err, abgs) => {
+				User.find({}, (err, users) => {
+					res.render('apartment-building/create', {
+						title: 'Thêm tòa nhà',
+						users: users,
+						abgs: abgs,
+						errors: errors,
+						data: req.body
+					});
 				});
-			})
+			});
 		} else {
-			const abg = new ApartmentBuilding();
-			abg.abgName = req.body.abgName;
-			abg.address = req.body.address;
-			abg.manager = req.body.manager;
-			abg.status = req.body.status;
-			abg.createdBy = req.session.user._id;
-			abg.updatedBy = req.session.user._id;
+			const apartmentBuilding = new ApartmentBuilding();
+			apartmentBuilding.buildingName = req.body.buildingName;
+			apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
+			apartmentBuilding.floor = req.body.floor;
+			apartmentBuilding.area = req.body.area;
+			apartmentBuilding.manager = req.body.manager;
+			apartmentBuilding.status = req.body.status;
+			apartmentBuilding.createdBy = req.session.user._id;
+			apartmentBuilding.updatedBy = req.session.user._id;
 
-			abg.save((err) => {
+			apartmentBuilding.save((err, ab) => {
 				if (err) {
 					console.log('error create new abg', err);
 					return next(err);
 				}
-				client.del('get_list_abgs', () => {
-					res.redirect('/apartment-building-group');
+				/**
+				 * Save to apartment building group
+				 */
+				ApartmentBuildingGroup.findById(ab.apartmentBuildingGroup, (err, abg) => {
+					if (abg) {
+						abg.apartmentBuildings.push(ab._id);
+						abg.save();
+					}
+				})
+
+				client.del('get_list_abs', () => {
+					res.redirect('/apartment-building');
 				})
 			});
 		}

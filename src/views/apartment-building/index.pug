@@ -26,7 +26,9 @@ block content
 						tr
 							th.hidden-xs STT
 							th Tên tòa nhà
-							th Địa chỉ
+							th Khu chung cư
+							th Số tầng
+							th Diện tích
 							th Người quản lý
 							th Người tạo
 							th.text-center Trạng thái
@@ -36,16 +38,18 @@ block content
 						each dt in data
 							tr
 								td.hidden-xs #{i}
-								td #{dt.abgName}
-								td #{dt.address}
+								td #{dt.buildingName}
+								td #{dt.apartmentBuildingGroup.abgName}
+								td #{dt.floor}
+								td #{dt.area}
 								td #{dt.manager.userName}
 								td #{dt.createdBy.userName}
 								td.text-center #{dt.status ? 'Public' : 'Draft'}
 								td(align='center')
-									a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default
+									a(href='/apartment-building/view/' + dt._id).u-action.btn.btn-default
 										em.fa.fa-eye
-									a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
+									a(href='/apartment-building/edit/' + dt._id).u-action.btn.btn-success
 										em.fa.fa-pencil
-									a(href='/apartment-building-group/delete/' + dt._id).u-action.btn.btn-danger
+									a(href='/apartment-building/delete/' + dt._id).u-action.btn.btn-danger
 										em.fa.fa-trash
 							- i += 1

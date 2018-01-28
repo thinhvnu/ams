@@ -80,6 +80,12 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 					message: 'Update device token successfully'
 				});
 			})
+		} else {
+			return res.json({
+				success: true,
+				errorCode: 0,
+				message: 'Update device token successfully'
+			});
 		}
 	})
 }

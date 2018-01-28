@@ -43,7 +43,10 @@ exports.getInfo = function (req, res) {
 
 exports.postFirebaseDeviceToken = (req, res, next) => {
 	let currentUser = req.session.user;
-	let deviceToken = req.body.token;
+	let deviceToken = req.body.token,
+		os = req.body.os,
+		version = req.body.version,
+		deviceName = req.body.deviceName;
 
 	User.findById(currentUser.id, (err, user) => {
 		if (err) {
@@ -63,8 +66,14 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 		}
 
 		// Add firebase device token when log in new device
-		if (user.firebaseDeviceToken.indexOf(deviceToken) === -1) {
-			user.firebaseDeviceToken.push(deviceToken);
+		let deviceInfo = JSON.stringify({
+			token: deviceToken,
+			os: os,
+			version: version,
+			deviceName: deviceName
+		});
+		if (user.firebaseDeviceToken.indexOf(deviceInfo) === -1) {
+			user.firebaseDeviceToken.push(deviceInfo);
 
 			user.save((err, u) => {
 				if (err) {

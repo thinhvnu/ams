@@ -43,6 +43,40 @@ block content
 				header
 					.icons
 						i.fa.fa-home
-					h5 Danh sách tòa nhà
+					h5 Danh sách tòa nhà ( #{data.apartmentBuildings.length} tòa )
 				.body
-					h2 #{title}
+					each dt, i in data.apartmentBuildings
+						if (i % 2 === 0)
+							| <div class="row">
+						.col-md-6.col-lg-6
+							.apartment-building-item.well
+								.building-name.text-center(style='font-weight: bold;') #{dt.buildingName}
+								hr
+								.row
+									.col-md-6.col-lg-6
+										.item-detail
+											.icon
+												i.fa.fa-building
+											.content Số tầng:
+												i  #{dt.floor}
+									.col-md-6.col-lg-6
+										.item-detail
+											.icon
+												i.fa.fa-area-chart
+											.content Diện tích:
+												i  #{dt.area} ( m2 )
+								.row
+									.col-md-6.col-lg-6
+										.item-detail
+											.icon
+												i.fa.fa-user-o
+											.content Quản lý: #{dt.manager.userName}
+									.col-md-6.col-lg-6
+										.item-detail
+											.icon
+												i.fa.fa-book
+											.content Số phòng trống:
+												i  X ( phòng )
+						if (i % 2 === 1 || i === data.apartmentBuildings.length - 1)
+							| </div>
+

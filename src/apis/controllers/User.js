@@ -12,16 +12,26 @@ exports.getInfo = function (req, res) {
 			console.log('err', err);
 			throw err;
 		}
-		if (user) {
+		if (user && process.env.CACHE_ENABLE === 1) {
 			return res.json({
 				success: true,
 				errorCode: 0,
 				data: JSON.parse(user)
 			});
 		} else {
-			User.find({_id: currentUser._id}, {
+			User.find({_id: currentUser._id})
+			.select({
+				'_id': 0,
+				'firstName': 1,
+				'lastName': 1,
 				'userName': 1,
-			}).exec(function (err, user) {
+				'phoneNumber': 1,
+				'email': 1,
+				'gender': 1,
+				'avatar': 1,
+				'address': 1
+			})
+			.exec(function (err, user) {
 				if (err) {
 					console.log('err', err)
 					return done(err);

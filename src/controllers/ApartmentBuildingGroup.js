@@ -122,17 +122,24 @@ exports.getView = (req, res, next) => {
 			});
 		} else {
 			ApartmentBuildingGroup.findById(req.params.abgId)
-				.populate('manager', {
-					'_id': 1,
-					'userName': 1
+				.populate({
+					path: 'manager',
+					model: 'User',
+					select: {'userName': 1}
 				})
-				.populate('createdBy', {
-					'_id': 1,
-					'userName': 1
+				.populate({
+					path: 'createdBy',
+					model: 'User',
+					select: {'userName': 1}
 				})
-				.populate('apartmentBuildings', {
-					'_id': 1,
-					'buildingName': 1
+				.populate({
+					path: 'apartmentBuildings',
+					model: 'ApartmentBuilding',
+					populate: {
+						path: 'manager',
+						model: 'User',
+						select: { 'userName': 1 }
+					}
 				})
 				.exec(function (err, abg) {
 					if (err) {

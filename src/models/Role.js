@@ -11,7 +11,7 @@ const roleSchema = new mongoose.Schema({
     users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: Boolean,
-}, {timestamps: true});
+}, {timestamps: true, usePushEach: true});
 
 const Role = mongoose.model('Role', roleSchema);
 

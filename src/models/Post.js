@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
     views: {type: Number},
     status: {type: Boolean},
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
-}, {timestamps: true});
+}, {timestamps: true, usePushEach: true});
 
 postSchema.set('toJSON', {
     virtuals: true

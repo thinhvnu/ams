@@ -11,7 +11,7 @@ const serviceSchema = new mongoose.Schema({
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: { type: Number }, // active, inActive
-}, {timestamps: true});
+}, {timestamps: true, usePushEach: true});
 
 const Service = mongoose.model('Service', serviceSchema);
 

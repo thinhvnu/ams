@@ -7,21 +7,24 @@
 exports.postUploadImage = (req, res, next) => {
 	const fs = require('fs'),
 	path = require('path'),
-	fileType = require('file-type'),
-	uploadDir = '/media/images/post/';
+	fileType = require('file-type');
 
-	let imageData = req.body.imageData,
+	let uploadDir = '/media/images/';
+
+	let imageData = req.body.imageData, imageType = req.body.imageType,
 	fileName = 'post-' + Date.now(),
 	ext = null;
+
+	uploadDir += imageType ? (imageType + '/') : 'store/';
 
 	/**
 	 * Case no image data
 	 */
-	if (!imageData) {
+	if (!imageData || !imageType) {
 		return res.json({
 			success: false,
 			errorCode: 100,
-			message: 'Image data empty'
+			message: 'Image type or Image data empty'
 		});
 	}
 
@@ -58,7 +61,7 @@ exports.postUploadImage = (req, res, next) => {
 				success: false,
 				errorCode: 0,
 				data: {
-					imageUrl: process.env.MEDIA_URL + '/images/post/origin/' + fileName,
+					imageUrl: process.env.MEDIA_URL + uploadDir + 'origin/' + fileName,
 					fileName: fileName
 				},
 				message: 'Save message successfully'

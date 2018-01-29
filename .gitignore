@@ -12,6 +12,16 @@
 /media/images/post/thumb/*
 /media/images/post/origin/.gitkeep
 /media/images/post/thumb/.gitkeep
+#--avatar--
+/media/images/avatar/origin/*
+/media/images/avatar/thumb/*
+/media/images/avatar/origin/.gitkeep
+/media/images/avatar/thumb/.gitkeep
+#--store--
+/media/images/store/origin/*
+/media/images/store/thumb/*
+/media/images/store/origin/.gitkeep
+/media/images/store/thumb/.gitkeep
 
 #ignore some config variable local
 .env

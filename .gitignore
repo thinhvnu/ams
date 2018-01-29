@@ -5,23 +5,23 @@
 #--slider--
 /media/images/slider/origin/*
 /media/images/slider/thumb/*
-/media/images/slider/origin/.gitkeep
-/media/images/slider/thumb/.gitkeep
+!/media/images/slider/origin/.gitkeep
+!/media/images/slider/thumb/.gitkeep
 #--post--
 /media/images/post/origin/*
 /media/images/post/thumb/*
-/media/images/post/origin/.gitkeep
-/media/images/post/thumb/.gitkeep
+!/media/images/post/origin/.gitkeep
+!/media/images/post/thumb/.gitkeep
 #--avatar--
 /media/images/avatar/origin/*
 /media/images/avatar/thumb/*
-/media/images/avatar/origin/.gitkeep
-/media/images/avatar/thumb/.gitkeep
+!/media/images/avatar/origin/.gitkeep
+!/media/images/avatar/thumb/.gitkeep
 #--store--
 /media/images/store/origin/*
 /media/images/store/thumb/*
-/media/images/store/origin/.gitkeep
-/media/images/store/thumb/.gitkeep
+!/media/images/store/origin/.gitkeep
+!/media/images/store/thumb/.gitkeep
 
 #ignore some config variable local
 .env

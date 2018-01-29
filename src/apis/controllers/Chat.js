@@ -17,7 +17,7 @@ exports.getClients = (req, res, next) => {
 			throw err;
         }
         
-        if (users) {
+        if (users && process.env.CACHE_ENABLE === 1) {
 			return res.json({
                 success: true,
                 errorCode: 0,

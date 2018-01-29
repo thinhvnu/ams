@@ -138,7 +138,7 @@ exports.getView = (req, res, next) => {
 			console.log('err', err);
 			throw err;
 		}
-		if (abg) {
+		if (abg && process.env.CACHE_ENABLE === 1) {
 			abg = JSON.parse(abg);
 
 			res.render('apartment-building-group/view', {

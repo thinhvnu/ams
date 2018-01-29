@@ -9,7 +9,7 @@ exports.getHomeSlider = function (req, res) {
 			console.log('err', err);
 			throw err;
 		}
-		if (sliders) {
+		if (sliders && process.env.CACHE_ENABLE === 1) {
 			return res.json({
 				success: true,
 				errorCode: 0,

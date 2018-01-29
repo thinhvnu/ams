@@ -11,7 +11,7 @@ exports.getIndex = function (req, res, next) {
 			console.log('err', err);
 			throw err;
 		}
-		if (abgs) {
+		if (abgs && process.env.CACHE_ENABLE === 1) {
 			res.render('apartment-building-group/index', {
 				title: 'Danh sách khu chung cư',
 				current: ['apartment-building-group', 'index'],

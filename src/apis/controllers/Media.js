@@ -35,7 +35,7 @@ exports.postUploadImage = (req, res, next) => {
 	} else if (imageData.charAt(0) == 'R') {
 		ext = 'gif';
 	} else if (imageData.charAt(0) == 'i') {
-		ext = '.png';
+		ext = 'png';
 	}
 
 	if (!ext) {

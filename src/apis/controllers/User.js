@@ -108,3 +108,44 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 		}
 	})
 }
+
+exports.postUpdateInfo = (req, res, next) => {
+	let userId = req.session.user._id;
+
+	User.findById(userId, (err, user) => {
+		if (err) {
+			return res.json({
+				success: false,
+				errorCode: 112,
+				message: JSON.stringify(err)
+			});
+		}
+
+		let data = req.body;
+		if (user) {
+			user.firstName = data.firstName ? data.firstName : user.firstName;
+			user.lastName = data.lastName ? data.lastName : user.lastName;
+			user.email = data.email ? data.email : user.email;
+			user.phoneNumber = data.phoneNumber ? data.phoneNumber : user.phoneNumber;
+			user.gender = data.gender ? data.gender : user.gender;
+			user.avatar = data.avatar ? data.avatar : user.avatar;
+			user.address = data.address ? data.address : user.address;
+
+			user.save((err, user) => {
+				if (err) {
+					return res.json({
+						success: false,
+						errorCode: 112,
+						message: JSON.stringify(err)
+					});
+				}
+
+				return res.json({
+					success: true,
+					errorCode: 0,
+					message: 'Update user info successfully'
+				});
+			})
+		}
+	});
+}

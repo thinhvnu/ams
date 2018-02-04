@@ -1,4 +1,5 @@
-var Role = require('../models/Role');
+const Role = require('../models/Role');
+const Permission = require('../models/Permission');
 
 // Get all Categories
 exports.getIndex = function (req, res) {
@@ -17,9 +18,12 @@ exports.getIndex = function (req, res) {
 };
 
 exports.getCreate = function (req, res) {
-	res.render('role/create', {
-		title: 'Create New Role',
-		current: ['role', 'create'],
+	Permission.find({}, (err, permissions) => {
+		res.render('role/create', {
+			title: 'Create New Role',
+			current: ['role', 'create'],
+			permissions: permissions
+		});
 	});
 };
 
@@ -27,17 +31,22 @@ exports.postCreate = function (req, res) {
 	/*
 	* Validate create category
 	*/ 
-  req.checkBody('name', 'Role name không được để trống').notEmpty();
+  req.checkBody('roleName', 'Role name không được để trống').notEmpty();
   req.checkBody('roleCode', 'Mã không được để trống').notEmpty();
 
 	var errors = req.getValidationResult().then(function(errors) {
+		console.log('req.body', req.body);
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
-			res.render('role/create', {
-        title: 'Create New Role',
-        current: ['role', 'create'],
-				errors: errors,
-				data: req.body
+
+			Permission.find({}, (err, permissions) => {
+				res.render('role/create', {
+					title: 'Create New Role',
+					current: ['role', 'create'],
+					errors: errors,
+					data: req.body,
+					permissions: permissions
+				});
 			});
 			return;
 		}
@@ -47,8 +56,9 @@ exports.postCreate = function (req, res) {
 	*/
 	var newRole = new Role();
 	
-		newRole.name = req.body.name;
+		newRole.roleName = req.body.roleName;
 		newRole.roleCode = req.body.roleCode.toUpperCase();
+		newRole.permissions = req.body.permissions;
 		newRole.description = req.body.description;
 		newRole.status = req.body.status;
 		// save the user

@@ -26,6 +26,7 @@ const slider = require('./src/routes/slider');
 const media = require('./src/routes/media');
 const abg = require('./src/routes/apartmentBuildingGroup');
 const ab = require('./src/routes/apartmentBuilding');
+const permission = require('./src/routes/permission');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
@@ -78,6 +79,7 @@ app.use('/slider', slider);
 app.use('/media', media);
 app.use('/apartment-building-group', abg);
 app.use('/apartment-building', ab);
+app.use('/permission', permission);
 
 /**
  * Api router

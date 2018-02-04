@@ -7,7 +7,9 @@ block scripts
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
 		$(function() {
-		$('#role-list').DataTable();
+		$('.chosen-select').chosen();
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+		$('#slider-list').DataTable();
 		});
 block content
 	.row
@@ -18,25 +20,23 @@ block content
 						i.fa.fa-table
 					h5 #{title}
 				.user-actions
-					a.btn.btn-success(href='/role/create') Tạo mới
-				table#role-list.table.table-responsive.display(cellspacing='0', width='100%')
+					a.btn.btn-success(href='/permission/create') Tạo mới
+				table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 					thead
 						tr
-							th.hidden-xs ID
-							th Role Name
-							th Role Code
-							th Description
+							th.hidden-xs STT
+							th name
+							th router
 							th.text-center Status
-							th.text-center
+							th.text-center.no-sort
 								em.fa.fa-cog
 					tbody
-						each role, index in roles
+						each dt, index in data
 							tr
-								td.hidden-xs #{index}
-								td #{role.roleName}
-								td #{role.roleCode}
-								td #{role.description}
-								td.text-center #{role.status ? 'Active' : 'Inactive'}
+								td.hidden-xs #{index + 1}
+								td #{dt.permissionName}
+								td #{dt.accessRouter}
+								td.text-center #{dt.status ? 'Active' : 'Inactive'}
 								td(align='center')
 									a.u-action.btn.btn-default
 										em.fa.fa-pencil

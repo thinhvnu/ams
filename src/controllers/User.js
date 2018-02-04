@@ -121,6 +121,7 @@ exports.getCreate = (req, res) => {
  */
 exports.postCreate = (req, res, next) => {
   req.checkBody('userName', 'UserName is required').notEmpty();
+  req.checkBody('roles', 'Roles is required').notEmpty();
   req.checkBody('email', 'Email is invalid').isEmail();
   req.checkBody('password', 'Password must be at least 4 characters long').len(4);
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
@@ -129,6 +130,8 @@ exports.postCreate = (req, res, next) => {
   req.getValidationResult().then(function(errors) {
     if (!errors.isEmpty()) {
       var errors = errors.mapped();
+
+      console.log('req.body', req.body)
       Role.find({}, function(err, roles) {
         res.render('user/create', {
           title: 'Create Account',
@@ -145,8 +148,11 @@ exports.postCreate = (req, res, next) => {
       user.email = req.body.email;
       user.password = req.body.password;
       user.gender = req.body.gender;
-      if (req.body.role) {
-        user.roles.push(req.body.role);
+      
+      if (req.body.role instanceof Array) {
+        user.roles = req.body.roles;
+      } else {
+        user.roles.push(req.body.roles);
       }
       user.status = req.body.status;
     

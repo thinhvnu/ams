@@ -7,25 +7,25 @@ const mongoose = require('mongoose');
  * @name userModel
  */
 const userSchema = new mongoose.Schema({
-    userName: { type: String, required: true, unique: true },
-    phoneNumber: { type: String },
-    email: { type: String, unique: true },
-    password: String,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
-    tokens: Array,
-    firebaseDeviceToken: Array,
+  userName: { type: String, required: true, unique: true },
+  phoneNumber: { type: String },
+  email: { type: String, unique: true },
+  password: String,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
+  tokens: Array,
+  firebaseDeviceToken: Array,
 
-    gender: {type: Number}, // 1: male, 2: female, 3: other
-    avata: {type: String},
-    firstName: {type: String},
-    lastName: {type: String},
-    address: {type: String},
+  gender: {type: Number}, // 1: male, 2: female, 3: other
+  avata: {type: String},
+  firstName: {type: String},
+  lastName: {type: String},
+  address: {type: String},
 
-    roles: [{type: String}],
-    status: { type: Number }, // active, block, reported
-    isOnline: { type: Boolean },
-    rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
+  roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+  status: { type: Number }, // active, block, reported
+  isOnline: { type: Boolean },
+  rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
 }, {timestamps: true, usePushEach: true});
 
 /**

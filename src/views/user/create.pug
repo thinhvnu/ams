@@ -5,7 +5,7 @@ block scripts
   script(src='/javascripts/bootstrap-chosen.js')
   script.
     $(function() {
-    $('.chosen-select-deselect').chosen({ allow_single_deselect: true });
+    $('.select-role').chosen({ allow_single_deselect: true, disable_search: false });
     $('.chosen-status, .select-gender').chosen({ allow_single_deselect: true, disable_search: true });
     });
 block content
@@ -58,22 +58,23 @@ block content
               if errors && errors.confirmPassword
                 .help-block #{errors.confirmPassword.msg}
           .form-group
-            .col-lg-4
+            .col-lg-12
+              label.control-label(for='role', style='display: block;text-align: left;') Role
+              select.select-role.form-control(multiple=true, name='roles', data-placeholder='Select Role', style='width: 100%;display: block;')
+                each role in roles
+                  option(value=role._id, selected=(data && data.roles && data.roles.indexOf(role.id) >= 0)) #{role.roleName}
+          .form-group
+            .col-lg-6
               label.control-label(for='gender', style='display: block;text-align: left;') Gender
               select.select-gender.form-control(name='gender', data-placeholder='Gender', style='width: 100px;display: block;')
                 option(value=1) Male
                 option(value=2) Female
                 option(value=2) Other
-            .col-lg-4
-              label.control-label(for='role', style='display: block;text-align: left;') Role
-              select.select-role.form-control(name='role', data-placeholder='Role', style='width: 100px;display: block;')
-                each role in roles
-                  option(value=role.roleCode) #{role.name}
-            .col-lg-4
+            .col-lg-6
               label.control-label(for='status', style='display: block;text-align: left;') Status
               select.chosen-status.form-control(name='status', data-placeholder='Status', style='width: 100px;display: block;')
-                option(value=1) Active
-                option(value=0) Inactive
+                option(value=1, selected=(data && data.status === '1') ? true : false) Active
+                option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
           hr
           .form-group  
             .col-lg-4

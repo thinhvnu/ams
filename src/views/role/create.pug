@@ -47,43 +47,27 @@ block content
 								option(value=1, selected=(data && data.status === '1') ? true : false) Active
 								option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
 					.form-group
-						.col-md-6.col-lg-6
-							table#permission-list.table.table-responsive.display(cellspacing='0', width='100%')
-								thead
-									tr
-										th Permission Name
-										th Access Router
-										th.text-center
-											em.fa.fa-cog
-								tbody
-									each permission, index in permissions
-										tr
-											td #{permission.permissionName}
-											td #{permission.accessRouter}
-											td(align='center')
-												a.u-action.btn.btn-success
-													em.fa.fa-plus
-						.col-md-6.col-lg-6
+						.col-md-12.col-lg-12
 							table#permission-list-selected.table.table-responsive.display(cellspacing='0', width='100%')
 								thead
 									tr
 										th Select
 										th Permission Name
 										th Access Router
-										th.text-center
-											em.fa.fa-cog
+										//- th.text-center
+										//- 	em.fa.fa-cog
 								tbody
 									each permission, index in permissions
 										tr
 											td
 												.checkbox.text-center(style='padding: 0;')
 													label
-														input.uniform(type='checkbox', name='permissions', value=permission._id, checked='', onclick="return false;")
+														input.uniform(type='checkbox', name='permissions', value=permission._id)
 											td #{permission.permissionName}
 											td #{permission.accessRouter}
-											td(align='center')
-												a.u-action.btn.btn-danger
-													em.fa.fa-minus
+											//- td(align='center')
+											//- 	a.u-action.btn.btn-danger
+											//- 		em.fa.fa-minus
 					hr
 					.form-group  
 						.col-lg-8

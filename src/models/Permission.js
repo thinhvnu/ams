@@ -13,6 +13,6 @@ const permissonSchema = new mongoose.Schema({
     updatedBy: {type: mongoose.Schema.Types.ObjectId}
 }, {timestamps: true, usePushEach: true});
 
-const Permission = mongoose.model('Permisson', permissonSchema);
+const Permission = mongoose.model('Permission', permissonSchema);
 
 module.exports = Permission;

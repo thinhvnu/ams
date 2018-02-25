@@ -8,7 +8,7 @@ exports.getIndex = function (req, res) {
 			console.log('err', err)
 			return done(err);
 		}
-		
+		console.log('req.session.user', req.session.user);
 		res.render('role/index', {
 			title: 'Roles',
 			current: ['role', 'index'],
@@ -51,10 +51,10 @@ exports.postCreate = function (req, res) {
 			return;
 		}
 
-	/*
-	* End validate
-	*/
-	var newRole = new Role();
+		/*
+		* End validate
+		*/
+		var newRole = new Role();
 	
 		newRole.roleName = req.body.roleName;
 		newRole.roleCode = req.body.roleCode.toUpperCase();

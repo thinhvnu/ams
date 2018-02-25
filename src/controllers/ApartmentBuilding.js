@@ -132,7 +132,7 @@ exports.postCreate = (req, res, next) => {
  */
 exports.getView = (req, res, next) => {
 	let clientKey = 'abg_view_' + req.params.abgId;
-	console.log('abgId', req.params.abgId);
+	
 	client.get(clientKey, (err, abg) => {
 		if (err) {
 			console.log('err', err);

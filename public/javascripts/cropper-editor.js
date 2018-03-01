@@ -37,6 +37,8 @@ function CropperEditor(config) {
                     toolbar, loading, cropBtn, zoomInBtn, zoomOutBtn,
                     rotateLef, rotateRight, submitCrop;
                 
+                document.body.style.overflow = 'hidden';
+
                 popup = document.createElement('div');
                 popup.className = 'cropper-editor-popup';
 

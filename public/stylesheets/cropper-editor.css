@@ -33,6 +33,8 @@ img {
     text-align: center;
     width: 100%;
     height: calc(100% - 100px);
+    width: 600px;
+    height: 400px;
     left: 0;
     top: 0;
     padding: 15px;

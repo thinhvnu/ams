@@ -31,3 +31,23 @@ function genSlug(s, selector) {
   var slug = stringToSlug(s);
   $(selector).val(slug);
 }
+
+function confirmAction(text, url) {
+
+  confirmAgree = function() {
+    window.location.href = url;
+  }
+
+  confirmCancel = function() {
+    let popupConfirm = document.getElementById('popup-confirm');
+
+    if (popupConfirm) {
+      popupConfirm.remove();
+    }
+  }
+
+  let html = '<div id="popup-confirm" class="confirm-action content-center"><div class="content-center-container"><div class="confirm-action-container"><div class="confirm-message">' + text + '</div><div class="confirm-actions"><button class="btn btn-success confirm-agree" onclick="confirmAgree()"><i class="fa fa-check"></i>&nbsp;Đồng ý</button><button class="btn btn-default confirm-disagree" onclick="confirmCancel()"><i class="fa fa-ban"></i>&nbsp;Thoát</button></div></div></div></div>';
+  document.getElementById('html-bottom').innerHTML += html;
+
+  return false;
+}

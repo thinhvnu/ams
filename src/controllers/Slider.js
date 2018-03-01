@@ -26,14 +26,15 @@ exports.getCreate = function (req, res) {
 exports.postCreate = function (req, res) {
 	/*
 	* Validate create category
-	*/ 
+  */ 
+  req.checkBody('name', 'Tên không được để trống').notEmpty();
 	req.checkBody('image', 'Ảnh không được để trống').notEmpty();
 
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
 			//If there are errors render the form again, passing the previously entered values and errors
-			res.render('slider/create', {
+			return res.render('slider/create', {
         title: 'Create New Category Slider',
         current: ['slider', 'create'],
         data: req.body,
@@ -61,3 +62,22 @@ exports.postCreate = function (req, res) {
     });
 	});
 };
+
+exports.getEdit = (req, res, nex) => {
+
+}
+
+exports.postEdit = (req, res, nex) => {
+  
+}
+
+exports.getDelete = (req, res, nex) => {
+  Slider.remove({ _id: req.params.sliderId }, (err) => {
+    if (err) {
+      req.flash('errors', 'Xóa ảnh không thành công');
+    } else {
+      req.flash('success', 'Xóa ảnh slide thành công');
+    }
+    return res.redirect('/slider');
+  })
+}

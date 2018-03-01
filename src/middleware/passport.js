@@ -16,7 +16,8 @@ exports.isAuthenticated = (req, res, next) => {
             if (accessRouter === '/') {
                 next();
             } else {
-                return res.redirect(publicUrl);
+                req.flash('errors', 'Bạn không có quyền thực hiện chức năng này. Liên hệ quản trị viên để được thêm chức năng');
+                return res.redirect('/');
             }
         }
     } else {
@@ -42,7 +43,8 @@ exports.isAuthenticated = (req, res, next) => {
                     if (accessRouter === '/') {
                         next();
                     } else {
-                        return res.redirect(publicUrl);
+                        req.flash('errors', 'Bạn không có quyền thực hiện chức năng này. Liên hệ quản trị viên để được thêm chức năng');
+                        return res.redirect('/');
                     }
                 }
             } else {
@@ -92,6 +94,7 @@ exports.jwtVerifyToken = (token, cb) => {
  * Check permission
  */
 exports.hasPermission = (user, accessRouter) => {
+    return true;
     if (user && user.roles instanceof Array) {
         for (let i=0; i<user.roles.length; i++) {
             let permissions = user.roles[i].permissions;

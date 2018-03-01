@@ -8,7 +8,6 @@ const passport = require('../middleware/passport');
 
 /* GET home page. */
 router.get('/', passport.isAuthenticated, function(req, res, next) {
-  req.flash('errors', 'test flash message');
   res.render('index', { title: 'Express' });
 });
 

@@ -40,12 +40,12 @@ block content
 								td #{dt.address}
 								td #{dt.manager.userName}
 								td #{dt.createdBy.userName}
-								td.text-center #{dt.status ? 'Public' : 'Draft'}
+								td.text-center #{dt.status ? 'Active' : 'Inactive'}
 								td(align='center')
 									a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default
 										em.fa.fa-eye
 									a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
 										em.fa.fa-pencil
-									a(href='/apartment-building-group/delete/' + dt._id).u-action.btn.btn-danger
+									a(href='/apartment-building-group/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa ảnh slide này không?", "/slider/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
 										em.fa.fa-trash
 							- i += 1

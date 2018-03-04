@@ -64,11 +64,43 @@ exports.postCreate = function (req, res) {
 };
 
 exports.getEdit = (req, res, nex) => {
-
+  Slider.findById(req.params.sliderId, (err, slider) => {
+    res.render('slider/edit', {
+      title: 'Chỉnh sửa ảnh slide',
+      current: ['slider', 'edit'],
+      data: slider
+    });
+  })
 }
 
-exports.postEdit = (req, res, nex) => {
-  
+exports.postUpdate = (req, res, nex) => {
+  Slider.findById(req.params.sliderId, (err, slider) => {
+    if (err) {
+      req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
+      return res.redirect('/slider/edit/' + req.params.sliderId);
+    }
+
+    if (slider) {
+      slider.name = req.body.name;
+      slider.image = req.body.image;
+      slider.link = req.body.link;
+      slider.status = req.body.status;
+      // save the user
+      slider.save(function (err) {
+        if (err) {
+          req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
+          return res.redirect('/slider/edit/' + req.params.sliderId);
+        }
+
+        req.flash('success', 'Cập nhật thành công ' + slider.name);
+        // Insert child to category
+        return res.redirect('/slider');
+      });
+    } else {
+      req.flash('errors', 'Không tìm thấy dữ liệu')
+      return res.redirect('/slider');
+    }
+  })
 }
 
 exports.getDelete = (req, res, nex) => {

@@ -12,7 +12,7 @@ router.get('/', passport.isAuthenticated, SliderController.getIndex);
 router.get('/create', passport.isAuthenticated, SliderController.getCreate);
 router.post('/create', passport.isAuthenticated, SliderController.postCreate);
 router.get('/edit/:sliderId', passport.isAuthenticated, SliderController.getEdit);
-router.post('/edit/:sliderId', passport.isAuthenticated, SliderController.postEdit);
+router.post('/update/:sliderId', passport.isAuthenticated, SliderController.postUpdate);
 router.get('/delete/:sliderId', passport.isAuthenticated, SliderController.getDelete)
 
 module.exports = router;

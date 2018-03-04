@@ -1,0 +1,90 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
+block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script(src='/javascripts/cropper-editor.js')
+
+	script.
+		$(function() {
+		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+	script(type='text/javascript').
+		var cropperEditor = new CropperEditor({ 
+			selector : 'slider-image',
+			uploadDir: '/images/slider/',
+			prefixFileName: 'slide',
+			thumbWidth: 640,
+			thumbHeight: 360,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		cropperEditor.init();
+block content
+	.row
+		.col-lg-12
+			.box.dark
+				header
+					.icons
+						i.fa.fa-edit
+					h5 #{title}
+					// .toolbar
+					.toolbar
+						nav(style='padding: 8px;')
+							a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
+								i.fa.fa-times
+					// /.toolbar
+				#div-1.body.collapse.in(aria-expanded='true', style='')
+				form.form-horizontal(method='POST', action='/slider/update/' + data.id, style="padding: 0 15px;")
+					.form-group
+						.col-lg-6(class=errors && errors.name && 'has-error')
+							label.control-label(for='title') Name
+							input#slider-name.form-control(type='text', name='name', placeholder='Name', value=data && data.name) 
+							if errors && errors.name
+								.help-block #{errors.name.msg}
+						.col-lg-6(class=errors && errors.link && 'has-error')
+							label.control-label(for='link') link
+							input#link.form-control(type='text', name='link', placeholder='Link', value=data && data.link) 
+							if errors && errors.link
+								.help-block #{errors.link.msg}
+					.form-group
+						.col-lg-6(class=errors && errors.image && 'has-error')
+							label.control-label(for='image') Image
+							if data && data.image
+								#slider-image-image-preview.image-preview
+									.image-preview-item
+										span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image, onclick='deleteImage("' + data.image + '", "slider-image")')
+											i.fa.fa-trash
+										img(src=data.thumbnail)
+								input#cropper-editor-input-slider-image(type='hidden', name='image', value=data.image)
+								input#slider-image.mycropper-browse-file(type='file', name='image', disabled)
+								label.custom-file-upload(for='slider-image', style="display: none;")
+									i.fa.fa-cloud-upload
+							else
+								input#slider-image.mycropper-browse-file(type='file', name='image')
+								label.custom-file-upload(for='slider-image')
+									i.fa.fa-cloud-upload
+							if errors && errors.image
+								.help-block #{errors.image.msg}
+						.col-lg-6
+							label.control-label(for='status', style='display: block; text-align: left;') Status
+							select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 100px;')
+								option(value=1, selected=(data && data.status) ? true : false) Public
+								option(value=0, selected=(data && data.status) ? false : true) Draft
+					.form-group  
+							.col-lg-12
+								input#submit.btn.btn-success(type='submit', text='Submit')

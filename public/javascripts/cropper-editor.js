@@ -365,6 +365,37 @@ function CropperEditor(config) {
             xhr.send(formData);
         }.bind(this));
     }
+}
 
+function deleteImage(fileName, inputSelector) {
+    let deleteEl = document.getElementById('delete-' + fileName);
+    if (deleteEl) {
+        /**
+         * Remove file name in input 
+         */
+        var inputEl = document.getElementById('cropper-editor-input-' + inputSelector);
+        if (inputEl) {
+            var inputImgVal = inputEl.value;
+            inputImgVal = inputImgVal.replace(','+fileName, '');
+            inputImgVal = inputImgVal.replace(','+fileName + ',', '');
+            inputImgVal = inputImgVal.replace(fileName, '');
+            
+            if (inputImgVal == '') {
+                inputEl.remove();
 
+                /**
+                 * Enable input file
+                 */
+                var inputFile = document.getElementById(inputSelector);
+                if (inputFile) {
+                    inputFile.disabled = false;
+                    inputFile.value='';
+                    inputFile.nextSibling.style.display = 'flex';
+                }
+            } else {
+                inputEl.value = inputImgVal;
+            }
+        }
+        deleteEl.parentNode.remove();
+    }
 }

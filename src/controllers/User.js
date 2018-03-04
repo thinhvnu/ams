@@ -172,7 +172,7 @@ exports.postCreate = (req, res, next) => {
            */
           var token = passport.jwtCreateToken(user.id);
           res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
-          res.redirect('/');
+          res.redirect('/user');
         });
       });
     }

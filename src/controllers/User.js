@@ -51,7 +51,7 @@ exports.postLogin = (req, res, next) => {
   req.checkBody('email', 'Email is invalid').isEmail();
   req.checkBody('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-
+  console.log('redirectTo', req.session.redirectTo);
   req.getValidationResult().then(function(errors) {
     if (!errors.isEmpty()) {
       var errors = errors.mapped();
@@ -66,7 +66,8 @@ exports.postLogin = (req, res, next) => {
       }, (err, user) => {
         if (err) throw err;
         if (!user) {
-          res.json({ success: false, message: 'Authentication failed. User not found.' });
+          req.flash('errors', 'Authentication failed. User not found.');
+          return res.redirect('/user/login');
         } else {
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
@@ -77,11 +78,11 @@ exports.postLogin = (req, res, next) => {
               /**
                * Using json web token gen token for client
                */
-              var token = passport.jwtCreateToken(user.id);
+              var token = passport.jwtCreateToken(user.id), accessRouter = req.originalUrl;;
               res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
-              return res.redirect('/');
+              return res.redirect(req.session.redirectTo || '/');
             } else {
-              return res.redirect('/login');
+              return res.redirect('/user/login');
             }
           })
         }

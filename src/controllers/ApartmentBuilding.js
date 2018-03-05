@@ -99,7 +99,7 @@ exports.postCreate = (req, res, next) => {
 			apartmentBuilding.manager = req.body.manager;
 			apartmentBuilding.status = req.body.status;
 			apartmentBuilding.createdBy = req.session.user._id;
-			apartmentBuilding.updatedBy = req.session.user._id;
+			// apartmentBuilding.updatedBy = req.session.user._id;
 
 			apartmentBuilding.save((err, ab) => {
 				if (err) {
@@ -131,47 +131,60 @@ exports.postCreate = (req, res, next) => {
  * @param {*} next 
  */
 exports.getView = (req, res, next) => {
-	let clientKey = 'abg_view_' + req.params.abgId;
+	let clientKey = 'ab_view_' + req.params.abId;
 	
-	client.get(clientKey, (err, abg) => {
+	client.get(clientKey, (err, ab) => {
 		if (err) {
 			console.log('err', err);
 			throw err;
 		}
-		if (abg && process.env.CACHE_ENABLE === 1) {
-			abg = JSON.parse(abg);
+		if (ab && process.env.CACHE_ENABLE === 1) {
+			ab = JSON.parse(abg);
 
-			res.render('apartment-building-group/view', {
-				title: abg.abgName,
-				current: ['apartment-building-group', 'view'],
-				data: abg
+			res.render('apartment-building/view', {
+				title: ab.buildingName,
+				current: ['apartment-building', 'view'],
+				data: ab
 			});
 		} else {
-			ApartmentBuildingGroup.findById(req.params.abgId)
+			ApartmentBuilding.findById(req.params.abId)
 				.populate('manager', {
 					'_id': 0,
 					'userName': 1
 				})
+				.populate('apartmentBuildingGroup', {
+					'_id': 0,
+					'abgName': 1
+				})
+				// .populate({
+				// 	path: 'apartments',
+				// 	model: 'Apartment',
+				// 	populate: {
+				// 		path: 'manager',
+				// 		model: 'User',
+				// 		select: { 'userName': 1 }
+				// 	}
+				// })
 				.populate('createdBy', {
 					'_id': 0,
 					'userName': 1
 				})
-				.exec(function (err, abg) {
+				.exec(function (err, ab) {
 					if (err) {
 						console.log('err', err)
 						return next(err);
 					}
 			
-					res.render('apartment-building-group/view', {
-						title: abg.abgName,
-						current: ['apartment-building-group', 'view'],
-						data: abg
+					res.render('apartment-building/view', {
+						title: ab.buildingName,
+						current: ['apartment-building', 'view'],
+						data: ab
 					});
 
 					/**
 					 * Set redis cache data
 					 */
-					client.set(clientKey, JSON.stringify(abg));
+					client.set(clientKey, JSON.stringify(ab));
 				});
 		}
 	});

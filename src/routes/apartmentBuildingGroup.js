@@ -26,4 +26,7 @@ router.post('/update/:abgId', passport.isAuthenticated, abgController.postUpdate
 /* Get view */
 router.get('/view/:abgId', passport.isAuthenticated, abgController.getView);
 
+/* Get delete */
+router.get('/delete/:abgId', passport.isAuthenticated, abgController.getDelete);
+
 module.exports = router;

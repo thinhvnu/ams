@@ -9,7 +9,7 @@ const apartmentModel = new mongoose.Schema({
     area: {type: Number},
     manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     apartmentRooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentRoom'}],
-    building: {type: mongoose.Schema.Types.ObjectId, ref: 'Building'},
+    building: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'},
     status: { type: Number }, // active, inActive
 }, {timestamps: true, usePushEach: true});
 

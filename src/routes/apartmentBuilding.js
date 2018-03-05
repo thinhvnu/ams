@@ -18,7 +18,7 @@ router.get('/create', passport.isAuthenticated, abController.getCreate);
 router.post('/create', passport.isAuthenticated, abController.postCreate);
 
 /* Get view */
-router.get('/view/:abgId', passport.isAuthenticated, abController.getView);
+router.get('/view/:abId', passport.isAuthenticated, abController.getView);
 
 
 module.exports = router;

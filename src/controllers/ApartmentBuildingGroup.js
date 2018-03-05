@@ -252,6 +252,7 @@ exports.getDelete = (req, res, next) => {
 		} else {
 			req.flash('success', 'Xóa thành công');
 		}
+		
 		return res.redirect('/apartment-building-group');
 	})
 }

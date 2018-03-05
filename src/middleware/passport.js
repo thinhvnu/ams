@@ -48,6 +48,7 @@ exports.isAuthenticated = (req, res, next) => {
                     }
                 }
             } else {
+                req.session.redirectTo = accessRouter;
                 return res.redirect(publicUrl);
             }
         });

@@ -1,6 +1,7 @@
 const User = require('./../models/User');
 const Room = require('./../models/Room');
 const Message = require('./../models/Message');
+const Post = require('./../models/Post');
 
 const passport = require('./../middleware/passport');
 
@@ -73,6 +74,43 @@ var ioEvents = function(io) {
                 }
             });
         })
+
+        /**
+         * Emit new comment
+         */
+        socket.on('new_comment', postId => {
+            Post.findById(postId, {
+                '_id': 1,
+                'title': 1,
+                'alias': 1,
+                'image': 1,
+                'imageUrl': 1,
+                'description': 1,
+                'content': 1,
+                'category': 1,
+                'comments': 1,
+                'tags': 1,
+                'seo': 1,
+                'publishTime': 1
+            })
+            .populate({
+                path: 'comments',
+                model: 'Comment',
+                populate: {
+                    path: 'createdBy',
+                    model: 'User',
+                    select: { '_id': 0, 'userName': 1 }
+                }
+            })
+            .exec(function (err, post) {
+                if (err) {
+                    console.log('err', err)
+                    return done(err);
+                }
+                io.sockets.emit('comment', post);
+            });
+        })
+
         /**
          * Event client disconnect
          */

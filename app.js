@@ -34,6 +34,7 @@ const apiChat = require('./src/apis/routes/chat');
 const apiSlider = require('./src/apis/routes/slider');
 const apiPost = require('./src/apis/routes/post');
 const apiUser = require('./src/apis/routes/user');
+const apiComment = require('./src/apis/routes/comment');
 
 var app = express();
 var io = require('socket.io')();
@@ -89,6 +90,7 @@ app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
 app.use('/api/slider', apiSlider);
 app.use('/api/post', apiPost);
+app.use('/api/comment', apiComment);
 app.use('/api/user', apiUser);
 
 // catch 404 and forward to error handler

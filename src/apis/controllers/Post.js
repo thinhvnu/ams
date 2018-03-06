@@ -2,8 +2,8 @@ const Post = require('./../../models/Post');
 
 // Get all posts
 exports.getIndex = function (req, res) {
-	Post.find({status: 1}, {
-		'_id': 0,
+	Post.find({}, {
+		'_id': 1,
 		'title': 1,
 		'alias': 1,
 		'image': 1,
@@ -11,10 +11,21 @@ exports.getIndex = function (req, res) {
 		'description': 1,
 		'content': 1,
 		'category': 1,
+		'comments': 1,
 		'tags': 1,
 		'seo': 1,
 		'publishTime': 1
-	}).exec(function (err, posts) {
+	})
+	.populate({
+		path: 'comments',
+		model: 'Comment',
+		populate: {
+			path: 'createdBy',
+			model: 'User',
+			select: { '_id': 0, 'userName': 1 }
+		}
+	})
+	.exec(function (err, posts) {
 		if (err) {
 			console.log('err', err)
 			return done(err);

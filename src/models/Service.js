@@ -7,10 +7,10 @@ const mongoose = require('mongoose');
 const serviceSchema = new mongoose.Schema({
     serviceName: { type: String, unique: true },
     image: {type: String},
-    description: {type: String},
+    content: {type: String},
+    status: { type: Number }, // active, inActive
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    status: { type: Number }, // active, inActive
 }, {timestamps: true, usePushEach: true});
 
 const Service = mongoose.model('Service', serviceSchema);

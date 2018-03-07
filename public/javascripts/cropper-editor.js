@@ -241,6 +241,7 @@ function CropperEditor(config) {
             xhr.open('POST', '/media/upload-image', true);
             xhr.onload = function (response) {
                 console.log('this', response);
+                document.body.style.overflow = 'auto';
                 /**
                  * Function create image preview item
                  */

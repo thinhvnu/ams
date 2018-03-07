@@ -39,6 +39,20 @@
           a(href='/slider/create')
             i.fa.fa-plus
             |   Thêm slide mới
+    li.menu-dropdown(class=(Array.isArray(current) && current[0]=='service') && 'active')
+      a(href='javascript:void(0);')
+        i.fa.fa-coffee
+        span.link-title  Dịch vụ
+        span.fa.arrow
+      ul.collapse(aria-expanded='false', class=(Array.isArray(current) && current[0]=='service') && 'in')
+        li(class=(Array.isArray(current) && current[0]=='service' && current[1]=='index') && 'current-route')
+          a(href='/service')
+            i.fa.fa-list
+            |   Dịch vụ sẵn có
+        li(class=(Array.isArray(current) && current[0]=='service' && current[1]=='create') && 'current-route')
+          a(href='/service/create')
+            i.fa.fa-plus
+            |   Thêm dịch vụ mới
     li.menu-dropdown(class=(Array.isArray(current) && current[0]=='apartment-building-group') && 'active')
       a(href='javascript:void(0);')
         i.fa.fa-bank

@@ -6,8 +6,12 @@ exports.postFroalaUploadImage = (req, res, next) => {
     // Return data.
     if (err) {
       return res.send(JSON.stringify(err));
-    }
-		console.log('data', data);
+	}
+	try {
+		data.link = data.link.replace('../media', process.env.MEDIA_URL);
+	} catch (e) {
+		
+	}
     res.send(data);
   });
 }

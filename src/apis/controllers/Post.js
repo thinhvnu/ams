@@ -14,7 +14,7 @@ exports.getIndex = function (req, res) {
 		'comments': 1,
 		'tags': 1,
 		'seo': 1,
-		'publishTime': 1
+		'createdAt': 1
 	})
 	.populate({
 		path: 'comments',
@@ -25,6 +25,7 @@ exports.getIndex = function (req, res) {
 			select: { '_id': 0, 'userName': 1 }
 		}
 	})
+	.sort('-createdAt')
 	.exec(function (err, posts) {
 		if (err) {
 			console.log('err', err)
@@ -98,7 +99,7 @@ exports.getDetail = (req, res, next) => {
 		'comments': 1,
 		'tags': 1,
 		'seo': 1,
-		'publishTime': 1
+		'createdAt': 1
 	})
 	.populate({
 		path: 'comments',
@@ -109,7 +110,6 @@ exports.getDetail = (req, res, next) => {
 			select: { '_id': 0, 'userName': 1 }
 		}
 	})
-	.sort('-createdAt')
 	.exec(function (err, post) {
 		if (err) {
 			console.log('err', err)

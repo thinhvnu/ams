@@ -91,7 +91,7 @@ var ioEvents = function(io) {
                 'comments': 1,
                 'tags': 1,
                 'seo': 1,
-                'publishTime': 1
+                'createdAt': 1
             })
             .populate({
                 path: 'comments',

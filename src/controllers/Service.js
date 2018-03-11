@@ -62,3 +62,14 @@ exports.postCreate = function (req, res) {
 		}
 	});
 };
+
+exports.getDelete = (req, res, nex) => {
+	Service.remove({ _id: req.params.serviceId }, (err) => {
+	  if (err) {
+		req.flash('errors', 'Xóa dịch vụ không thành công');
+	  } else {
+		req.flash('success', 'Xóa dịch vụ thành công');
+	  }
+	  return res.redirect('/service');
+	})
+  }

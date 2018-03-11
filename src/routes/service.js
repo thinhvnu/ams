@@ -2,9 +2,16 @@ var express = require('express');
 var router = express.Router();
 var ServiceController = require('../controllers/Service');
 
+
+/**
+ * API keys and Passport configuration.
+ */
+const passport = require('../middleware/passport');
+
 /* get all categories. */
-router.get('/', ServiceController.getIndex);
-router.get('/create', ServiceController.getCreate);
-router.post('/create', ServiceController.postCreate);
+router.get('/', passport.isAuthenticated, ServiceController.getIndex);
+router.get('/create', passport.isAuthenticated, ServiceController.getCreate);
+router.post('/create', passport.isAuthenticated, ServiceController.postCreate);
+router.get('/delete/:serviceId', passport.isAuthenticated, ServiceController.getDelete)
 
 module.exports = router;

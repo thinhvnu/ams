@@ -80,7 +80,6 @@ exports.jwtVerifyToken = (token, cb) => {
                 }
             })
             .exec((err, user) => {
-                console.log('userrr', user);
                 if (err) {
                     return cb(null);   
                 } else {

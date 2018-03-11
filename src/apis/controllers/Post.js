@@ -109,6 +109,7 @@ exports.getDetail = (req, res, next) => {
 			select: { '_id': 0, 'userName': 1 }
 		}
 	})
+	.sort('-createdAt')
 	.exec(function (err, post) {
 		if (err) {
 			console.log('err', err)

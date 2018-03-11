@@ -13,6 +13,15 @@ const serviceSchema = new mongoose.Schema({
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, {timestamps: true, usePushEach: true});
 
+serviceSchema.set('toJSON', {
+    virtuals: true
+});
+
+// Get full image url with media config
+serviceSchema.virtual('imageUrl').get(function () {
+    return process.env.MEDIA_URL + '/images/service/thumb/' + this.image;
+});
+
 const Service = mongoose.model('Service', serviceSchema);
 
 module.exports = Service;

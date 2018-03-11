@@ -36,6 +36,7 @@ const apiSlider = require('./src/apis/routes/slider');
 const apiPost = require('./src/apis/routes/post');
 const apiUser = require('./src/apis/routes/user');
 const apiComment = require('./src/apis/routes/comment');
+const apiService = require('./src/apis/routes/service');
 
 var app = express();
 var io = require('socket.io')();
@@ -94,6 +95,7 @@ app.use('/api/slider', apiSlider);
 app.use('/api/post', apiPost);
 app.use('/api/comment', apiComment);
 app.use('/api/user', apiUser);
+app.use('/api/service', apiService);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

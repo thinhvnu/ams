@@ -18,7 +18,7 @@ var config = require('./config/main');
 
 dotenv.config({path: '.env'});
 
-const index = require('./src/routes/index');
+const dashboard = require('./src/routes/dashboard');
 const user = require('./src/routes/user');
 const role = require('./src/routes/role');
 const room = require('./src/routes/room');
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 app.use('/libs', express.static(__dirname + '/node_modules/'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.use('/', dashboard);
 app.use('/user', user);
 app.use('/role', role);
 app.use('/room', room);

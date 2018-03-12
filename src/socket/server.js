@@ -37,6 +37,7 @@ var ioEvents = function(io) {
                     room: user.id,
                     userName: user.userName
                 });
+                console.log('connect successfully');
             } else {
                 console.log('client auth failed and server auto disconnected');
                 socket.emit('authenticate_failed');

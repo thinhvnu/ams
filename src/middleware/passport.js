@@ -64,7 +64,6 @@ exports.jwtCreateToken = (data) => {
 exports.jwtVerifyToken = (token, cb) => {
     // verifies secret and checks exp
     jwt.verify(token, process.env.JWT_SECRET, function(err, userId) {  
-        console.log('user_id', userId);
         if (err) {
           return cb(null);   
         } else {

@@ -49,7 +49,7 @@
 #sidebar .menu-item a .icon {
     width: 25px;
 }
-#sidebar .menu-item.active a .icon {
+#sidebar .menu-item:hover a .icon, #sidebar .menu-item.active a .icon {
     color: #38a22c;
 }
 .menu-item .link-title {

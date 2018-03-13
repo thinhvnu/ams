@@ -9,6 +9,7 @@ var count = 0;
 
 var ioEvents = function(io) {
     io.on('connection', function(socket){
+        console.log('client connected');
         /**
          * Event only for admin identify: if user loged in allow chat else show popup login
          * if user loged in => exist socket.request.user

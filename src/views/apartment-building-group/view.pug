@@ -9,11 +9,11 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark.abgs-detail(style='margin-bottom: 15px;')
-				header
-					.icons
-						i.fa.fa-table
-					h5 #{title}
+			.abgs-detail(style='margin-bottom: 15px;')
+				header.detail-header
+					.icon
+						i.fa.fa-eye
+					h5.detail-title #{title}
 				.body
 					.row
 						.col-md-6.col-lg-6
@@ -39,11 +39,12 @@ block content
 								.icon
 									i.fa.fa-plus-circle
 								.content Người tạo: #{data.createdBy.userName}
-			.box.dark.apartment-buildings
-				header
-					.icons
+			hr
+			.apartment-buildings
+				header.detail-header
+					.icon
 						i.fa.fa-home
-					h5 Danh sách tòa nhà ( #{data.apartmentBuildings.length} tòa )
+					h5.detail-title Danh sách tòa nhà ( #{data.apartmentBuildings.length} tòa )
 				.body
 					each dt, i in data.apartmentBuildings
 						if (i % 2 === 0)
@@ -51,30 +52,30 @@ block content
 						.col-md-6.col-lg-6
 							.apartment-building-item.well
 								.building-name.text-center(style='font-weight: bold;') #{dt.buildingName}
-								hr
-								.row
-									.col-md-6.col-lg-6
-										.item-detail
-											.icon
-												i.fa.fa-building
-											.content Số tầng: #{dt.floor}
-									.col-md-6.col-lg-6
-										.item-detail
-											.icon
-												i.fa.fa-area-chart
-											.content Diện tích:
-												i  #{dt.area} ( m2 )
-								.row
-									.col-md-6.col-lg-6
-										.item-detail
-											.icon
-												i.fa.fa-user-o
-											.content Quản lý: #{dt.manager.userName}
-									.col-md-6.col-lg-6
-										.item-detail
-											.icon
-												i.fa.fa-book
-											.content Số phòng trống: X ( phòng )
+								.building-content
+									.row
+										.col-md-6.col-lg-6
+											.item-detail
+												.icon
+													i.fa.fa-building
+												.content Số tầng: #{dt.floor}
+										.col-md-6.col-lg-6
+											.item-detail
+												.icon
+													i.fa.fa-area-chart
+												.content Diện tích:
+													i  #{dt.area}
+									.row
+										.col-md-6.col-lg-6
+											.item-detail
+												.icon
+													i.fa.fa-user-o
+												.content Quản lý: #{dt.manager.userName}
+										.col-md-6.col-lg-6
+											.item-detail
+												.icon
+													i.fa.fa-book
+												.content Số phòng trống: X
 						if (i % 2 === 1 || i === data.apartmentBuildings.length - 1)
 							| </div>
 

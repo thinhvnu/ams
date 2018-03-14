@@ -26,6 +26,7 @@ const slider = require('./src/routes/slider');
 const media = require('./src/routes/media');
 const abg = require('./src/routes/apartmentBuildingGroup');
 const ab = require('./src/routes/apartmentBuilding');
+const apartment = require('./src/routes/apartment');
 const service = require('./src/routes/service');
 const permission = require('./src/routes/permission');
 
@@ -82,6 +83,7 @@ app.use('/slider', slider);
 app.use('/media', media);
 app.use('/apartment-building-group', abg);
 app.use('/apartment-building', ab);
+app.use('/apartment', apartment);
 app.use('/service', service);
 app.use('/permission', permission);
 

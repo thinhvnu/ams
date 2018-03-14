@@ -14,34 +14,30 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-table
-					h5 #{title}
-				.user-actions
-					a.btn.btn-success(href='/slider/create') Tạo mới
-				table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
-					thead
+			.user-actions
+				a.btn.btn-success(href='/slider/create') Tạo mới
+			hr
+			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs ID
+						th Name
+						th Image
+						th Link
+						th.text-center Status
+						th.text-center.no-sort
+							em.fa.fa-cog
+				tbody
+					each slider, i in sliders
 						tr
-							th.hidden-xs ID
-							th Name
-							th Image
-							th Link
-							th.text-center Status
-							th.text-center.no-sort
-								em.fa.fa-cog
-					tbody
-						each slider, i in sliders
-							tr
-								td.hidden-xs #{i}
-								td #{slider.name}
-								td
-									img.img-responsive(src=process.env.MEDIA_URL + '/images/slider/thumb/' + slider.image, style='width: 128px;')
-								td #{slider.link}
-								td.text-center #{slider.status ? 'Public' : 'Draft'}
-								td(align='center')
-									a(href='/slider/edit/' + slider._id).u-action.btn.btn-success
-										em.fa.fa-pencil
-									a(href='/slider/delete/' + slider._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa ảnh slide này không?", "/slider/delete/' + slider._id + '")').u-action.btn.btn-danger.confirm-action
-										em.fa.fa-trash
+							td.hidden-xs #{i+1}
+							td #{slider.name}
+							td
+								img.img-responsive(src=process.env.MEDIA_URL + '/images/slider/thumb/' + slider.image, style='width: 128px;')
+							td #{slider.link}
+							td.text-center #{slider.status ? 'Public' : 'Draft'}
+							td(align='center')
+								a(href='/slider/edit/' + slider._id).u-action.btn.btn-success
+									em.fa.fa-pencil
+								a(href='/slider/delete/' + slider._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa ảnh slide này không?", "/slider/delete/' + slider._id + '")').u-action.btn.btn-danger.confirm-action
+									em.fa.fa-trash

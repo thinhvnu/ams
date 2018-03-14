@@ -59,4 +59,5 @@
 /* Css content page */
 #content {
     min-height: calc(100% - 50px);
+    background: #ffffff;
 }

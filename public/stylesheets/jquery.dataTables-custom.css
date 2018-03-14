@@ -97,4 +97,6 @@ table.dataTable thead tr th.sorting_desc::after {
 table.dataTable tbody tr td {
   padding: 5px 8px;
   border-right: 1px solid #ececec;
+  border-left: 1px solid #ececec;
+  vertical-align: middle;
 }

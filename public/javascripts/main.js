@@ -51,3 +51,26 @@ function confirmAction(text, url) {
 
   return false;
 }
+
+function onSelectAbg(value) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let response = JSON.parse(this.response);
+        if (response.data) {
+          let data = response.data;
+
+          let options = '<option value="">Chọn tòa nhà</option>';
+
+          for(let i=0; i<data.length; i++) {
+            options += '<option value="' + data[i]._id + '">' + data[i].buildingName + '</option>'
+          }
+
+          $('#choosen-apartment-building').empty().append(options).trigger("chosen:updated");
+        }
+        // Action to be performed when the document is read;
+      }
+  };
+  xhttp.open('GET', '/api/abg/list-building/' + value, true);
+  xhttp.send();
+}

@@ -58,6 +58,7 @@ exports.postCreate = function (req, res) {
         res.send({ "result": false });
       }
       // Insert child to category
+      req.flash('success', 'Thêm ảnh slide thành công');
       res.redirect('/slider');
     });
 	});

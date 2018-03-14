@@ -1,6 +1,10 @@
 @font-face {
-    font-family: sfRegular;
+    font-family: sfMedium;
     src: url(/fonts/SF-UI-Text-Medium.ttf);
+}
+@font-face {
+    font-family: sfRegular;
+    src: url(/fonts/SF-UI-Text-Regular.ttf);
 }
 
 #header {
@@ -53,11 +57,32 @@
     color: #38a22c;
 }
 .menu-item .link-title {
-    font-family: sfRegular;
+    font-family: sfMedium;
 }
 
 /* Css content page */
 #content {
     min-height: calc(100% - 50px);
     background: #ffffff;
+}
+#content .content-header {
+    font-family: sfMedium;
+    font-size: 16px;
+    color: #000000;
+}
+input.mycropper-browse-file[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 80px;
+    height: 60px;
+}
+.custom-file-upload i{
+    font-size: 28px;
+    margin: auto;
 }

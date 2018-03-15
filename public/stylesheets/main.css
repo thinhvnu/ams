@@ -80,7 +80,7 @@
     border: 0;
     border-radius: 0;
     background: #dddddd;
-    color: #f1981d;
+    color: #000000;
 }
 #content .content-header {
     font-family: sfMedium;
@@ -154,7 +154,7 @@ input.mycropper-browse-file[type="file"] {
     border: 1px solid #f1f1f1;
 }
 .item-detail {
-    padding: 15px;
+    padding: 15px 0 15px 15px;
 }
 .item-detail .icon, .item-detail .content {
     display: inline-block;
@@ -175,4 +175,39 @@ input.mycropper-browse-file[type="file"] {
 }
 .building-content .item-detail .content {
     width: calc(100% - 25px);
+}
+.apartments .body {
+    padding-top: 15px;
+}
+.apartment-item {
+    padding: 10px;
+}
+.apartment-item .a-name, .apartment-item .a-content {
+    display: inline-block;
+    vertical-align: middle;
+}
+.apartment-item .a-name {
+    /* padding: 0 25px; */
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    background: #4966A2;
+    color: #fff;
+    font-family: sfMedium;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.apartment-item .a-content {
+    padding-left: 15px;
+    width: calc(100% - 90px);
+    background: #ffffff;
+}
+.a-content .a-content-item {
+    padding: 5px 0;
+}
+.a-content .a-content-item i {
+    margin-right: 5px;
 }

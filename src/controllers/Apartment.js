@@ -95,9 +95,10 @@ exports.postCreate = (req, res, next) => {
 				/**
 				 * Save to apartment building group
 				 */
-				ApartmentBuilding.findById(a.apartmentBuilding, (err, ab) => {
+				ApartmentBuilding.findById(a.building, (err, ab) => {
+					console.log('ab', ab);
 					if (ab) {
-						ab.apartments.push(ab._id);
+						ab.apartments.push(a._id);
 						ab.save();
 					}
 				})

@@ -64,37 +64,22 @@ block content
 							.icon
 								i.fa.fa-home
 							h5.detail-title Danh sách căn hộ ( #{data.apartments.length} căn )
-				//- .body
-				//- 	each dt, i in data.apartmentBuildings
-				//- 		if (i % 2 === 0)
-				//- 			| <div class="row">
-				//- 		.col-md-6.col-lg-6
-				//- 			.apartment-building-item.well
-				//- 				.building-name.text-center(style='font-weight: bold;') #{dt.buildingName}
-				//- 				hr
-				//- 				.row
-				//- 					.col-md-6.col-lg-6
-				//- 						.item-detail
-				//- 							.icon
-				//- 								i.fa.fa-building
-				//- 							.content Số tầng: #{dt.floor}
-				//- 					.col-md-6.col-lg-6
-				//- 						.item-detail
-				//- 							.icon
-				//- 								i.fa.fa-area-chart
-				//- 							.content Diện tích:
-				//- 								i  #{dt.area} ( m2 )
-				//- 				.row
-				//- 					.col-md-6.col-lg-6
-				//- 						.item-detail
-				//- 							.icon
-				//- 								i.fa.fa-user-o
-				//- 							.content Quản lý: #{dt.manager.userName}
-				//- 					.col-md-6.col-lg-6
-				//- 						.item-detail
-				//- 							.icon
-				//- 								i.fa.fa-book
-				//- 							.content Số phòng trống: X ( phòng )
-				//- 		if (i % 2 === 1 || i === data.apartmentBuildings.length - 1)
-				//- 			| </div>
+						.body
+							each dt, i in data.apartments
+								if (i % 3 === 0)
+									| <div class="row">
+								.col-md-4.col-lg-4
+									.apartment-item.well
+										.a-name #{dt.apartmentName}
+										.a-content
+											.a-content-item #{dt.manager ? dt.manager.userName : 'Trống'}
+											.a-content-item
+												i.fa.fa-area-chart
+												| #{dt.area ? dt.area : 0} (m2)
+											.a-content-item
+												i.fa.fa-users
+												| #{dt.users ? dt.users.length : 0}
+										
+								if (i % 3 === 2 || i === data.apartments.length - 1)
+									| </div>
 

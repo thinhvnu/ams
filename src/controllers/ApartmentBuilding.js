@@ -156,15 +156,15 @@ exports.getView = (req, res, next) => {
 					'_id': 0,
 					'abgName': 1
 				})
-				// .populate({
-				// 	path: 'apartments',
-				// 	model: 'Apartment',
-				// 	populate: {
-				// 		path: 'manager',
-				// 		model: 'User',
-				// 		select: { 'userName': 1 }
-				// 	}
-				// })
+				.populate({
+					path: 'apartments',
+					model: 'Apartment',
+					populate: {
+						path: 'manager',
+						model: 'User',
+						select: { 'userName': 1 }
+					}
+				})
 				.populate('createdBy', {
 					'_id': 0,
 					'userName': 1

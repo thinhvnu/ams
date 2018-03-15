@@ -1,3 +1,4 @@
+const Apartment = require('../models/Apartment');
 const ApartmentBuilding = require('../models/ApartmentBuilding');
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const User = require('../models/User');
@@ -6,54 +7,40 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
 
 // Get all apartment building
 exports.getIndex = function (req, res, next) {
-	client.get('get_list_abs', (err, abs) => {
-		if (err) {
-			console.log('err', err);
-			throw err;
-		}
-		if (abs && process.env.CACHE_ENABLE == 1) {
-			console.log('cache_enable', process.env.CACHE_ENABLE);
+	Apartment.find({})
+		.populate('manager', {
+			'_id': 1,
+			'userName': 1
+		})
+		.populate({
+			path: 'building',
+			model: 'ApartmentBuilding',
+			select: {
+				'_id': 1,
+				'buildingName': 1
+			},
+			populate: {
+				path: 'apartmentBuildingGroup',
+				model: 'ApartmentBuildingGroup',
+				select: { 'abgName': 1 }
+			}
+		})
+		.populate('createdBy', {
+			'_id': 0,
+			'userName': 1
+		})
+		.exec(function (err, apartments) {
+			if (err) {
+				console.log('err', err)
+				return next(err);
+			}
+
 			res.render('apartment/index', {
 				title: 'Danh sách tòa nhà',
-				current: ['apartment-building', 'index'],
-				data: JSON.parse(abs)
+				current: ['apartment', 'index'],
+				data: apartments
 			});
-		} else {
-			ApartmentBuilding.find({})
-				.populate('manager', {
-					'_id': 1,
-					'userName': 1
-                })
-                // .populate('apartments', {
-                //     '_id': 1
-                // })
-                .populate('apartmentBuildingGroup', {
-					'_id': 1,
-					'abgName': 1
-                })
-				.populate('createdBy', {
-					'_id': 0,
-					'userName': 1
-				})
-				.exec(function (err, abs) {
-					if (err) {
-						console.log('err', err)
-						return next(err);
-					}
-
-					res.render('apartment-building/index', {
-						title: 'Danh sách tòa nhà',
-						current: ['apartment-building', 'index'],
-						data: abs
-					});
-
-					/**
-					 * Set redis cache data
-					 */
-					client.set('get_list_abs', JSON.stringify(abs));
-				});
-		}
-	});
+		});
 }
 
 exports.getCreate = (req, res, next) => {
@@ -70,10 +57,9 @@ exports.getCreate = (req, res, next) => {
 }
 
 exports.postCreate = (req, res, next) => {
-	req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
+	req.checkBody('apartmentName', 'Tên căn hộ không được để trống').notEmpty();
 	req.checkBody('apartmentBuildingGroup', 'Chọn khu chung cư').notEmpty();
-	req.checkBody('floor', 'Số tầng của tòa nhà ?').notEmpty();
-	req.checkBody('manager', 'Chọn quản lý').notEmpty();
+	req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();;
 	
 	req.getValidationResult().then(function (errors) {
 		if (!errors.isEmpty()) {
@@ -81,8 +67,8 @@ exports.postCreate = (req, res, next) => {
 
 			ApartmentBuildingGroup.find({}, (err, abgs) => {
 				User.find({}, (err, users) => {
-					res.render('apartment-building/create', {
-						title: 'Thêm tòa nhà',
+					res.render('apartment/create', {
+						title: 'Thêm căn hộ',
 						users: users,
 						abgs: abgs,
 						errors: errors,
@@ -91,17 +77,17 @@ exports.postCreate = (req, res, next) => {
 				});
 			});
 		} else {
-			const apartmentBuilding = new ApartmentBuilding();
-			apartmentBuilding.buildingName = req.body.buildingName;
-			apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
-			apartmentBuilding.floor = req.body.floor;
-			apartmentBuilding.area = req.body.area;
-			apartmentBuilding.manager = req.body.manager;
-			apartmentBuilding.status = req.body.status;
-			apartmentBuilding.createdBy = req.session.user._id;
+			const apartment = new Apartment();
+			apartment.apartmentName = req.body.apartmentName;
+			apartment.buildingGroup = req.body.apartmentBuildingGroup;
+			apartment.building = req.body.apartmentBuilding;
+			apartment.area = req.body.area;
+			apartment.manager = req.body.manager || null;
+			apartment.status = req.body.status;
+			apartment.createdBy = req.session.user._id;
 			// apartmentBuilding.updatedBy = req.session.user._id;
 
-			apartmentBuilding.save((err, ab) => {
+			apartment.save((err, a) => {
 				if (err) {
 					console.log('error create new abg', err);
 					return next(err);
@@ -109,16 +95,14 @@ exports.postCreate = (req, res, next) => {
 				/**
 				 * Save to apartment building group
 				 */
-				ApartmentBuildingGroup.findById(ab.apartmentBuildingGroup, (err, abg) => {
-					if (abg) {
-						abg.apartmentBuildings.push(ab._id);
-						abg.save();
+				ApartmentBuilding.findById(a.apartmentBuilding, (err, ab) => {
+					if (ab) {
+						ab.apartments.push(ab._id);
+						ab.save();
 					}
 				})
-
-				client.del('get_list_abs', () => {
-					res.redirect('/apartment-building');
-				})
+				req.flash('success', 'Đã thêm căn hộ ' + a.apartmentName);
+				return res.redirect('/apartment');
 			});
 		}
 	});

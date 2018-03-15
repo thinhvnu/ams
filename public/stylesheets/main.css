@@ -66,6 +66,22 @@
     background: #ffffff;
     padding-top: 15px;
 }
+#content .sub-menu {
+    min-height: 100%;
+    border-right: 1px solid #ccc;
+}
+.sub-menu .nav-tabs {
+    border-bottom: 0;
+}
+.sub-menu .nav-tabs li {
+    width: 100%;
+}
+.sub-menu .nav-tabs>li.active>a, .sub-menu .nav-tabs>li.active>a:focus, .sub-menu .nav-tabs>li.active>a:hover {
+    border: 0;
+    border-radius: 0;
+    background: #dddddd;
+    color: #f1981d;
+}
 #content .content-header {
     font-family: sfMedium;
     font-size: 16px;
@@ -148,8 +164,8 @@ input.mycropper-browse-file[type="file"] {
     padding-left: 10px;
 }
 .apartment-buildings .body {
-    padding: 15px;
-    border: 1px solid #f1f1f1;
+    padding: 15px 0;
+    /* border: 1px solid #f1f1f1; */
 }
 .apartment-building-item .building-name {
     padding-bottom: 15px;

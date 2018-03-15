@@ -3,7 +3,7 @@ const Post = require('./../../models/Post');
 
 exports.postCreateNew = (req, res, next) => {
     req.checkBody('content', 'Nội dung bình luận không được để trống').notEmpty();
-	
+	console.log('req.body', req.body);
     var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
             return res.json({

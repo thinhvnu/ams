@@ -15,7 +15,7 @@ block content
 	.row
 		.col-lg-12
 			.user-actions
-				a.btn.btn-success(href='/apartment-building/create') Tạo mới
+				a.btn.btn-success(href='/apartment/create') Tạo mới
 			hr
 			table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
@@ -33,9 +33,9 @@ block content
 						tr
 							td.hidden-xs #{i+1}
 							td #{dt.apartmentName}
-							td #{dt.apartmentName}
-							td #{dt.apartmentName}
-							td #{dt.manager.userName}
+							td #{dt.building.buildingName}
+							td #{dt.building.apartmentBuildingGroup.abgName}
+							td #{dt.manager && dt.manager.userName}
 							td #{dt.createdBy.userName}
 							td.text-center #{dt.status ? 'Active' : 'Inactive'}
 							td(align='center')
@@ -43,5 +43,5 @@ block content
 									em.fa.fa-eye
 								a(href='/apartment/edit/' + dt._id).u-action.btn.btn-success
 									em.fa.fa-pencil
-								a(href='/apartment/delete/' + dt._id).u-action.btn.btn-danger
+								a(href='/apartment/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa căn hộ này không?", "/apartment/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
 									em.fa.fa-trash

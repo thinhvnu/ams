@@ -14,7 +14,13 @@ exports.getIndex = function (req, res) {
 		'comments': 1,
 		'tags': 1,
 		'seo': 1,
-		'createdAt': 1
+		'createdAt': 1,
+		'createdBy': 1
+	})
+	.populate({
+		path: 'createdBy',
+		model: 'User',
+		select: { '_id': 0, 'userName': 1 }
 	})
 	.populate({
 		path: 'comments',
@@ -63,6 +69,7 @@ exports.postCreateNew = (req, res, next) => {
 			newPost.category = data.categoryId ? data.categoryId : null;
 			newPost.status = data.status;
 			newPost.pinPost = data.pinPost;
+			newPost.createdBy = req.session.user._id;
 			newPost.save(function (err, newPost) {
 				if (err) {
 					return res.json({

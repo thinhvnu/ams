@@ -8,53 +8,62 @@ block scripts
 		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true })
 block content
 	.row
-		.col-lg-12
-			.abgs-detail(style='margin-bottom: 15px;')
-				header.detail-header
-					.icon
-						i.fa.fa-eye
-					h5.detail-title #{title}
-				.body
-					.row
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-address-book-o
-								.content #{data.buildingName}
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-address-book-o
-								.content Khu chung cư: #{data.apartmentBuildingGroup.abgName}
+		.col-lg-2.col-md-2.col-sm-2.sub-menu
+			ul.sub-menu-item.nav.nav-tabs
+				li.active
+					a(data-toggle='tab', href='#details') Chi tiết
+				li
+					a(data-toggle='tab', href='#apartments') Căn hộ
+		.col-lg-10.col-md-10.col-sm-10
+			.tab-content
+				#details.tab-pane.fade.in.active
+					.abgs-detail(style='margin-bottom: 15px;')
+						header.detail-header
+							.icon
+								i.fa.fa-eye
+							h5.detail-title #{title}
+						.body
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-address-book-o
+										.content #{data.buildingName}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-address-book-o
+										.content Khu chung cư: #{data.apartmentBuildingGroup.abgName}
 
-					.row
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-map-marker
-								.content Diện tích:
-									i  #{data.area}
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-user-o
-								.content Quản lý: #{data.manager.userName}
-					.row
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-building
-								.content Số tầng : #{data.floor}
-						.col-md-6.col-lg-6
-							.item-detail
-								.icon
-									i.fa.fa-user-o
-								.content Người tạo: #{data.createdBy.userName}
-			.apartments
-				header.detail-header
-					.icon
-						i.fa.fa-home
-					h5.detail-title Danh sách căn hộ ( #{data.apartments.length} căn )
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-map-marker
+										.content Diện tích:
+											i  #{data.area}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-user-o
+										.content Quản lý: #{data.manager.userName}
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-building
+										.content Số tầng : #{data.floor}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-user-o
+										.content Người tạo: #{data.createdBy.userName}
+				#apartments.tab-pane.fade
+					.apartments
+						header.detail-header
+							.icon
+								i.fa.fa-home
+							h5.detail-title Danh sách căn hộ ( #{data.apartments.length} căn )
 				//- .body
 				//- 	each dt, i in data.apartmentBuildings
 				//- 		if (i % 2 === 0)

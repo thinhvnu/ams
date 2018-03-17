@@ -33,6 +33,7 @@ function genSlug(s, selector) {
 }
 
 function confirmAction(text, url) {
+  $('body').addClass('overflow-hidden');
 
   confirmAgree = function() {
     window.location.href = url;
@@ -42,6 +43,7 @@ function confirmAction(text, url) {
     let popupConfirm = document.getElementById('popup-confirm');
 
     if (popupConfirm) {
+      $('body').removeClass('overflow-hidden');
       popupConfirm.remove();
     }
   }
@@ -97,6 +99,12 @@ function addUserToApartment(apartmentId) {
   http.onreadystatechange = function() {//Call a function when the state changes.
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
+
+      console.log('dataRes', dataRes);
+      if (dataRes.errorCode === 0) {
+        window.location.reload();
+        return;
+      }
 
       if (dataRes.errors) {
         if (dataRes.errors.firstName) {

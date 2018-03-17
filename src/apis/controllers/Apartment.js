@@ -30,22 +30,65 @@ exports.postAddNewUser = function (req, res) {
 
           user.status = 1;
         
-          User.findOne({ email: req.body.userName }, (err, existingUser) => {
-            if (err) { return next(err); }
-            if (existingUser) {
-              req.flash('errors', { msg: 'Account with that email address already exists.' });
-              return res.redirect('/apartment/view/' + req.body.apartmentId);
-            }
-            user.save((err) => {
+          Apartment.findById(req.body.apartmentId, (err, apartment) => {
+            User.findOne({ userName: req.body.userName }, (err, existingUser) => {
               if (err) { 
-                console.log('error create new user', err);
-                return next(err); 
+                return res.json({
+                  success: false,
+                  errorCode: 113,
+                  message: 'Save user failed'
+                })
               }
-              return res.json({
+              if (existingUser) {
+                apartment.users.pull(existingUser._id);
+                apartment.users.push(existingUser._id);
+                console.log('pull before push');
+                apartment.save();
+
+                if (existingUser.apartments) {
+                  existingUser.apartments.pull(apartment._id);
+                  existingUser.apartments.push(apartment._id);
+                } else {
+                  existingUser.apartments = [];
+                  existingUser.apartments.push(apartment._id);
+                }
+                existingUser.save();
+
+                return res.json({
                   success: true,
                   errorCode: 0,
                   message: 'Successfully'
-              })
+                })
+              }
+
+              user.apartments.pull(apartment._id);
+              user.apartments.push(apartment._id);
+              
+              user.save(function (err, user) {
+                if (err) { 
+                  console.log('error create new user', err);
+                  return next(err); 
+                }
+
+                console.log('apartment', apartment);
+                if (apartment.user) {
+                  apartment.users.pull(user._id);
+                }
+                else {
+                  apartment.users = [];
+                  apartment.users.push(user._id);
+                }
+                
+                apartment.save((err, a) => {
+                  console.log('err', err);
+                });
+
+                return res.json({
+                  success: true,
+                  errorCode: 0,
+                  message: 'Successfully'
+                })
+              }.bind(apartment));
             });
           });
         }

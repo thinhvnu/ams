@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   lastName: {type: String},
   address: {type: String},
 
+  apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
   roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },

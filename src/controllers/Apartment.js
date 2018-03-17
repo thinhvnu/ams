@@ -145,15 +145,7 @@ exports.getView = (req, res, next) => {
 					path: 'buildingGroup',
 					model: 'ApartmentBuildingGroup'
 				})
-				// .populate({
-				// 	path: 'apartments',
-				// 	model: 'Apartment',
-				// 	populate: {
-				// 		path: 'manager',
-				// 		model: 'User',
-				// 		select: { 'userName': 1 }
-				// 	}
-				// })
+				.populate('users')
 				.populate('createdBy', {
 					'_id': 0,
 					'userName': 1
@@ -163,12 +155,14 @@ exports.getView = (req, res, next) => {
 						console.log('err', err)
 						return next(err);
 					}
-			
-					res.render('apartment/view', {
-						title: a.apartmentName,
-						current: ['apartment', 'view'],
-						data: a
-					});
+					User.find({}, (err, users) => {
+						res.render('apartment/view', {
+							title: a.apartmentName,
+							current: ['apartment', 'view'],
+							data: a,
+							users: users
+						});
+					})
 
 					/**
 					 * Set redis cache data

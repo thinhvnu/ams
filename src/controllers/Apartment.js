@@ -116,30 +116,34 @@ exports.postCreate = (req, res, next) => {
  * @param {*} next 
  */
 exports.getView = (req, res, next) => {
-	let clientKey = 'ab_view_' + req.params.abId;
+	let clientKey = 'apartment_view_' + req.params.apartmentId;
 	
-	client.get(clientKey, (err, ab) => {
+	client.get(clientKey, (err, a) => {
 		if (err) {
 			console.log('err', err);
 			throw err;
 		}
-		if (ab && process.env.CACHE_ENABLE === 1) {
-			ab = JSON.parse(abg);
+		if (a && process.env.CACHE_ENABLE === 1) {
+			a = JSON.parse(a);
 
-			res.render('apartment-building/view', {
-				title: ab.buildingName,
-				current: ['apartment-building', 'view'],
-				data: ab
+			res.render('apartment/view', {
+				title: a.apartmentName,
+				current: ['apartment', 'view'],
+				data: a
 			});
 		} else {
-			ApartmentBuilding.findById(req.params.abId)
+			Apartment.findById(req.params.apartmentId)
 				.populate('manager', {
 					'_id': 0,
 					'userName': 1
 				})
-				.populate('apartmentBuildingGroup', {
-					'_id': 0,
-					'abgName': 1
+				.populate({
+					path: 'building',
+					model: 'ApartmentBuilding'
+				})
+				.populate({
+					path: 'buildingGroup',
+					model: 'ApartmentBuildingGroup'
 				})
 				// .populate({
 				// 	path: 'apartments',
@@ -154,22 +158,22 @@ exports.getView = (req, res, next) => {
 					'_id': 0,
 					'userName': 1
 				})
-				.exec(function (err, ab) {
+				.exec(function (err, a) {
 					if (err) {
 						console.log('err', err)
 						return next(err);
 					}
 			
-					res.render('apartment-building/view', {
-						title: ab.buildingName,
-						current: ['apartment-building', 'view'],
-						data: ab
+					res.render('apartment/view', {
+						title: a.apartmentName,
+						current: ['apartment', 'view'],
+						data: a
 					});
 
 					/**
 					 * Set redis cache data
 					 */
-					client.set(clientKey, JSON.stringify(ab));
+					client.set(clientKey, JSON.stringify(a));
 				});
 		}
 	});

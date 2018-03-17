@@ -74,3 +74,86 @@ function onSelectAbg(value) {
   xhttp.open('GET', '/api/abg/list-building/' + value, true);
   xhttp.send();
 }
+
+function addUserToApartment(apartmentId) {
+  let firstName = document.getElementsByName('firstName')[0],
+    lastName = document.getElementsByName('lastName')[0],
+    userName = document.getElementsByName('userName')[0],
+    email = document.getElementsByName('email')[0];
+    password = document.getElementsByName('password')[0],
+    confirmPassword = document.getElementsByName('confirmPassword')[0],
+    params = 'firstName=' + firstName.value + '&lastName=' + lastName.value + 
+    '&userName=' + userName.value + '&email=' + email.value +
+    '&password=' + password.value + '&confirmPassword=' + confirmPassword.value +
+    '&apartmentId=' + apartmentId;
+
+  let http = new XMLHttpRequest();
+  let url = "/api/apartment/add-new-user";
+  http.open("POST", url, true);
+  
+  //Send the proper header information along with the request
+  http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  
+  http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      if (dataRes.errors) {
+        if (dataRes.errors.firstName) {
+          firstName.parentNode.classList.remove('has-error');
+          firstName.parentNode.classList.add('has-error');
+          if (firstName.parentNode.lastChild.classList.contains('help-block')) {
+            firstName.parentNode.lastChild.remove();
+          }
+          firstName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.firstName.msg + '</div>';
+        }
+        if (dataRes.errors.lastName) {
+          lastName.parentNode.classList.remove('has-error');
+          lastName.parentNode.classList.add('has-error');
+          if (lastName.parentNode.lastChild.classList.contains('help-block')) {
+            lastName.parentNode.lastChild.remove();
+          }
+          lastName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.lastName.msg + '</div>';
+        }
+        if (dataRes.errors.userName) {
+          userName.parentNode.classList.remove('has-error');
+          userName.parentNode.classList.add('has-error');
+          if (userName.parentNode.lastChild.classList.contains('help-block')) {
+            userName.parentNode.lastChild.remove();
+          }
+          userName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.userName.msg + '</div>';
+        }
+        if (dataRes.errors.email) {
+          email.parentNode.classList.remove('has-error');
+          email.parentNode.classList.add('has-error');
+          if (email.parentNode.lastChild.classList.contains('help-block')) {
+            email.parentNode.lastChild.remove();
+          }
+          email.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.email.msg + '</div>';
+        }
+        if (dataRes.errors.password) {
+          password.parentNode.classList.remove('has-error');
+          password.parentNode.classList.add('has-error');
+          if (password.parentNode.lastChild.classList.contains('help-block')) {
+            password.parentNode.lastChild.remove();
+          }
+          password.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.password.msg + '</div>';
+        }
+        if (dataRes.errors.confirmPassword) {
+          confirmPassword.parentNode.classList.remove('has-error');
+          confirmPassword.parentNode.classList.add('has-error');
+          if (confirmPassword.parentNode.lastChild.classList.contains('help-block')) {
+            confirmPassword.parentNode.lastChild.remove();
+          }
+          confirmPassword.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.confirmPassword.msg + '</div>';
+        }
+      }
+    }
+  }
+  http.send(params);
+}
+
+$(document).on('click', 'input', function() {
+  $(this).parent().removeClass('has-error');
+  $(this).nextAll('.help-block').remove();
+});

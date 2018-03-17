@@ -15,13 +15,13 @@ block content
 	.row
 		.col-lg-12
 			.user-actions
-				a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
+				a.btn.btn-success(href='/utility/create') Tạo mới
 			hr
 			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
 						th.hidden-xs STT
-						th Tên dịch vụ
+						th Tên tiện ích
 						th Ảnh
 						th.text-center Trạng thái
 						th.text-center.no-sort
@@ -30,12 +30,12 @@ block content
 					each dt, i in data
 						tr
 							td.hidden-xs #{i + 1}
-							td #{dt.serviceName}
+							td #{dt.utilityName}
 							td
-								img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
+								img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.image, style='width: 128px;')
 							td.text-center #{dt.status ? 'Public' : 'Draft'}
 							td(align='center')
-								a(href='/service/edit/' + dt._id).u-action.btn.btn-success
+								a(href='/utility/edit/' + dt._id).u-action.btn.btn-success
 									em.fa.fa-pencil
-								a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+								a(href='/utility/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa tiện ích này không?", "/utility/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
 									em.fa.fa-trash

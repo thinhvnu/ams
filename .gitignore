@@ -17,6 +17,11 @@
 /media/images/service/thumb/*
 !/media/images/service/origin/.gitkeep
 !/media/images/service/thumb/.gitkeep
+#--utility--
+/media/images/utility/origin/*
+/media/images/utility/thumb/*
+!/media/images/utility/origin/.gitkeep
+!/media/images/utility/thumb/.gitkeep
 #--avatar--
 /media/images/avatar/origin/*
 /media/images/avatar/thumb/*

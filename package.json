@@ -21,6 +21,7 @@
     "file-type": "^7.4.0",
     "font-awesome": "^4.7.0",
     "formidable": "^1.1.1",
+    "froala-editor": "^2.7.6",
     "jquery": "^3.2.1",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.11.10",

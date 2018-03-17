@@ -1,0 +1,129 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$('.chosen-select').chosen()
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true })
+block content
+	.row
+		.col-lg-2.col-md-2.col-sm-2.sub-menu
+			ul.sub-menu-item.nav.nav-tabs
+				li.active
+					a(data-toggle='tab', href='#details') Thông tin
+				//- li
+				//- 	a(data-toggle='tab', href='#apartments') Căn hộ
+		.col-lg-10.col-md-10.col-sm-10
+			.tab-content
+				#details.tab-pane.fade.in.active
+					.apartment-detail(style='margin-bottom: 15px;')
+						header.detail-header
+							.icon
+								i.fa.fa-eye
+							h5.detail-title Phòng: #{title}
+						.body
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-address-book-o
+										.content Tên căn hộ: #{data.apartmentName}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-user-o
+										.content Chủ hộ: #{data.manager ? data.manager.userName : 'Còn trống'}
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-address-book-o
+										.content Khu chung cư: #{data.buildingGroup.abgName}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-building
+										.content Tòa nhà: #{data.building.buildingName}
+							.row
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-building
+										.content Ngày tạo : #{data.createdAt.toLocaleString('vi-VN')}
+								.col-md-6.col-lg-6
+									.item-detail
+										.icon
+											i.fa.fa-user-o
+										.content Người tạo: #{data.createdBy.userName}
+					.resident
+						header.detail-header
+							.icon
+								i.fa.fa-home
+							h5.detail-title Cư dân ( #{data.users ? data.users.length : 0} người )
+							button.btn.btn-success.pull-right(type='button', data-toggle='modal', data-target='#addUser')
+								i.fa.fa-plus
+								| &nbsp;Thêm
+							#addUser.modal.fade(role='dialog')
+								#add-user-to-apartment.form-horizontal
+									.modal-dialog
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title Thêm cư dân
+											.modal-body
+												.form-group
+													.col-lg-6(class=errors && errors.firstName && 'has-error')
+														label.control-label(for='firstname') Họ
+														input#firstname.form-control(type='text', name='firstName', placeholder='Enter first name')
+														if errors && errors.firstName
+															.help-block #{errors.firstName.msg}
+													.col-lg-6(class=errors && errors.lastName && 'has-error')
+														label.control-label(for='lastName') Tên
+														input#lastname.form-control(type='text', name='lastName', placeholder='Last Name')
+														if errors && errors.lastName
+															.help-block #{errors.lastName.msg}
+												.form-group
+													.col-lg-6(class=errors && errors.userName && 'has-error')
+														label.control-label(for='username') Tên đăng nhập
+														input#username.form-control(type='text', name='userName', placeholder='Enter username')
+														if errors && errors.userName
+															.help-block #{errors.userName.msg}
+													.col-lg-6(class=errors && errors.email && 'has-error')
+														label.control-label(for='email') Email
+														input#email.form-control(type='text', name='email', placeholder='Email')
+														if errors && errors.email
+															.help-block #{errors.email.msg}
+												.form-group
+													.col-lg-6(class=errors && errors.password && 'has-error')
+														label.control-label(for='password') Mật khẩu
+														input#password.form-control(type='password', name='password', placeholder='Mật khẩu đăng nhập')  
+														if errors && errors.password
+															.help-block #{errors.password.msg}
+													.col-lg-6(class=errors && errors.confirmPassword && 'has-error')
+														label.control-label(for='confirmPassword') Nhập lại mật khẩu
+														input#confirmPassword.form-control(type='password', name='confirmPassword', placeholder='Nhập lại mật khẩu')  
+														if errors && errors.confirmPassword
+															.help-block #{errors.confirmPassword.msg}
+											.modal-footer
+												button.btn.btn-success.pull-left(type='submit', onClick='addUserToApartment("' + data._id + '")') Lưu lại
+												button.btn.btn-default(type='button', data-dismiss='modal') Hủy
+						.body
+							each dt, i in data.users
+								//- if (i % 3 === 0)
+								//- 	| <div class="row">
+								//- .col-md-4.col-lg-4
+								//- 	.apartment-item.well
+								//- 		.a-name #{dt.apartmentName}
+								//- 		.a-content
+								//- 			.a-content-item #{dt.manager ? dt.manager.userName : 'Trống'}
+								//- 			.a-content-item
+								//- 				i.fa.fa-area-chart
+								//- 				| #{dt.area ? dt.area : 0} (m2)
+								//- 			.a-content-item
+								//- 				i.fa.fa-users
+								//- 				| #{dt.users ? dt.users.length : 0}
+										
+								//- if (i % 3 === 2 || i === data.apartments.length - 1)
+								//- 	| </div>
+

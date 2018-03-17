@@ -11,6 +11,7 @@ const apartmentModel = new mongoose.Schema({
     apartmentRooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentRoom'}],
     building: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'},
     buildingGroup: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuildingGroup'},
+    users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     status: { type: Number }, // active, inActive
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 }, {timestamps: true, usePushEach: true});

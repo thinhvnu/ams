@@ -140,6 +140,7 @@ input.mycropper-browse-file[type="file"] {
     padding: 5px 0;
     background: #3a589e;
     color: #ffffff;
+    padding-right: 15px;
 }
 .detail-header .icon, .detail-header .detail-title {
     display: inline-block;
@@ -210,4 +211,7 @@ input.mycropper-browse-file[type="file"] {
 }
 .a-content .a-content-item i {
     margin-right: 5px;
+}
+.modal-content {
+    color: #000000;
 }

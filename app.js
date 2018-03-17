@@ -28,17 +28,20 @@ const abg = require('./src/routes/apartmentBuildingGroup');
 const ab = require('./src/routes/apartmentBuilding');
 const apartment = require('./src/routes/apartment');
 const service = require('./src/routes/service');
+const utility = require('./src/routes/utility');
 const permission = require('./src/routes/permission');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
 const apiChat = require('./src/apis/routes/chat');
 const apiAbg = require('./src/apis/routes/abg');
+const apiApartment = require('./src/apis/routes/apartment');
 const apiSlider = require('./src/apis/routes/slider');
 const apiPost = require('./src/apis/routes/post');
 const apiUser = require('./src/apis/routes/user');
 const apiComment = require('./src/apis/routes/comment');
 const apiService = require('./src/apis/routes/service');
+const apiUtility = require('./src/apis/routes/utility');
 
 var app = express();
 var io = require('socket.io')();
@@ -86,6 +89,7 @@ app.use('/apartment-building-group', abg);
 app.use('/apartment-building', ab);
 app.use('/apartment', apartment);
 app.use('/service', service);
+app.use('/utility', utility);
 app.use('/permission', permission);
 
 /**
@@ -95,11 +99,13 @@ app.use('/api/media', apiMedia);
 app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
 app.use('/api/abg', apiAbg);
+app.use('/api/apartment', apiApartment);
 app.use('/api/slider', apiSlider);
 app.use('/api/post', apiPost);
 app.use('/api/comment', apiComment);
 app.use('/api/user', apiUser);
 app.use('/api/service', apiService);
+app.use('/api/utility', apiUtility);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -7,6 +7,13 @@
     src: url(/fonts/SF-UI-Text-Regular.ttf);
 }
 
+/* crack froala editor lib*/
+.fr-box .show-placeholder div:first-child {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+
 #header {
     width: 100%;
     height: 50px;

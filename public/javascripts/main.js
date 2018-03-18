@@ -188,7 +188,6 @@ function selectExistingUserToApartment(apartmentId) {
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
 
-      console.log('dataRes', dataRes);
       if (dataRes.errorCode === 0) {
         window.location.reload();
         return;
@@ -215,6 +214,66 @@ function downloadFileImport(url) {
   };
   xhttp.open('GET', url, true);
   xhttp.send();
+}
+
+function importFileAbg(selector) {
+  if (selector.files && selector.files[0]) {
+    let file = selector.files[0];
+    let formData = new FormData();
+    formData.append('fileImport', file);
+
+    let xhr = new XMLHttpRequest();
+    // Open the connection.
+    xhr.open('POST', '/api/media/upload-excel-file', true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        let dataRes = JSON.parse(this.response);
+        if (dataRes.success) {
+          let tableEl = document.querySelector('#abgDataImport table tbody');
+          let showData = document.getElementById('abg-data-import-file');
+          let tableHtml = '';
+          if (tableEl) {
+            for (let i=0, len = dataRes.data.length; i<len; i++) {
+              tableHtml += '<tr><td>' + dataRes.data[i].ten_chung_cu + '</td><td>' + dataRes.data[i].dia_chi + '</td></tr>';
+            }
+
+            tableEl.innerHTML = tableHtml;
+
+            if (showData) {
+              showData.click();
+            }
+
+            let abgSubmitData = document.getElementById('abg-submit-data');
+            if (abgSubmitData) {
+              abgSubmitData.addEventListener('click', function() {
+                /**
+                 * Submit data
+                 */
+                let xhttp = new XMLHttpRequest();
+                let params = 'data=' + JSON.stringify(dataRes.data);
+                xhttp.onreadystatechange = function() {
+                  if(xhttp.readyState == 4 && xhttp.status == 200) {
+                    let dataRes = JSON.parse(this.response);
+
+                    if (dataRes.success) {
+                      window.location.reload();
+                    }
+                  }
+                };
+                xhttp.open('POST', '/api/abg/submit-data', true);
+                //Send the proper header information along with the request
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send(params);
+              }.bind(dataRes));
+            }
+          }
+        }
+      } else {
+        alert('An error occurred!');
+      }
+    };
+    xhr.send(formData);
+  }
 }
 
 $(document).on('click', 'input', function() {

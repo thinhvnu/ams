@@ -10,5 +10,8 @@ const passport = require('./../../middleware/apiPassport');
 /* API create new post */
 router.post('/upload-image', mediaController.postUploadImage);
 
+/* API upload file */
+router.post('/upload-excel-file', mediaController.postUploadExcelFile);
+
 
 module.exports = router;

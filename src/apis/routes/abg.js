@@ -10,5 +10,7 @@ const passport = require('./../../middleware/apiPassport');
 
 /* GET list building. */
 router.get('/list-building/:abgId', abgController.getListBuilding);
+/* POST submit data. */
+router.post('/submit-data', passport.isAuthenticated, abgController.postSubmitData);
 
 module.exports = router;

@@ -69,3 +69,47 @@ exports.postUploadImage = (req, res, next) => {
 		}
 	});
 }
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.postUploadExcelFile = (req, res, next) => {
+	var fs = require('fs'),
+	path = require('path');
+	formidable = require('formidable'),
+	XLSX = require('xlsx'),
+	form = new formidable.IncomingForm();
+
+    form.on('file', function (name, file) {
+		let uploadFilePath = path.join(__dirname, '/../../..' + '/media/files/import/' + Date.now() + '-' + file.name);
+
+		fs.rename(file.path, uploadFilePath, function (err) {
+			if (err) {
+				return res.json({
+					success: false,
+					errorCode: 1312,
+					message: 'Upload file failed'
+				})
+			};
+			/**
+			 * Read xlsx to data
+			 */
+			let wb = XLSX.readFile(uploadFilePath);
+			let sheet_name_list = wb.SheetNames;
+			let data = XLSX.utils.sheet_to_json(wb.Sheets[sheet_name_list[0]]);
+
+			return res.json({
+				success: true,
+				errorCode: 0,
+				filePath: uploadFilePath,
+				data: data
+			})
+		});
+	});
+
+	// Parse the incoming form fields.
+	form.parse(req);
+}

@@ -114,6 +114,15 @@ input.mycropper-browse-file[type="file"] {
     font-size: 28px;
     margin: auto;
 }
+.import-file {
+    width: auto;
+    height: auto;
+    border: 0;
+    margin: 0;
+}
+.import-file i {
+    font-size: 16px;
+}
 .content-center {
     position: fixed;
     width: 100%;

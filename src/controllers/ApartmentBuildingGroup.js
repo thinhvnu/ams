@@ -53,10 +53,10 @@ exports.getImportTemplate = (req, res, next) => {
 	let abgData = [], managerData = [], abgWs, managerWs, wb, filePath;
 
 	abgData = [
-		['Tên chung cư', 'Quản lý', 'Địa chỉ']
+		['ten_chung_cu', 'quan_ly', 'dia_chi']
 	];
 	managerData = [
-		['ID', 'Họ tên', 'SĐT'],
+		['id', 'ho_ten', 'sdt'],
 		['123131', 'Nguyễn Viết Thịnh', '01626878789']
 	]
 
@@ -89,7 +89,6 @@ exports.getCreate = (req, res, next) => {
 
 exports.postCreate = (req, res, next) => {
 	req.checkBody('abgName', 'Tên khu chung cư không được để trống').notEmpty();
-	req.checkBody('manager', 'Chọn quản lý').notEmpty();
 	req.checkBody('address', 'Địa chỉ không được để trống').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {

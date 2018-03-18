@@ -2,6 +2,13 @@
 /node_modules
 
 #ignore media
+#--file--#
+/media/files/import-template/*
+/media/files/import/*
+/media/files/export/*
+!/media/files/import-template/.gitkeep
+!/media/files/import/.gitkeep
+!/media/files/export/.gitkeep
 #--slider--
 /media/images/slider/origin/*
 /media/images/slider/thumb/*
@@ -28,10 +35,8 @@
 !/media/images/avatar/origin/.gitkeep
 !/media/images/avatar/thumb/.gitkeep
 #--store--
-/media/images/store/origin/*
-/media/images/store/thumb/*
-!/media/images/store/origin/.gitkeep
-!/media/images/store/thumb/.gitkeep
+/media/images/store/*
+!/media/images/store/.gitkeep
 
 #ignore some config variable local
 .env

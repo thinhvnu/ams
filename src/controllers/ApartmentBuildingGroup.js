@@ -48,6 +48,35 @@ exports.getIndex = function (req, res, next) {
 	});
 }
 
+exports.getImportTemplate = (req, res, next) => {
+	const XLSX = require('xlsx'), path = require('path');
+	let abgData = [], managerData = [], abgWs, managerWs, wb, filePath;
+
+	abgData = [
+		['Tên chung cư', 'Quản lý', 'Địa chỉ']
+	];
+	managerData = [
+		['ID', 'Họ tên', 'SĐT'],
+		['123131', 'Nguyễn Viết Thịnh', '01626878789']
+	]
+
+	abgWs = XLSX.utils.aoa_to_sheet(abgData);
+	managerWs = XLSX.utils.aoa_to_sheet(managerData);
+
+	wb = XLSX.utils.book_new();
+	filePath = path.join(__dirname, '/../..' + '/media/files/import-template/building-group-import.xlsx');
+
+	XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
+	XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
+	XLSX.writeFile(wb, filePath);
+
+	return res.json({
+		success: true,
+		errorCode: 0,
+		fileUrl: process.env.MEDIA_URL + '/files/import-template/building-group-import.xlsx'
+	});
+}
+
 exports.getCreate = (req, res, next) => {
 	User.find({}, (err, users) => {
 		res.render('apartment-building-group/create', {

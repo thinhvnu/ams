@@ -22,6 +22,7 @@ block content
 					tr
 						th.hidden-xs STT
 						th Tên dịch vụ
+						th Icon
 						th Ảnh
 						th Giá (VNĐ)
 						th.text-center Trạng thái
@@ -32,6 +33,8 @@ block content
 						tr
 							td.hidden-xs #{i + 1}
 							td #{dt.serviceName}
+							td
+								img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 128px;')
 							td
 								img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
 							td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}

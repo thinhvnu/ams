@@ -28,6 +28,7 @@ exports.postCreate = function (req, res) {
 	* Validate create category
 	*/ 
 	req.checkBody('serviceName', 'Tên dịch vụ không được để trống').notEmpty();
+	req.checkBody('icon', 'Icon dịch vụ không được để trống').notEmpty();
 	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
 	
 	var errors = req.getValidationResult().then(function(errors) {
@@ -44,6 +45,7 @@ exports.postCreate = function (req, res) {
 			var newService = new Service();
 			
 			newService.serviceName = data.serviceName;
+			newService.icon = data.icon;
 			newService.image = data.image;
 			newService.content = data.content;
 			newService.price = data.price;

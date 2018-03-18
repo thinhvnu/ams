@@ -16,6 +16,12 @@ block content
 		.col-lg-12
 			.user-actions
 				a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
+				.btn.btn-success(onclick='return downloadFileImport("/apartment-building-group/import-template")')
+					| Nhập liệu excel &nbsp;
+					i.fa.fa-file-excel-o
+				.btn.btn-success(onclick='return downloadFileImport("/apartment-building-group/import-template")')
+					| Tải mẫu nhập liệu &nbsp;
+					i.fa.fa-download
 			hr
 			table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead

@@ -25,6 +25,28 @@ block scripts
 			});
 		});
 	script(type='text/javascript').
+		var iconCropperEditor = new CropperEditor({ 
+			selector : 'icon-image',
+			uploadDir: '/images/service/',
+			prefixFileName: 'service',
+			thumbWidth: 100,
+			thumbHeight: 100,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		iconCropperEditor.init();
+
 		var cropperEditor = new CropperEditor({ 
 			selector : 'service-image',
 			uploadDir: '/images/service/',
@@ -55,17 +77,35 @@ block content
 			#div-1.body.collapse.in(aria-expanded='true', style='')
 			form.form-horizontal(method='POST', action='/service/create', style="padding: 0 15px;")
 				.form-group
-					.col-lg-8(class=errors && errors.serviceName && 'has-error')
+					.col-lg-6(class=errors && errors.serviceName && 'has-error')
 						label.control-label(for='serviceName') Tên dịch vụ
 						input#serrvice-name.form-control(type='text', name='serviceName', value=data && data.serviceName, placeholder='Nhập tên dịch vụ')
 						if errors && errors.serviceName
 							.help-block #{errors.serviceName.msg}
-					.col-lg-4(class=errors && errors.price && 'has-error')
+					.col-lg-6(class=errors && errors.price && 'has-error')
 						label.control-label(for='price') Giá dịch vụ (VNĐ)
 						input#serrvice-price.form-control(type='text', name='price', value=data && data.price, placeholder='Giá dịch vụ')
 						if errors && errors.price
 							.help-block #{errors.price.msg}
 				.form-group
+					.col-lg-6(class=errors && errors.icon && 'has-error')
+						label.control-label(for='icon') Icon dịch vụ
+						if data && data.image
+							label.custom-file-upload(for='service-icon', style='display: none;')
+								i.fa.fa-cloud-upload
+							input#icon-image.mycropper-browse-file(type='file', name='icon', disabled=true)
+							input#cropper-editor-input-icon-image(type='hidden', name='icon', value=data.icon)
+							#icon-image-preview.image-preview
+								.image-preview-item
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.icon)
+										i.fa.fa-trash
+									img(src='/media/images/service/thumb/' + data.icon)
+						else
+							input#icon-image.mycropper-browse-file(type='file', name='icon')
+							label.custom-file-upload(for='icon-image')
+								i.fa.fa-cloud-upload
+						if errors && errors.icon
+							.help-block #{errors.icon.msg}
 					.col-lg-6(class=errors && errors.image && 'has-error')
 						label.control-label(for='image') Ảnh dịch vụ
 						if data && data.image

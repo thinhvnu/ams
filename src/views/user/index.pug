@@ -12,39 +12,33 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-table
-					h5 #{title}
-				.user-actions
-					a.btn.btn-success(href='/user/create') Tạo mới
-				table#user-list.table.table-responsive.display(cellspacing='0', width='100%')
-					thead
+			.user-actions
+				a.btn.btn-success(href='/user/create') Tạo mới
+			hr
+			table#user-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs ID
+						th UserName
+						th Email
+						th Gender
+						th Role Code
+						th.text-center Status
+						th.text-center
+							em.fa.fa-cog
+				tbody
+					each user, i in users
 						tr
-							th.hidden-xs ID
-							th UserName
-							th Email
-							th Gender
-							th Role Code
-							th.text-center Status
-							th.text-center
-								em.fa.fa-cog
-					tbody
-						- var i = 1;
-						each user in users
-							tr
-								td.hidden-xs #{i}
-								td #{user.userName}
-								td #{user.email}
-								td #{(user.gender === 1) ? 'Male' : ((user.gender === 2) ? 'Female' : 'Other')}
-								td #{user.roles}
-								td.text-center #{user.status ? 'Active' : 'Inactive'}
-								td(align='center')
-									a.u-action.btn.btn-default
-										em.fa.fa-eye
-									a.u-action.btn.btn-success
-										em.fa.fa-pencil
-									a.u-action.btn.btn-danger
-										em.fa.fa-trash
-							- i += 1
+							td.hidden-xs #{i + 1}
+							td #{user.userName}
+							td #{user.email}
+							td #{(user.gender === 1) ? 'Male' : ((user.gender === 2) ? 'Female' : 'Other')}
+							td #{user.roles}
+							td.text-center #{user.status ? 'Active' : 'Inactive'}
+							td(align='center')
+								a.u-action.btn.btn-default
+									em.fa.fa-eye
+								a.u-action.btn.btn-success
+									em.fa.fa-pencil
+								a.u-action.btn.btn-danger
+									em.fa.fa-trash

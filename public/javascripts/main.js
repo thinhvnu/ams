@@ -202,6 +202,21 @@ function selectExistingUserToApartment(apartmentId) {
   http.send(params);
 }
 
+function downloadFileImport(url) {
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      if (dataRes.success) {
+        window.location.href = dataRes.fileUrl;
+      }
+    }
+  };
+  xhttp.open('GET', url, true);
+  xhttp.send();
+}
+
 $(document).on('click', 'input', function() {
   $(this).parent().removeClass('has-error');
   $(this).nextAll('.help-block').remove();

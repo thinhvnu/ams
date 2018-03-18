@@ -160,6 +160,9 @@ input.mycropper-browse-file[type="file"] {
     font-size: 16px;
     /* font-weight: bold; */
 }
+.user-actions .btn {
+    margin-right: 15px;
+}
 .detail-header .icon {
     padding: 0 15px;
 }

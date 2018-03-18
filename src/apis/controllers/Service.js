@@ -8,6 +8,8 @@ exports.getIndex = function (req, res) {
 		'serviceName': 1,
 		'image': 1,
 		'imageUrl': 1,
+		'icon': 1,
+		'iconUrl': 1,
 		'content': 1,
 		'price': 1
 	})

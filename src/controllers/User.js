@@ -122,7 +122,7 @@ exports.getCreate = (req, res) => {
  */
 exports.postCreate = (req, res, next) => {
   req.checkBody('userName', 'UserName is required').notEmpty();
-  req.checkBody('roles', 'Roles is required').notEmpty();
+  // req.checkBody('roles', 'Roles is required').notEmpty();
   req.checkBody('email', 'Email is invalid').isEmail();
   req.checkBody('password', 'Password must be at least 4 characters long').len(4);
   req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);

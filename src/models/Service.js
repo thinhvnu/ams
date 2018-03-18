@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
  */
 const serviceSchema = new mongoose.Schema({
     serviceName: { type: String, unique: true },
+    icon: {type: String},
     image: {type: String},
     content: {type: String},
     price: {type: Number},
@@ -16,6 +17,11 @@ const serviceSchema = new mongoose.Schema({
 
 serviceSchema.set('toJSON', {
     virtuals: true
+});
+
+// Get full image url with media config
+serviceSchema.virtual('iconUrl').get(function () {
+    return process.env.MEDIA_URL + '/images/service/thumb/' + this.icon;
 });
 
 // Get full image url with media config

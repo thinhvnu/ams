@@ -29,7 +29,7 @@ exports.getClients = (req, res, next) => {
                 if (err) {
                     return res.json({
                         success: false,
-                        errorCode: 0004,
+                        errorCode: '0004',
                         data: [],
                         message: 'Error'
                     });
@@ -84,7 +84,7 @@ exports.getMessages = (req, res, next) => {
             console.log('err', err);
 			return res.json({
                 success: false,
-                errorCode: 0004,
+                errorCode: '0004',
                 message: 'Error'
             });
 		} else {

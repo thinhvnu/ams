@@ -10,5 +10,6 @@ const passport = require('./../../middleware/apiPassport');
 
 /* GET list building. */
 router.post('/add-new-user', apartmentController.postAddNewUser);
+router.post('/add-exist-user', apartmentController.postAddExistUser);
 
 module.exports = router;

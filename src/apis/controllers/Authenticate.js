@@ -25,7 +25,7 @@ exports.accessToken = (req, res, next) => {
          */
         return res.json({
             success: false,
-            errorCode: 001,
+            errorCode: '001',
             message: 'Email or password is empty'
         })
       } else {

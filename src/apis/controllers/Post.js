@@ -53,7 +53,7 @@ exports.postCreateNew = (req, res, next) => {
 		if (!errors.isEmpty()) {
             return res.json({
                 success: false,
-                errorCode: 010,
+                errorCode: '010',
                 message: errors,
                 data: req.body
             });
@@ -74,7 +74,7 @@ exports.postCreateNew = (req, res, next) => {
 				if (err) {
 					return res.json({
                         success: false,
-                        errorCode: 010,
+                        errorCode: '010',
                         message: errors,
                         data: req.body
                     })

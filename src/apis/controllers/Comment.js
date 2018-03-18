@@ -24,7 +24,7 @@ exports.postCreateNew = (req, res, next) => {
 				if (err) {
 					return res.json({
                         success: false,
-                        errorCode: 010,
+                        errorCode: '010',
                         message: errors,
                         data: req.body
                     })
@@ -33,7 +33,7 @@ exports.postCreateNew = (req, res, next) => {
                         if (err || !post) {
                             return res.json({
                                 success: false,
-                                errorCode: 121,
+                                errorCode: '121',
                                 message: 'Comment failed'
                             });
                         }

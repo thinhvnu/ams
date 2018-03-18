@@ -161,6 +161,47 @@ function addUserToApartment(apartmentId) {
   http.send(params);
 }
 
+function selectExistingUserToApartment(apartmentId) {
+  let apartmentUser = document.getElementsByName('apartmentUser')[0],
+    params = '';
+
+  let options = apartmentUser.options, opt, result = [];
+
+  for (var i=0, iLen=options.length; i<iLen; i++) {
+    opt = options[i];
+
+    if (opt.selected) {
+      result.push(opt.value || opt.text);
+    }
+  }
+
+  params = 'apartmentUser=' + JSON.stringify(result) + '&apartmentId=' + apartmentId;
+
+  let http = new XMLHttpRequest();
+  let url = "/api/apartment/add-exist-user";
+  http.open("POST", url, true);
+  
+  //Send the proper header information along with the request
+  http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  
+  http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      console.log('dataRes', dataRes);
+      if (dataRes.errorCode === 0) {
+        window.location.reload();
+        return;
+      }
+
+      if (dataRes.errors) {
+        
+      }
+    }
+  }
+  http.send(params);
+}
+
 $(document).on('click', 'input', function() {
   $(this).parent().removeClass('has-error');
   $(this).nextAll('.help-block').remove();

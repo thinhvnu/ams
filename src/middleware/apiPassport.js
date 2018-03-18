@@ -31,7 +31,7 @@ exports.isAuthenticated = (req, res, next) => {
             } else {
                 return res.json({
                     success: false,
-                    errorCode: 401,
+                    errorCode: '401',
                     message: 'Authenticate failed'
                 });
             }

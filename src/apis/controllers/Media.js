@@ -23,7 +23,7 @@ exports.postUploadImage = (req, res, next) => {
 	if (!imageData || !imageType) {
 		return res.json({
 			success: false,
-			errorCode: 100,
+			errorCode: '100',
 			message: 'Image type or Image data empty'
 		});
 	}
@@ -41,7 +41,7 @@ exports.postUploadImage = (req, res, next) => {
 	if (!ext) {
 		return res.json({
 			success: false,
-			errorCode: 101,
+			errorCode: '101',
 			message: 'Data is not image'
 		});
 	}
@@ -53,7 +53,7 @@ exports.postUploadImage = (req, res, next) => {
 			console.log(err);
 			return res.json({
 				success: false,
-				errorCode: 102,
+				errorCode: '102',
 				message: 'Image data error'
 			});
 		} else {

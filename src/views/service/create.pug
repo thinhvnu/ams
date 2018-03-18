@@ -1,12 +1,14 @@
 extends ../layout/main
 block stylesheets
 	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
-	link(rel='stylesheet', href='/stylesheets/froala_editor.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
 block scripts
 	script(src='/libs/cropperjs/dist/cropper.min.js')
-	script(src='/javascripts/froala_editor.min.js')
+	script(src='/libs/froala-editor/js/froala_editor.min.js')
+	script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script(src='/javascripts/cropper-editor.js')
 	script.
@@ -47,55 +49,52 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-edit
-					h5 #{title}
-					// .toolbar
-					.toolbar
-						nav(style='padding: 8px;')
-							a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
-								i.fa.fa-times
-					// /.toolbar
-				#div-1.body.collapse.in(aria-expanded='true', style='')
-				form.form-horizontal(method='POST', action='/service/create', style="padding: 0 15px;")
-					.form-group
-						.col-lg-8(class=errors && errors.serviceName && 'has-error')
-							label.control-label(for='serviceName') Tên dịch vụ
-							input#serrvice-name.form-control(type='text', name='serviceName', value=data && data.serviceName, placeholder='Nhập tên dịch vụ')
-							if errors && errors.serviceName
-								.help-block #{errors.serviceName.msg}
-					.form-group
-						.col-lg-6(class=errors && errors.image && 'has-error')
-							label.control-label(for='image') Ảnh dịch vụ
-							if data && data.image
-								label.custom-file-upload(for='service-image', style='display: none;')
-									i.fa.fa-cloud-upload
-								input#service-image.mycropper-browse-file(type='file', name='image', disabled=true)
-								input#cropper-editor-input-service-image(type='hidden', name='image', value=data.image)
-								#service-image-image-preview.image-preview
-									.image-preview-item
-										span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image)
-											i.fa.fa-trash
-										img(src='/media/images/service/thumb/' + data.image)
-							else
-								input#service-image.mycropper-browse-file(type='file', name='image')
-								label.custom-file-upload(for='service-image')
-									i.fa.fa-cloud-upload
-							if errors && errors.image
-								.help-block #{errors.image.msg}
-					.form-group
-						.col-lg-12
-							label.control-label(for='content') Nội dung dịch vụ
-							textarea#service-content.form-control(type='text', name='content', placeholder='Nội dung dịch vụ', rows=3) #{data ? data.content : ''}
-					.form-group
-						.col-lg-6
-							label.control-label(for='status', style='display: block; text-align: left;') Status
-							select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
-								option(value=1, selected=(data && data.status === '1') ? true : false) Active
-								option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
-					.form-group  
-						.col-lg-8
-							input#submit.btn.btn-success(type='submit', value='Lưu lại')
+			header
+				.content-header Nhập dữ liệu dịch vụ
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/service/create', style="padding: 0 15px;")
+				.form-group
+					.col-lg-8(class=errors && errors.serviceName && 'has-error')
+						label.control-label(for='serviceName') Tên dịch vụ
+						input#serrvice-name.form-control(type='text', name='serviceName', value=data && data.serviceName, placeholder='Nhập tên dịch vụ')
+						if errors && errors.serviceName
+							.help-block #{errors.serviceName.msg}
+					.col-lg-4(class=errors && errors.price && 'has-error')
+						label.control-label(for='price') Giá dịch vụ (VNĐ)
+						input#serrvice-price.form-control(type='text', name='price', value=data && data.price, placeholder='Giá dịch vụ')
+						if errors && errors.price
+							.help-block #{errors.price.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.image && 'has-error')
+						label.control-label(for='image') Ảnh dịch vụ
+						if data && data.image
+							label.custom-file-upload(for='service-image', style='display: none;')
+								i.fa.fa-cloud-upload
+							input#service-image.mycropper-browse-file(type='file', name='image', disabled=true)
+							input#cropper-editor-input-service-image(type='hidden', name='image', value=data.image)
+							#service-image-image-preview.image-preview
+								.image-preview-item
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image)
+										i.fa.fa-trash
+									img(src='/media/images/service/thumb/' + data.image)
+						else
+							input#service-image.mycropper-browse-file(type='file', name='image')
+							label.custom-file-upload(for='service-image')
+								i.fa.fa-cloud-upload
+						if errors && errors.image
+							.help-block #{errors.image.msg}
+				.form-group
+					.col-lg-12
+						label.control-label(for='content') Nội dung dịch vụ
+						textarea#service-content.form-control(type='text', name='content', placeholder='Nội dung dịch vụ', rows=3) #{data ? data.content : ''}
+				.form-group
+					.col-lg-6
+						label.control-label(for='status', style='display: block; text-align: left;') Status
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === '1') ? true : false) Active
+							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')
 				

@@ -13,4 +13,6 @@ router.get('/list-building/:abgId', abgController.getListBuilding);
 /* POST submit data. */
 router.post('/submit-data', passport.isAuthenticated, abgController.postSubmitData);
 
+router.post('/add-new-building', passport.isAuthenticated, abgController.postAddNewBuilding);
+
 module.exports = router;

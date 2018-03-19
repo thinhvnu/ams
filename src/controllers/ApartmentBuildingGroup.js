@@ -56,25 +56,45 @@ exports.getImportTemplate = (req, res, next) => {
 		['ten_chung_cu', 'quan_ly', 'dia_chi']
 	];
 	managerData = [
-		['id', 'ho_ten', 'sdt'],
-		['123131', 'Nguyễn Viết Thịnh', '01626878789']
-	]
+		['id', 'ho_ten', 'sdt']
+	];
 
 	abgWs = XLSX.utils.aoa_to_sheet(abgData);
-	managerWs = XLSX.utils.aoa_to_sheet(managerData);
 
-	wb = XLSX.utils.book_new();
-	filePath = path.join(__dirname, '/../..' + '/media/files/import-template/building-group-import.xlsx');
+	User.find({})
+		.select({
+			_id: 1,
+			firstName: 1,
+			lastName: 1,
+			userName: 1,
+			phoneNumber: 1
+		})
+		.exec((err, users) => {
+			if (users) {
+				for (let i=0; i<users.length; i++) {
+					managerData.push([
+						users[i]._id,
+						users[i].firstName + ' ' + users[i].lastName,
+						users[i].phoneNumber
+					])
+				}
+			}
 
-	XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
-	XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
-	XLSX.writeFile(wb, filePath);
+			managerWs = XLSX.utils.aoa_to_sheet(managerData);
 
-	return res.json({
-		success: true,
-		errorCode: 0,
-		fileUrl: process.env.MEDIA_URL + '/files/import-template/building-group-import.xlsx'
-	});
+			wb = XLSX.utils.book_new();
+			filePath = path.join(__dirname, '/../..' + '/media/files/import-template/building-group-import.xlsx');
+
+			XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
+			XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
+			XLSX.writeFile(wb, filePath);
+
+			return res.json({
+				success: true,
+				errorCode: 0,
+				fileUrl: process.env.MEDIA_URL + '/files/import-template/building-group-import.xlsx'
+			});
+		})
 }
 
 exports.getCreate = (req, res, next) => {
@@ -217,7 +237,7 @@ exports.postUpdate = (req, res, next) => {
  */
 exports.getView = (req, res, next) => {
 	let clientKey = 'abg_view_' + req.params.abgId;
-	console.log('abgId', req.params.abgId);
+	
 	client.get(clientKey, (err, abg) => {
 		if (err) {
 			console.log('err', err);
@@ -257,11 +277,14 @@ exports.getView = (req, res, next) => {
 						console.log('err', err)
 						return next(err);
 					}
-					console.log('abg', abg);
-					res.render('apartment-building-group/view', {
-						title: abg.abgName,
-						current: ['apartment-building-group', 'view'],
-						data: abg
+					
+					User.find({}, (err, users) => {
+						res.render('apartment-building-group/view', {
+							title: abg.abgName,
+							current: ['apartment-building-group', 'view'],
+							data: abg,
+							users: users
+						});
 					});
 
 					/**

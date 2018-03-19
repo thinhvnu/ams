@@ -278,3 +278,17 @@ input.mycropper-browse-file[type="file"] {
     font-weight: bold;
     /* color: #000000; */
 }
+.noti-devider {
+    width: 100%;
+    padding: 6px 0;
+    background: #eeeeee;
+}
+.noti-header {
+    border-bottom: 1px solid #eeeeee;
+}
+.noti-header .icon, .noti-header .detail-title {
+    display: inline-block;
+}
+.chosen-container-multi {
+    width: 100% !important;
+}

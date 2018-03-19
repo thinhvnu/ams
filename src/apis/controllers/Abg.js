@@ -49,3 +49,59 @@ exports.postSubmitData = (req, res, next) => {
         })
     }
 }
+
+exports.postAddNewBuilding = (req, res, next) => {
+    try {
+        req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
+        req.checkBody('abgId', 'Chọn khu chung cư').notEmpty();
+        req.checkBody('floor', 'Số tầng của tòa nhà').notEmpty();
+        req.checkBody('manager', 'Chọn quản lý').notEmpty();
+        
+        req.getValidationResult().then(function (errors) {
+            if (!errors.isEmpty()) {
+                var errors = errors.mapped();
+
+                return res.json({
+                    success: false,
+                    errors: errors,
+                    data: req.body
+                });
+            } else {
+                const apartmentBuilding = new ApartmentBuilding();
+                apartmentBuilding.buildingName = req.body.buildingName;
+                apartmentBuilding.apartmentBuildingGroup = req.body.abgId;
+                apartmentBuilding.floor = req.body.floor;
+                apartmentBuilding.area = req.body.area;
+                apartmentBuilding.manager = req.body.manager;
+                apartmentBuilding.status = req.body.status;
+                apartmentBuilding.createdBy = req.session.user._id;
+                // apartmentBuilding.updatedBy = req.session.user._id;
+
+                apartmentBuilding.save((err, ab) => {
+                    if (err) {
+                        console.log('error create new abg', err);
+                        return next(err);
+                    }
+                    /**
+                     * Save to apartment building group
+                     */
+                    ApartmentBuildingGroup.findById(req.body.abgId, (err, abg) => {
+                        if (abg) {
+                            abg.apartmentBuildings.pull(ab._id);
+                            abg.apartmentBuildings.push(ab._id);
+                            abg.save();
+                        }
+                        req.flash('success', 'Thêm tòa nhà thành công');
+                        return res.json({
+                            success: true,
+                            errorCode: 0,
+                            message: 'Successfully'
+                        })
+                    })
+                });
+            }
+        });
+    } catch (e) {
+
+    }
+}

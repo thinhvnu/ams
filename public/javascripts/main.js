@@ -227,6 +227,72 @@ function addBuilding(abgId) {
   http.send(params);
 }
 
+function addApartment(buildingId) {
+  let apartmentName = document.getElementsByName('apartmentName')[0],
+    floor = document.getElementsByName('floor')[0],
+    area = document.getElementsByName('area')[0],
+    manager = document.getElementsByName('manager')[0],
+    status = document.getElementsByName('status')[0];
+    params = 'apartmentName=' + apartmentName.value + '&floor=' + floor.value + 
+    '&area=' + area.value + '&manager=' + manager.value + '&status=' + status.value +
+    '&buildingId=' + buildingId;
+
+  let http = new XMLHttpRequest();
+  let url = "/api/building/add-new-apartment";
+  http.open("POST", url, true);
+  
+  //Send the proper header information along with the request
+  http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  
+  http.onreadystatechange = function() {//Call a function when the state changes.
+    if(http.readyState == 4 && http.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      console.log('dataRes', dataRes);
+      if (dataRes.errorCode === 0) {
+        window.location.reload();
+        return;
+      }
+
+      if (dataRes.errors) {
+        if (dataRes.errors.apartmentName) {
+          apartmentName.parentNode.classList.remove('has-error');
+          apartmentName.parentNode.classList.add('has-error');
+          if (apartmentName.parentNode.lastChild.classList.contains('help-block')) {
+            apartmentName.parentNode.lastChild.remove();
+          }
+          apartmentName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.apartmentName.msg + '</div>';
+        }
+        if (dataRes.errors.floor) {
+          floor.parentNode.classList.remove('has-error');
+          floor.parentNode.classList.add('has-error');
+          if (floor.parentNode.lastChild.classList.contains('help-block')) {
+            floor.parentNode.lastChild.remove();
+          }
+          floor.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.floor.msg + '</div>';
+        }
+        if (dataRes.errors.area) {
+          area.parentNode.classList.remove('has-error');
+          area.parentNode.classList.add('has-error');
+          if (area.parentNode.lastChild.classList.contains('help-block')) {
+            area.parentNode.lastChild.remove();
+          }
+          area.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.area.msg + '</div>';
+        }
+        if (dataRes.errors.manager) {
+          manager.parentNode.classList.remove('has-error');
+          manager.parentNode.classList.add('has-error');
+          if (manager.parentNode.lastChild.classList.contains('help-block')) {
+            manager.parentNode.lastChild.remove();
+          }
+          // manager.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.manager.msg + '</div>';
+        }
+      }
+    }
+  }
+  http.send(params);
+}
+
 function selectExistingUserToApartment(apartmentId) {
   let apartmentUser = document.getElementsByName('apartmentUser')[0],
     params = '';
@@ -340,6 +406,11 @@ function importFileAbg(selector) {
     };
     xhr.send(formData);
   }
+}
+
+function selectAllApartments() {
+  console.log(111);
+  $('#listSendTo option').attr('selected', true).trigger("chosen:updated");
 }
 
 $(document).on('click', 'input', function() {

@@ -289,6 +289,9 @@ input.mycropper-browse-file[type="file"] {
 .noti-header .icon, .noti-header .detail-title {
     display: inline-block;
 }
+.chosen-container-single {
+    width: 100% !important;
+}
 .chosen-container-multi {
     width: 100% !important;
 }

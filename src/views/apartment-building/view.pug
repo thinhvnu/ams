@@ -4,19 +4,21 @@ block stylesheets
 block scripts
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
-		$('.chosen-select').chosen()
-		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true })
+		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true })
+		$('.chosen-select-deselect, .chosen-manager, .select-recipients').chosen({ allow_single_deselect: true, disable_search: false })
 block content
 	.row
 		.col-lg-2.col-md-2.col-sm-2.sub-menu
 			ul.sub-menu-item.nav.nav-tabs
-				li.active
-					a(data-toggle='tab', href='#details') Chi tiết
 				li
+					a(data-toggle='tab', href='#details') Thông tin
+				li.active
 					a(data-toggle='tab', href='#apartments') Căn hộ
+				li
+					a(data-toggle='tab', href='#notification') Thông báo
 		.col-lg-10.col-md-10.col-sm-10
 			.tab-content
-				#details.tab-pane.fade.in.active
+				#details.tab-pane.fade
 					.abgs-detail(style='margin-bottom: 15px;')
 						header.detail-header
 							.icon
@@ -58,12 +60,61 @@ block content
 										.icon
 											i.fa.fa-user-o
 										.content Người tạo: #{data.createdBy.userName}
-				#apartments.tab-pane.fade
+				#apartments.tab-pane.fade.in.active
 					.apartments
 						header.detail-header
 							.icon
 								i.fa.fa-home
 							h5.detail-title Danh sách căn hộ ( #{data.apartments.length} căn )
+							button.btn.btn-success.pull-right(type='button', data-toggle='modal', data-target='#addApartment')
+								i.fa.fa-plus
+								| &nbsp;Thêm
+							#addApartment.modal.fade(role='dialog')
+								#add-building.form-horizontal
+									.modal-dialog
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												ul.nav.nav-tabs
+													li.active
+														a(data-toggle='tab', href='#addNew') Thêm mới
+												.tab-content
+													#addNew.tab-pane.fade.in.active
+														.modal-body
+															.form-group
+																.col-lg-6(class=errors && errors.apartmentName && 'has-error')
+																	label.control-label(for='apartmentName') Tên căn hộ (*)
+																	input#ab-name.form-control(type='text', name='apartmentName', value=data && data.apartmentName, placeholder='Nhập tên căn hộ')
+																	if errors && errors.apartmentName
+																		.help-block #{errors.apartmentName.msg}
+																.col-lg-6(class=errors && errors.floor && 'has-error')
+																		label.control-label(for='floor', style='display: block; text-align: left;') Tầng (*)
+																		input.form-control.number-floor(name='floor', data-placeholder='Chọn tầng', style='width: 100%;')
+																		if errors && errors.floor
+																			.help-block #{errors.floor.msg}
+															.form-group
+																.col-lg-6(class=errors && errors.area && 'has-error')
+																	label.control-label(for='area', style='display: block; text-align: left;') Diện tích
+																	input.form-control.building-area(name='area', data-placeholder='Diện tích (m2)', style='width: 100%;')
+																	if errors && errors.area
+																		.help-block #{errors.area.msg}
+																.col-lg-6(class=errors && errors.manager && 'has-error')
+																	label.control-label(for='manager', style='display: block; text-align: left;') Chủ căn hộ (*)
+																	select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
+																		option(value='') Chọn chủ căn hộ
+																		each user in users
+																			option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.firstName + ' ' + user.lastName}
+																	if errors && errors.manager
+																		.help-block #{errors.manager.msg}
+															.form-group
+																.col-lg-6
+																	label.control-label(for='status', style='display: block; text-align: left;') Trạng thái
+																	select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+																		option(value=1, selected=(data && data.status === '1') ? true : false) Active
+																		option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+														.modal-footer
+															button.btn.btn-success.pull-left(type='submit', onClick='addApartment("' + data._id + '")') Lưu lại
+															button.btn.btn-default(type='button', data-dismiss='modal') Hủy
 						.body
 							each dt, i in data.apartments
 								if (i % 3 === 0)
@@ -82,4 +133,44 @@ block content
 										
 								if (i % 3 === 2 || i === data.apartments.length - 1)
 									| </div>
-
+				#notification.tab-pane.fade
+					ul.nav.nav-tabs
+						li.active
+							a(data-toggle='tab', href='#newNotification') Gửi thông báo
+						li
+							a(data-toggle='tab', href='#addExist') Chọn từ danh sách
+					.tab-content
+						#newNotification.tab-pane.fade.in.active
+							.noti-devider
+							header.noti-header
+								.icon
+									i.fa.fa-commenting-o
+								h5.detail-title &nbsp;Nhập nội dung thông báo
+							.body
+								.row
+									.col-md-8
+										form.form-horizontal
+											.form-group
+												.col-md-12
+													label.control-label(for='title') Tiêu đề
+													input#notification-title.form-control(type='text', name='title', value=data && data.title, placeholder='Nhập tiêu đề thông báo')
+											.form-group
+												.col-md-12
+													label.control-label(for='content') Nội dung
+													textarea#notification-content.form-control(type='text', name='content', placeholder='Nhập nội dung thông báo', rows='3') #{data.content ? data.content : ''}
+											.form-group
+												.col-md-12
+													label.control-label(for='sendTo', style='display: block;text-align: left;') Gửi tới
+													select#listSendTo.select-recipients.form-control(multiple=true, name='sendTo', data-placeholder='Send to', style='width: 100%;display: block;')
+														each dt in data.apartments
+															option(value=dt._id) #{dt.apartmentName}
+									.col-md-4(style='padding-top: 25px')
+										.row
+											.col-md-12
+												.btn.btn-default(style='width: 100%', onclick='return selectAllApartments();') Tất cả căn hộ
+										.row(style='margin-top: 15px;')
+											.col-md-12
+												.btn.btn-default(style='width: 100%') Tầng
+								hr
+								.btn.btn-success
+									| Gửi thông báo &nbsp;

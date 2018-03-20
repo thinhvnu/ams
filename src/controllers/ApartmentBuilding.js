@@ -175,11 +175,14 @@ exports.getView = (req, res, next) => {
 						return next(err);
 					}
 			
-					res.render('apartment-building/view', {
-						title: ab.buildingName,
-						current: ['apartment-building', 'view'],
-						data: ab
-					});
+					User.find({}, (err, users) => {
+						res.render('apartment-building/view', {
+							title: ab.buildingName,
+							current: ['apartment-building', 'view'],
+							data: ab,
+							users: users
+						});
+					})
 
 					/**
 					 * Set redis cache data

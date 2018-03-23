@@ -12,17 +12,10 @@ body(style='background: #d3d3d3;')
     .login-content
       .row(style='margin: 0;')
         .col-lg-6.login-container
-          .box.dark
+          .box.dark(style='padding: 15px 0;')
             header
-              .icons
-                i.fa.fa-sign-in
-              h5 Welcome to my CMS
-              // .toolbar
-              .toolbar
-                nav(style='padding: 8px;')
-                  a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
-                    i.fa.fa-times
-              // /.toolbar
+              h5 ĐĂNG NHẬP HỆ THỐNG QUẢN LÝ CHUNG CƯ
+            hr
             #div-1.body.collapse.in(aria-expanded='true', style='')
             .row
               .col-lg-2
@@ -32,14 +25,14 @@ body(style='background: #d3d3d3;')
               .form-group
                 .col-lg-2
                 .col-lg-8(class=errors && errors.email && 'has-error')
-                  label.control-label(for='email') Email
+                  label.control-label(for='email') Tên đăng nhập
                   input#email.form-control(type='text', name='email', value=data && data.email, placeholder='Email')
                   if errors && errors.email
                     .help-block #{errors.email.msg}
               .form-group
                 .col-lg-2
                 .col-lg-8(class=errors && errors.password && 'has-error')
-                  label.control-label(for='password') Password
+                  label.control-label(for='password') Mật khẩu
                   input#password.form-control(type='password', name='password', placeholder='Password')
                   if errors && errors.password
                     .help-block #{errors.password.msg}
@@ -47,7 +40,7 @@ body(style='background: #d3d3d3;')
               .form-group  
                 .col-lg-2
                 .col-lg-4
-                  input#submit.btn.btn-success(type='submit', text='Login')
+                  input#submit.btn.btn-success(type='submit', text='Đăng nhập')
     
     // Latest compiled JavaScript
   script(src='/libs/jquery/dist/jquery.min.js')

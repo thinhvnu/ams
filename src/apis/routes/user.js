@@ -16,4 +16,6 @@ router.post('/update-info', passport.isAuthenticated, userController.postUpdateI
 /* POST firebase device token. */
 router.post('/firebase-device-token', passport.isAuthenticated, userController.postFirebaseDeviceToken);
 
+router.get('/search', userController.getSearch);
+
 module.exports = router;

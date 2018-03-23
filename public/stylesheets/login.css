@@ -1,8 +1,13 @@
+@font-face {
+    font-family: sfRegular;
+    src: url(/fonts/SF-UI-Text-Regular.ttf);
+}
 .login-page {
     width: 100%;
     height: 100%;
     display: table;
     background: url(./../images/apartment_bg.png) center center / cover;
+    font-family: sfRegular;
 }
 .login-page .box {
     border-radius: 5px;
@@ -13,8 +18,8 @@
     border-top-left-radius: 5px;
 }
 .login-page .box h5 {
-    width: calc(100% - 88px);
     text-align: center;
+    font-weight: bold;
 }
 .login-page .login-content {
     display: table-cell;

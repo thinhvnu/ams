@@ -10,6 +10,6 @@ const notificationLogSchema = new mongoose.Schema({
     device: { type: String }
 }, {timestamps: true, usePushEach: true});
 
-const Notification = mongoose.model('Notification', notificationSchema);
+const NotificationLog = mongoose.model('NotificationLog', notificationLogSchema);
 
-module.exports = Notification;
+module.exports = NotificationLog;

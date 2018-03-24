@@ -6,10 +6,10 @@ const mongoose = require('mongoose');
  */
 const notificationSchema = new mongoose.Schema({
     title: {type: String},
-    content: {type: String, unique: true},
-    apartment: { type: mongoose.Schema.Types.ObjectId },
-    building: { type: mongoose.Schema.Types.ObjectId },
-    buildingGroup: { type: mongoose.Schema.Types.ObjectId },
+    content: {type: String},
+    apartments: { type: Array },
+    buildings: { type: Array },
+    buildingGroups: { type: Array },
     status: {type: Number},
     createdBy: {type: mongoose.Schema.Types.ObjectId},
     updatedBy: {type: mongoose.Schema.Types.ObjectId}

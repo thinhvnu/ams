@@ -30,6 +30,7 @@ const apartment = require('./src/routes/apartment');
 const service = require('./src/routes/service');
 const utility = require('./src/routes/utility');
 const permission = require('./src/routes/permission');
+const notification = require('./src/routes/notification');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
@@ -92,6 +93,7 @@ app.use('/apartment', apartment);
 app.use('/service', service);
 app.use('/utility', utility);
 app.use('/permission', permission);
+app.use('/notification', notification);
 
 /**
  * Api router

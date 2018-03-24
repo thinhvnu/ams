@@ -147,9 +147,9 @@ block content
 									i.fa.fa-commenting-o
 								h5.detail-title &nbsp;Nhập nội dung thông báo
 							.body
-								.row
-									.col-md-8
-										form.form-horizontal
+								form.form-horizontal(method='POST', action="/notification/create")
+									.row
+										.col-md-8
 											.form-group
 												.col-md-12
 													label.control-label(for='title') Tiêu đề
@@ -164,13 +164,12 @@ block content
 													select#listSendTo.select-recipients.form-control(multiple=true, name='sendTo', data-placeholder='Send to', style='width: 100%;display: block;')
 														each dt in data.apartments
 															option(value=dt._id) #{dt.apartmentName}
-									.col-md-4(style='padding-top: 25px')
-										.row
-											.col-md-12
-												.btn.btn-default(style='width: 100%', onclick='return selectAllApartments();') Tất cả căn hộ
-										.row(style='margin-top: 15px;')
-											.col-md-12
-												.btn.btn-default(style='width: 100%') Tầng
-								hr
-								.btn.btn-success
-									| Gửi thông báo &nbsp;
+										.col-md-4(style='padding-top: 25px')
+											.row
+												.col-md-12
+													.btn.btn-default(style='width: 100%', onclick='return selectAllApartments();') Tất cả căn hộ
+											.row(style='margin-top: 15px;')
+												.col-md-12
+													.btn.btn-default(style='width: 100%') Tầng
+									hr
+									input#submit.btn.btn-success(type='submit', value='Gửi thông báo')

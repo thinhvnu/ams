@@ -37,7 +37,7 @@ exports.getList = (req, res, next) => {
                 let data = [], currentId = null;
 
                 for (let i=0; i<notifications.length; i++) {
-                    if (currentId !== notifications[i].id) {
+                    if (notifications[i].notification.id !== currentId) {
                         data.push(
                             {
                                 title: notifications[i].notification.title,
@@ -45,7 +45,7 @@ exports.getList = (req, res, next) => {
                                 createdAt: notifications[i].createdAt
                             }
                         )
-                        currentId = notifications[i].id;
+                        currentId = notifications[i].notification.id;
                     }
                 }
 

@@ -34,13 +34,13 @@ function createNewChatBox(user) {
     
     let topHeader = document.createElement('div');
     topHeader.className = 'top-header';
-    topHeader.style = 'cursor: pointer;background-color: #0ba14b; border-color: #0ba14b; color: #fff; height: 28px; border-top-left-radius: 5px; border-top-right-radius: 5px;';
+    topHeader.style = 'cursor: pointer;background-color: #0ba14b; border-color: #0ba14b; color: #fff; height: 28px; border-top-left-radius: 5px; border-top-right-radius: 5px;text-align: center;';
     topHeader.onclick = function() {
         chatBox.classList.toggle('box-hidden');
         if (chatBox.classList.contains('box-hidden')) {
-            chatBox.style.height = '28px';
+            chatBox.style.bottom = '-322px';
         } else {
-            chatBox.style.height = boxHeight + 'px';
+            chatBox.style.bottom = '0px';
         }
     }
     chatBoxHeader.appendChild(topHeader);
@@ -52,8 +52,8 @@ function createNewChatBox(user) {
 
     let boxTitle = document.createElement('div');
     boxTitle.className = 'box-title';
-    boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; margin-left: 58px;'; 
-    boxTitle.textContent = 'HỖ TRỢ TRỰC TUYẾN';
+    boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; text-transform: uppercase;'; 
+    boxTitle.textContent = user.firstName + ' ' + user.lastName;
     boxHeaderInfo.appendChild(boxTitle);
 
     let headerToolbar = document.createElement('div');
@@ -71,6 +71,9 @@ function createNewChatBox(user) {
     closeBox.className = 'close-box';
     closeBox.style = 'width: 12px; height: 12px; margin-top: 8px; display: inline-block;'
                     + ' background: url(/images/chat-icons-v1.png); background-position: -26px -2px;';
+    closeBox.onclick = function() {
+        chatBox.remove();
+    }
     headerToolbar.appendChild(closeBox);
 
     /**
@@ -92,7 +95,7 @@ function createNewChatBox(user) {
     let accountName = document.createElement('div');
     accountName.className = 'account-name';
     accountName.style = 'height: 16px;line-height: 16px;color:#1874ba;font-weight:bold;';
-    accountName.textContent = user.firstName + ' ' + user.lastName;
+    accountName.textContent = user.email;
     account.appendChild(accountName);
 
     let hotline = document.createElement('div');
@@ -114,6 +117,19 @@ function createNewChatBox(user) {
     chatBoxContent.id = 'chat-box-content';
     chatBoxContent.style = 'height: ' + boxContentHeight + 'px; background: #e5e5e5; overflow-y: auto;';
     chatBox.appendChild(chatBoxContent);
+
+    /* === Request server get list message ===*/
+    let getMessageUrl = '/api/chat/messages/' + user.id + '?page=1&pageSize=10';
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            let dataRes = JSON.parse(this.response);
+
+            console.log('dataRes', dataRes);
+        }
+    };
+    xhttp.open('GET', getMessageUrl, true);
+    xhttp.send();
 
     /**
      * Create chat box footer

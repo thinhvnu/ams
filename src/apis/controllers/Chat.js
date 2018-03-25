@@ -52,7 +52,7 @@ exports.getClients = (req, res, next) => {
 };
 
 exports.getMessages = (req, res, next) => {
-    let page = 1, pageSize = 10;
+    let page = 0, pageSize = 10;
 
     if (req.query) {
         if (req.query.page) {
@@ -85,6 +85,7 @@ exports.getMessages = (req, res, next) => {
 			return res.json({
                 success: false,
                 errorCode: '0004',
+                data: err,
                 message: 'Error'
             });
 		} else {

@@ -37,11 +37,13 @@ var ioEvents = function(io) {
                  * Notification join chat success
                  */
                 socket.emit('join_chat_successfully', {
+                    id: user.id,
                     room: user.id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     userName: user.userName,
-                    phoneNumber: user.phoneNumber
+                    phoneNumber: user.phoneNumber,
+                    email: user.email
                 });
             } else {
                 console.log('client auth failed and server auto disconnected');

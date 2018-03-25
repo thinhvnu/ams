@@ -52,49 +52,61 @@ exports.getClients = (req, res, next) => {
 };
 
 exports.getMessages = (req, res, next) => {
-    let page = 0, pageSize = 10;
+    try {
+        let page = 0, pageSize = 10;
 
-    if (req.query) {
-        if (req.query.page) {
-            page = req.query.page - 1;
+        if (req.query) {
+            if (req.query.page) {
+                page = req.query.page - 1;
+            }
+            if (req.query.pageSize) {
+                pageSize = parseInt(req.query.pageSize);
+            }
         }
-        if (req.query.pageSize) {
-            pageSize = parseInt(req.query.pageSize);
-        }
+        
+        Message.find({
+            $or:[ 
+                {'sender': req.session.user._id, 'recipient': req.params.roomId},
+                {'sender': req.params.roomId, 'recipient': req.session.user._id}
+            ]
+        }, {
+            'sender': 1,
+            'messageContent': 1,
+            'createdAt': 1,
+            'updatedAt': 1
+        })
+        .sort('-createdAt')
+        .skip(page * pageSize)
+        .limit(pageSize)
+        .populate('sender', {
+            '_id': 1,
+            'avatar': 1,
+            'userName': 1,
+        })
+        .exec(function (err, messages) {
+            if (err) {
+                console.log('err', err);
+                return res.json({
+                    success: false,
+                    errorCode: '0004',
+                    data: err,
+                    message: 'Error'
+                });
+            } else {
+                return res.json({
+                    success: true,
+                    errorCode: 0,
+                    data: messages.reverse(),
+                    message: 'Get message successfully'
+                });
+            }
+        });
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            data: [],
+            message: 'Exception'
+        })
     }
-
-    Message.find({
-        $or:[ {'recipient': req.params.roomId}, {'sender': req.params.roomId} ]
-    }, {
-        'sender': 1,
-        'messageContent': 1,
-        'createdAt': 1,
-        'updatedAt': 1
-    })
-    .sort('-createdAt')
-    .skip(page * pageSize)
-    .limit(pageSize)
-	.populate('sender', {
-        '_id': 0,
-        'avatar': 1,
-		'userName': 1,
-    })
-    .exec(function (err, messages) {
-		if (err) {
-            console.log('err', err);
-			return res.json({
-                success: false,
-                errorCode: '0004',
-                data: err,
-                message: 'Error'
-            });
-		} else {
-            return res.json({
-                success: true,
-                errorCode: 0,
-                data: messages.reverse(),
-                message: 'Get message successfully'
-            });
-        }
-	});
 }

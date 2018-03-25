@@ -11,34 +11,46 @@ block scripts
 		});
 block content
 	.row
-		.col-lg-12
-			h5 Lịch sử gửi thông báo
+		.col-lg-9.col-md-9
+			h4(style='margin: 0') Lịch sử gửi thông báo
 			hr
 			table#notification-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
 						th.hidden-xs STT
-						th Tên căn hộ
+						th Thông báo
+						th Người nhận
+						th Thiết bị
+						th Căn hộ
 						th Tòa nhà
-						th Khu chung cư
-						th Chủ hộ
-						th Người tạo
+						th Chung cư
 						th.text-center Trạng thái
-						th.text-center.no-sort Hành động
+						th Ngày gửi
 				tbody
-					each dt, i in data
+					each nt, i in notifications
 						tr
 							td.hidden-xs #{i+1}
-							td #{dt.apartmentName}
-							td #{dt.building.buildingName}
-							td #{dt.building.apartmentBuildingGroup.abgName}
-							td #{dt.manager && dt.manager.userName}
-							td #{dt.createdBy.userName}
-							td.text-center #{dt.status ? 'Active' : 'Inactive'}
-							td(align='center')
-								a(href='/apartment/view/' + dt._id).u-action.btn.btn-default
-									em.fa.fa-eye
-								a(href='/apartment/edit/' + dt._id).u-action.btn.btn-success
-									em.fa.fa-pencil
-								a(href='/apartment/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa căn hộ này không?", "/apartment/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-									em.fa.fa-trash
+							td #{nt.notification.title}
+							td #{nt.sendTo.firstName + ' ' + nt.sendTo.lastName}
+							td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
+							td #{nt.apartment.apartmentName}
+							td #{nt.building.buildingName}
+							td #{nt.buildingGroup.abgName}
+							td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
+							td #{nt.createdAt.toLocaleString('vi-VN')}
+		.col-lg-3.col-md-3.chat-container
+			h4(style='margin: 0') Chat với người dùng
+			hr
+			each u in users
+				.user-item(id='user-' + u._id, onclick='createNewChatBox(' + JSON.stringify(u) + ')')
+					.user-avatar
+						if u.avatar
+							img.img-responsive(src=u.avatarUrl)
+						else 
+							i.fa.fa-user-o
+					.user-info
+						.info-center
+							.user-name #{u.firstName + ' ' + u.lastName}
+							.phoneNumber #{u.phoneNumber}
+					.online-status
+						.icon-online

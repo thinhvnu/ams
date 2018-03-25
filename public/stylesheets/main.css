@@ -295,3 +295,66 @@ input.mycropper-browse-file[type="file"] {
 .chosen-container-multi {
     width: 100% !important;
 }
+#notification-list {
+    border: 1px solid #ccc;
+}
+#notification-list th, #notification-list td {
+    vertical-align: middle;
+}
+
+/* Css for user chat */
+.chat-container {
+    border-left:1px solid#eeeeee;
+}
+.user-item {
+    cursor: pointer;
+    position: relative;
+}
+.user-item:hover {
+    background: #eeeeee;
+}
+.user-item .user-avatar, .user-item .user-info {
+    display: inline-block;
+    vertical-align: top;
+}
+.user-item .user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    display: inline-table;
+    vertical-align: middle;
+}
+.user-item .user-avatar img {
+    padding: 5px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+}
+.user-item .user-avatar .fa-user-o {
+    font-size: 38px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.user-item .user-info {
+    width: calc(100% - 60px);
+    height: 60px;
+    display: inline-table;
+}
+.user-item .user-info .info-center {
+    display: table-cell;
+    vertical-align: middle;
+}
+.user-item .online-status {
+    position: absolute;
+    display: inline-block;
+    right: 5px;
+    margin-top: 26px;
+}
+.user-item .icon-online {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgb(66, 183, 42);
+}

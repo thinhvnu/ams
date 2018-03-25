@@ -1,3 +1,4 @@
+const User = require('./../models/User');
 const Notification = require('./../models/Notification');
 const NotificationLog = require('./../models/NotificationLog');
 
@@ -29,12 +30,17 @@ exports.getIndex = (req, res, next) => {
             model: 'ApartmentBuildingGroup'
         })
         .exec((err, nLogs) => {
-            console.log('nLogs', nLogs);
-            res.render('dashboard/index', {
-                title: 'Phần mềm quản lý chung cư',
-                current: ['dashboard', 'index'],
-                notifications: nLogs
-            });
+            User.find({})
+                .sort('-createdAt')
+                .limit(10)
+                .exec((err, users) => {
+                    res.render('dashboard/index', {
+                        title: 'Phần mềm quản lý chung cư',
+                        current: ['dashboard', 'index'],
+                        notifications: nLogs,
+                        users: users
+                    });
+                })
         })
     } catch (e) {
         res.render('dashboard/index', {

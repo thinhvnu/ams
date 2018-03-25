@@ -7,6 +7,8 @@ var userController = require('./../controllers/User');
  */
 const passport = require('./../../middleware/apiPassport');
 
+router.post('/register', userController.postRegister);
+
 /* GET users Info. */
 router.get('/info', passport.isAuthenticated, userController.getInfo);
 

@@ -2,6 +2,74 @@ const User = require('../../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
+exports.postRegister = (req, res, next) => {
+	try {
+		req.checkBody('firstName', 'firstName is required').notEmpty();
+		req.checkBody('lastName', 'lastName is required').notEmpty();
+		req.checkBody('userName', 'userName is required').notEmpty();
+		req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
+		req.checkBody('email', 'Email is invalid').isEmail();
+		req.checkBody('password', 'Password must be at least 4 characters long').len(4);
+		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+	
+		req.getValidationResult().then(function(errors) {
+		  if (!errors.isEmpty()) {
+			var errors = errors.mapped();
+
+			return res.json({
+				success: false,
+				errorCode: '011',
+				errors: errors,
+            	data: req.body,
+				message: 'Validate errors'
+			})
+		  } else {
+			const user = new User();
+			user.firstName = req.body.firstName;
+			user.lastName = req.body.lastName;
+			user.userName = req.body.userName;
+			user.email = req.body.email;
+			user.avatar = req.body.avatar;
+			user.phoneNumber = req.body.phoneNumber;
+			user.password = req.body.password;
+			user.gender = req.body.gender;
+			user.status = 0;
+		  
+			User.findOne({ email: req.body.email }, (err, existingUser) => {
+			  if (err) { return next(err); }
+			  if (existingUser) {
+				return res.json({
+					success: false,
+					errorCode: '012',
+					message: 'Người dùng đã tồn tại'
+				});
+			  }
+			  user.save((err) => {
+				if (err) { 
+					return res.json({
+						success: false,
+						errorCode: '013',
+						message: 'Có lỗi xảy ra'
+					});
+				}
+				return res.json({
+					success: true,
+					errorCode: 0,
+					message: 'Đăng ký tài khoản thành công'
+				});
+			  });
+			});
+		  }
+		});
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			message: 'Server exception'
+		})
+	}
+}
 // Get all active sliders
 exports.getInfo = function (req, res) {
     try {

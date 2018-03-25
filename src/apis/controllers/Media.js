@@ -12,7 +12,7 @@ exports.postUploadImage = (req, res, next) => {
 	let uploadDir = '/media/images/';
 
 	let imageData = req.body.imageData, imageType = req.body.imageType,
-	fileName = 'post-' + Date.now(),
+	fileName = imageType + '-' + Date.now(),
 	ext = null;
 
 	uploadDir += imageType ? (imageType + '/') : 'store/';

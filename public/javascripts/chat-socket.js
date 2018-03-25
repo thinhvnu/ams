@@ -1,4 +1,20 @@
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 function createNewChatBox(user) {
     /**
      * Check exist chatbox
@@ -115,11 +131,11 @@ function createNewChatBox(user) {
     let chatBoxContent = document.createElement('div');
     chatBoxContent.className = 'chat-box-content';
     chatBoxContent.id = 'chat-box-content';
-    chatBoxContent.style = 'height: ' + boxContentHeight + 'px; background: #e5e5e5; overflow-y: auto;';
+    chatBoxContent.style = 'height: ' + boxContentHeight + 'px; background: #e5e5e5; overflow-y: auto;padding: 15px;';
     chatBox.appendChild(chatBoxContent);
 
     /* === Request server get list message ===*/
-    let getMessageUrl = '/api/chat/messages/' + user.id + '?page=1&pageSize=10';
+    let getMessageUrl = '/api/chat/messages/' + user.id;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
@@ -146,11 +162,10 @@ function createNewChatBox(user) {
 
     let inputMessage = document.createElement('textarea');
     inputMessage.className = 'message-input';
-    inputMessage.id = 'message-input';
     inputMessage.placeholder = 'Enter new message';
     inputMessage.style = 'padding: 0 5px; width: ' + (boxWidth - 48) + 'px;height: ' + boxFooterHeight/2 + 'px; line-height: ' + boxFooterHeight/2 + 'px; resize: none;border:none;'
                         + '; box-sizing: border-box;';
-                        inputMessage.onkeydown = function(e) {
+    inputMessage.onkeydown = function(e) {
         var code = e.keyCode ? e.keyCode : e.which;
         if (code == 13 && !e.shiftKey) {  // Enter keycode
             let sendMessBtn = document.getElementById('send-message');
@@ -162,8 +177,22 @@ function createNewChatBox(user) {
 
     let btnSend = document.createElement('button');
     btnSend.className = 'send-message';
-    btnSend.id = 'send-message';
     btnSend.style = 'width: 40px; height: 25px; border: none; margin-top: 5px; background: url(/images/chat-icons-v1.png); background-position: -70px 0px;box-sizing: border-box; vertical-align: top;';
+    btnSend.onclick = function() {
+        console.log('socket', socket);
+        let messval = inputMessage.value;
+        let messageItem = document.createElement('div');
+        messageItem.style = 'text-align: right;';
+        messageItem.className = 'message-item mess-send';
+
+        let messageItemContent = document.createElement('div');
+        messageItemContent.className = 'mess-item-content';
+        messageItemContent.style = 'display: inline-block;background: #4080ff;color: #ffffff;padding: 5px 10px;margin-bottom: 5px;border-top-left-radius: 15px;border-bottom-left-radius: 15px; border-top-right-radius: 15px;';
+        messageItemContent.textContent = messval;
+
+        messageItem.appendChild(messageItemContent);
+        chatBoxContent.appendChild(messageItem);
+    }
     mainFooterContainer.appendChild(btnSend);
 
     // document.body.appendChild(chatBox);
@@ -179,3 +208,16 @@ function createNewChatBox(user) {
     }
     chatWrap.appendChild(chatBox);
 }
+
+/*
+* Connect socket
+*/
+const token = getCookie('ams_token');
+const socket = io('http://localhost:6888', {query: 'token=' + token});
+
+socket.on('connect', () => {
+    socket.on('join_chat_successfully', (data) => {
+        console.log('data');
+        socket.identification = data;
+    });
+});

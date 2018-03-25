@@ -44,6 +44,7 @@ const apiUser = require('./src/apis/routes/user');
 const apiComment = require('./src/apis/routes/comment');
 const apiService = require('./src/apis/routes/service');
 const apiUtility = require('./src/apis/routes/utility');
+const apiNotification = require('./src/apis/routes/notification');
 
 var app = express();
 var io = require('socket.io')();
@@ -110,6 +111,7 @@ app.use('/api/comment', apiComment);
 app.use('/api/user', apiUser);
 app.use('/api/service', apiService);
 app.use('/api/utility', apiUtility);
+app.use('/api/notification', apiNotification);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

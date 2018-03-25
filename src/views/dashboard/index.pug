@@ -1,10 +1,44 @@
-extends ./../layout/main
+extends ../layout/main
 block stylesheets
-block content
-	input#message-input(type='text')
-	button#send-message Send
-	#message-container
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 block scripts
-	script(src='/socket.io/socket.io.js')
-	script(src='/javascripts/socket-client.js')
-	
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			
+		});
+block content
+	.row
+		.col-lg-12
+			h5 Lịch sử gửi thông báo
+			hr
+			table#notification-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Tên căn hộ
+						th Tòa nhà
+						th Khu chung cư
+						th Chủ hộ
+						th Người tạo
+						th.text-center Trạng thái
+						th.text-center.no-sort Hành động
+				tbody
+					each dt, i in data
+						tr
+							td.hidden-xs #{i+1}
+							td #{dt.apartmentName}
+							td #{dt.building.buildingName}
+							td #{dt.building.apartmentBuildingGroup.abgName}
+							td #{dt.manager && dt.manager.userName}
+							td #{dt.createdBy.userName}
+							td.text-center #{dt.status ? 'Active' : 'Inactive'}
+							td(align='center')
+								a(href='/apartment/view/' + dt._id).u-action.btn.btn-default
+									em.fa.fa-eye
+								a(href='/apartment/edit/' + dt._id).u-action.btn.btn-success
+									em.fa.fa-pencil
+								a(href='/apartment/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa căn hộ này không?", "/apartment/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+									em.fa.fa-trash

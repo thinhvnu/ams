@@ -71,4 +71,4 @@ exports.getDelete = (req, res, nex) => {
 	  }
 	  return res.redirect('/utility');
 	})
-  }
+}

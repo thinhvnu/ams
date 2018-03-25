@@ -1,6 +1,45 @@
-exports.getIndex = function (req, res) {
-	res.render('dashboard/index', {
-        title: 'Phần mềm quản lý chung cư',
-        current: ['dashboard', 'index']
-    });
+const Notification = require('./../models/Notification');
+const NotificationLog = require('./../models/NotificationLog');
+
+exports.getIndex = (req, res, next) => {
+    try {
+        /**
+         * Get last 10 notification
+         */
+        NotificationLog.find({})
+        .populate({
+            path: 'notification',
+            model: 'Notification'
+        })
+        .populate({
+            path: 'sendTo',
+            model: 'User',
+            select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
+        })
+        .populate({
+            path: 'apartment',
+            model: 'Apartment'
+        })
+        .populate({
+            path: 'building',
+            model: 'ApartmentBuilding'
+        })
+        .populate({
+            path: 'buildingGroup',
+            model: 'ApartmentBuildingGroup'
+        })
+        .exec((err, nLogs) => {
+            console.log('nLogs', nLogs);
+            res.render('dashboard/index', {
+                title: 'Phần mềm quản lý chung cư',
+                current: ['dashboard', 'index'],
+                notifications: nLogs
+            });
+        })
+    } catch (e) {
+        res.render('dashboard/index', {
+            title: 'Phần mềm quản lý chung cư',
+            current: ['dashboard', 'index']
+        });
+    }
 };

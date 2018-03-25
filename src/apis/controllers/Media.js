@@ -61,7 +61,7 @@ exports.postUploadImage = (req, res, next) => {
 				success: false,
 				errorCode: 0,
 				data: {
-					imageUrl: process.env.MEDIA_URL + uploadDir + 'origin/' + fileName,
+					imageUrl: process.env.MEDIA_URL + '/images/' + (imageType ? (imageType + '/') : 'store/') + 'origin/' + fileName,
 					fileName: fileName
 				},
 				message: 'Save message successfully'

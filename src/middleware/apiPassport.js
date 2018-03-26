@@ -40,20 +40,20 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 exports.jwtCreateToken = (data) => {
-    let token = jwt.sign(data, process.env.JWT_SECRET);
+    let token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: process.env.LOGIN_TOKEN_EXP });
 
     return token;
 }
 
 exports.jwtVerifyToken = (token, cb) => {
     // verifies secret and checks exp
-    jwt.verify(token, process.env.JWT_SECRET, function(err, userId) {  
+    jwt.verify(token, process.env.JWT_SECRET, function(err, data) {  
         if (err) {
           return cb(null);   
         } else {
           // if everything is good, save to request for use in other routes
             User.findOne({
-                _id: userId
+                _id: data.userId
             }, (err, user) => {
                 if (err) {
                     return cb(null);   

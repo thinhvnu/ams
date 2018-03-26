@@ -1,4 +1,8 @@
 #header
+    if user
+        .pull-left.user-full-name
+            a(href='#', style='color: #ffffff; text-decoration: none;') #{user.firstName + ' ' + user.lastName}
+
     .text-center
         a.logo(href="/")
             img.img.img-responsive(src="/images/logo_02.png")

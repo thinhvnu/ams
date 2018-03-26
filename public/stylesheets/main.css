@@ -25,6 +25,12 @@
     line-height: 50px;
     background: #38a22c;
 }
+#header .user-full-name {
+    position: absolute;
+    left: 15px;
+    color: #fff;
+    text-transform: uppercase;
+}
 #header .logo img {
     margin: auto;
 }

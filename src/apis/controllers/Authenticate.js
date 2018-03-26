@@ -45,7 +45,7 @@ exports.accessToken = (req, res, next) => {
                 /**
                  * Using json web token gen token for client
                  */
-                var token = passport.jwtCreateToken(user.id);
+                var token = passport.jwtCreateToken({userId: user.id});
                 // res.cookie('rtcs_chat_token', token, { httpOnly: false});
                 return res.json({
                     success: true,

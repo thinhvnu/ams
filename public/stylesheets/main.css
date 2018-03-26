@@ -306,6 +306,11 @@ input.mycropper-browse-file[type="file"] {
 .chat-container {
     border-left:1px solid#eeeeee;
 }
+.message-input:active, .message-input:focus,
+.send-message:active, .send-message:focus {
+    outline: none;
+    border: 0;
+}
 .user-item {
     cursor: pointer;
     position: relative;

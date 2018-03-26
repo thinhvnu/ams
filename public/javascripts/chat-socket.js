@@ -60,6 +60,7 @@ function createInboxMessageItem(data) {
 }
 
 function createNewChatBox(user) {
+    console.log('user', user);
     /**
      * Check exist chatbox
      */
@@ -139,10 +140,23 @@ function createNewChatBox(user) {
     /**
      * Header avata
      */
-    let avata = document.createElement('span');
-    avata.className = 'avatar';
-    avata.style = 'position: absolute;z-index: 200;width: 54px;height: 54px;float: left;left: 15px;top: 15px;background: #ccc;border-radius:3px;border: 1px solid #eee;';
-    chatBoxHeader.appendChild(avata);
+    let avatar = document.createElement('span');
+    avatar.className = 'avatar';
+    avatar.style = 'position: absolute;display: table;text-align: center;vertical-align: middle;z-index: 200;width: 54px;height: 54px;float: left;left: 15px;top: 15px;background: #ccc;border-radius:3px;border: 1px solid #eee;';
+    
+    if (user.avatar) {
+        let avtImg = document.createElement('img');
+        avtImg.className='img img-responsive img-circle';
+        avtImg.src = user.avatarUrl;
+        avatar.appendChild(avtImg);
+    } else {
+        let iconAvtDefault = document.createElement('i');
+        iconAvtDefault.className = 'fa fa-user-o';
+        iconAvtDefault.style = 'display: table-cell;vertical-align: middle;font-size: 30px;';
+        avatar.appendChild(iconAvtDefault);
+    }
+    
+    chatBoxHeader.appendChild(avatar);
 
     /**
      * Header account
@@ -217,17 +231,17 @@ function createNewChatBox(user) {
 
     let inputMessage = document.createElement('textarea');
     inputMessage.className = 'message-input';
-    inputMessage.placeholder = 'Enter new message';
-    inputMessage.style = 'padding: 0 5px; width: ' + (boxWidth - 48) + 'px;height: ' + boxFooterHeight/2 + 'px; line-height: ' + boxFooterHeight/2 + 'px; resize: none;border:none;'
-                        + '; box-sizing: border-box;';
+    inputMessage.placeholder = 'Nhập tin nhắn ...';
+    inputMessage.style = 'padding: 0 10px; width: ' + (boxWidth - 48) + 'px;height: ' + boxFooterHeight/2 + 'px; line-height: ' + boxFooterHeight/2 + 'px; resize: none;border:none;'
+                        + '; box-sizing: border-box;border-radius: 3px;';
     inputMessage.onkeydown = function(e) {
         var code = e.keyCode ? e.keyCode : e.which;
         if (code == 13 && !e.shiftKey) {  // Enter keycode
             let messVal = inputMessage.value;
-            let messageItem = createSenderMessageItem(messVal);
-            chatBoxContent.appendChild(messageItem);
 
             if (messVal) {
+                let messageItem = createSenderMessageItem(messVal);
+                chatBoxContent.appendChild(messageItem);
                 /**
                  * Emit message to socket server
                  */
@@ -254,10 +268,10 @@ function createNewChatBox(user) {
     btnSend.style = 'width: 40px; height: 25px; border: none; margin-top: 5px; background: url(/images/chat-icons-v1.png); background-position: -70px 0px;box-sizing: border-box; vertical-align: top;';
     btnSend.onclick = function() {
         let messVal = inputMessage.value;
-        let messageItem = createSenderMessageItem(messVal);
-        chatBoxContent.appendChild(messageItem);
 
         if (messVal) {
+            let messageItem = createSenderMessageItem(messVal);
+            chatBoxContent.appendChild(messageItem);
             /**
              * Emit message to socket server
              */
@@ -277,6 +291,31 @@ function createNewChatBox(user) {
     }
     mainFooterContainer.appendChild(btnSend);
 
+    let footerTools = document.createElement('div');
+    footerTools.style = 'position:absolute;bottom: 5px;width: 100%;';
+    footerTools.className = 'footer-tools';
+    chatBoxFooter.appendChild(footerTools);
+
+    let footerToolItem = document.createElement('span');
+    footerToolItem.className = 'footer-tool-item';
+    footerToolItem.style = 'cursor: pointer;margin-right: 5px;';
+    footerTools.appendChild(footerToolItem);
+
+    let toolItemIcon = document.createElement('i');
+    toolItemIcon.className = 'fa fa-image';
+    toolItemIcon.style = 'font-size: 18px;';
+    footerToolItem.appendChild(toolItemIcon);
+
+    let footerToolItemHeart = document.createElement('span');
+    footerToolItemHeart.className = 'footer-tool-item';
+    footerToolItemHeart.style = 'cursor: pointer;margin-right: 15px;float: right; right: 0; color: #ffffff';
+    footerTools.appendChild(footerToolItemHeart);
+
+    let toolItemIconHeart = document.createElement('i');
+    toolItemIconHeart.className = 'fa fa-heart';
+    toolItemIconHeart.style = 'font-size: 18px;';
+    footerToolItemHeart.appendChild(toolItemIconHeart);
+
     // document.body.appendChild(chatBox);
     /**
      * Append chatbox to container
@@ -295,10 +334,11 @@ function createNewChatBox(user) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://backend.thinhnv.net', {query: 'token=' + token});
+const socket = io('http://localhost:6888', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
+        console.log('data', data);
         socket.identification = data;
     });
 

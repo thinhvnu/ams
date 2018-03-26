@@ -34,6 +34,11 @@
 /media/images/avatar/thumb/*
 !/media/images/avatar/origin/.gitkeep
 !/media/images/avatar/thumb/.gitkeep
+#--feedback--
+/media/images/feedback/origin/*
+/media/images/feedback/thumb/*
+!/media/images/feedback/origin/.gitkeep
+!/media/images/feedback/thumb/.gitkeep
 #--store--
 /media/images/store/*
 !/media/images/store/.gitkeep

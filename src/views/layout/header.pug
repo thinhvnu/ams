@@ -4,10 +4,28 @@
             img.img.img-responsive(src="/images/logo_02.png")
     .pull-right.account-info
         if user && user.avatar 
-            .avatar
-                img.img.img-responsive.img-circle(src=user.avatarUrl)
+            .dropdown(style='height: 100%;display:inline-table;vertical-align: top;')
+                .avatar.dropdown-toggle(data-toggle="dropdown")
+                    img.img.img-responsive.img-circle(src=user.avatarUrl)
+                ul.dropdown-menu(style='float: right; right: 0;left: auto;')
+                    li
+                        a(href='#') Trang cá nhân
+                    li.divider
+                    li
+                        a(href='/user/logout') Đăng xuất
         else
-            .avatar
-                i.fa.fa-user-o
-        .notification
-            i.fa.fa-bell-o
+            .dropdown(style='height: 100%;display:inline-table;')
+                .avatar.dropdown-toggle(data-toggle="dropdown")
+                    i.fa.fa-user-o
+                ul.dropdown-menu(style='float: right; right: 0;left: auto;')
+                    li
+                        a(href='#') Trang cá nhân
+                    li.divider
+                    li
+                        a(href='/user/logout') Đăng xuất
+        .dropdown(style='height: 100%;display:inline-table;vertical-align: top;')
+            .notification.dropdown-toggle(data-toggle="dropdown")
+                i.fa.fa-bell-o
+            ul.dropdown-menu(style='float: right; right: 0;left: auto;')
+                li
+                    a(href='#') Chưa có thông báo nào

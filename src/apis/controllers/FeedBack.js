@@ -18,7 +18,7 @@ exports.postCreate = (req, res, next) => {
                 newFeedBack.title = data.title;
                 newFeedBack.content = data.content;
                 newFeedBack.image = data.image;
-                newFeedBack.status = 0;
+                newFeedBack.status = data.status;
                 newFeedBack.createdBy = req.session.user._id;
                 newFeedBack.save(function (err, feedback) {
                     if (err) {

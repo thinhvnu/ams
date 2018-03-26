@@ -6,7 +6,7 @@ exports.postRegister = (req, res, next) => {
 	try {
 		req.checkBody('firstName', 'firstName is required').notEmpty();
 		req.checkBody('lastName', 'lastName is required').notEmpty();
-		req.checkBody('userName', 'userName is required').notEmpty();
+		// req.checkBody('userName', 'userName is required').notEmpty();
 		req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
 		req.checkBody('email', 'Email is invalid').isEmail();
 		req.checkBody('password', 'Password must be at least 4 characters long').len(4);
@@ -28,7 +28,7 @@ exports.postRegister = (req, res, next) => {
 			const user = new User();
 			user.firstName = req.body.firstName;
 			user.lastName = req.body.lastName;
-			user.userName = req.body.userName;
+			user.userName = req.body.userName ? req.body.userName : req.body.phoneNumber;
 			user.email = req.body.email;
 			user.avatar = req.body.avatar;
 			user.phoneNumber = req.body.phoneNumber;

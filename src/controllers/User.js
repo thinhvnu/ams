@@ -80,7 +80,9 @@ exports.postLogin = (req, res, next) => {
               /**
                * Using json web token gen token for client
                */
-              var token = passport.jwtCreateToken(user.id), accessRouter = req.originalUrl;;
+              var token = passport.jwtCreateToken({
+                userId: user.id
+              }), accessRouter = req.originalUrl;;
               res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
               return res.redirect(req.session.redirectTo || '/');
             } else {
@@ -98,7 +100,9 @@ exports.postLogin = (req, res, next) => {
  * Log out.
  */
 exports.logout = (req, res) => {
-  req.logout();
+  // req.logout();
+  req.session.destroy();
+  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false});
   res.redirect('/');
 };
 
@@ -191,6 +195,13 @@ exports.postCreate = (req, res, next) => {
     });
   }
 };
+
+/**
+ * Get edit account
+ */
+exports.getEdit = (req, res, next) => {
+  
+}
 
 /**
  * GET /account

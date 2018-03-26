@@ -2,3 +2,12 @@
     .text-center
         a.logo(href="/")
             img.img.img-responsive(src="/images/logo_02.png")
+    .pull-right.account-info
+        if user && user.avatar 
+            .avatar
+                img.img.img-responsive.img-circle(src=user.avatarUrl)
+        else
+            .avatar
+                i.fa.fa-user-o
+        .notification
+            i.fa.fa-bell-o

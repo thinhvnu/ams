@@ -19,6 +19,7 @@
 }
 
 #header {
+    position: relative;
     width: 100%;
     height: 50px;
     line-height: 50px;
@@ -26,6 +27,35 @@
 }
 #header .logo img {
     margin: auto;
+}
+#header .account-info {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    height: 100%;
+    display: table;
+    vertical-align: middle;
+}
+#header .account-info .avatar, #header .account-info .notification {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 26px;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 0 6px;
+}
+#header .account-info .avatar i, #header .account-info .avatar img {
+    width: 40px;
+    height: 40px;
+    background: #eeeeee;
+    display: table;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 50%;
+}
+#header .account-info .avatar i::before {
+    display: table-cell;
+    vertical-align: middle;
 }
 #main-content {
     background: #eeeeee;

@@ -30,7 +30,11 @@ exports.getIndex = (req, res, next) => {
             model: 'ApartmentBuildingGroup'
         })
         .exec((err, nLogs) => {
-            User.find({})
+            User.find({
+                _id: {
+                    $ne: req.session.user._id
+                }
+            })
                 .sort('-createdAt')
                 .limit(10)
                 .exec((err, users) => {

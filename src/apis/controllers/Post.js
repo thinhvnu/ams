@@ -20,7 +20,7 @@ exports.getIndex = function (req, res) {
 	.populate({
 		path: 'createdBy',
 		model: 'User',
-		select: { '_id': 0, 'avatar': 1, 'avatarUrl': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+		select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
 	})
 	.populate({
 		path: 'comments',
@@ -28,7 +28,7 @@ exports.getIndex = function (req, res) {
 		populate: {
 			path: 'createdBy',
 			model: 'User',
-			select: { '_id': 0, 'avatar': 1, 'avatarUrl': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+			select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
 		}
 	})
 	.sort('-createdAt')

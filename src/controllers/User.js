@@ -179,13 +179,13 @@ exports.postCreate = (req, res, next) => {
               console.log('error create new user', err);
               return next(err); 
             }
-            /**
-             * Using json web token gen token for client
-             */
-            var token = passport.jwtCreateToken({
-              userId: user.id
-            });
-            res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
+            // /**
+            //  * Using json web token gen token for client
+            //  */
+            // var token = passport.jwtCreateToken({
+            //   userId: user.id
+            // });
+            // res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
             res.redirect('/user');
           });
         });

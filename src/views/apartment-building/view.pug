@@ -48,7 +48,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-user-o
-										.content Quản lý: #{data.manager.userName}
+										.content Quản lý: #{data.manager.firstName + ' ' + data.manager.lastName}
 							.row
 								.col-md-6.col-lg-6
 									.item-detail
@@ -59,7 +59,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-user-o
-										.content Người tạo: #{data.createdBy.userName}
+										.content Người tạo: #{data.createdBy.firstName + ' ' + data.createdBy.lastName}
 				#apartments.tab-pane.fade.in.active
 					.apartments
 						header.detail-header
@@ -123,7 +123,7 @@ block content
 									.apartment-item.well
 										.a-name #{dt.apartmentName}
 										.a-content
-											.a-content-item #{dt.manager ? dt.manager.userName : 'Trống'}
+											.a-content-item #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Trống'}
 											.a-content-item
 												i.fa.fa-area-chart
 												| #{dt.area ? dt.area : 0} (m2)

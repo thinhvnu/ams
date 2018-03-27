@@ -150,7 +150,9 @@ exports.getView = (req, res, next) => {
 			ApartmentBuilding.findById(req.params.abId)
 				.populate('manager', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.populate('apartmentBuildingGroup', {
 					'_id': 0,
@@ -162,12 +164,14 @@ exports.getView = (req, res, next) => {
 					populate: {
 						path: 'manager',
 						model: 'User',
-						select: { 'userName': 1 }
+						select: { 'userName': 1, 'firstName': 1, 'lastName': 1 }
 					}
 				})
 				.populate('createdBy', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.exec(function (err, ab) {
 					if (err) {

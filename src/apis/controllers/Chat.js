@@ -25,7 +25,10 @@ exports.getClients = (req, res, next) => {
                 message: 'Get list clients successfully'
             });
 		} else {
-            User.find({_id: { $ne: user._id }}, (err, users) => {
+            User.find({
+                _id: { $ne: user._id },
+                status: 1
+            }, (err, users) => {
                 if (err) {
                     return res.json({
                         success: false,

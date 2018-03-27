@@ -53,7 +53,8 @@ exports.jwtVerifyToken = (token, cb) => {
         } else {
           // if everything is good, save to request for use in other routes
             User.findOne({
-                _id: data.userId
+                _id: data.userId,
+                status: 1
             }, (err, user) => {
                 if (err) {
                     return cb(null);   

@@ -182,7 +182,9 @@ exports.postCreate = (req, res, next) => {
             /**
              * Using json web token gen token for client
              */
-            var token = passport.jwtCreateToken(user.id);
+            var token = passport.jwtCreateToken({
+              userId: user.id
+            });
             res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
             res.redirect('/user');
           });

@@ -54,7 +54,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-user-o
-										.content Người tạo: #{data.createdBy.userName}
+										.content Người tạo: #{data.createdBy.first + ' ' + data.createdBy.lastName}
 					.resident
 						header.detail-header
 							.icon
@@ -120,7 +120,7 @@ block content
 																	label.control-label(for='apartmentUser', style='display: block; text-align: left;') Thêm cư dân
 																	select.form-control.chosen-apartment-user(multiple=true, name='apartmentUser', data-placeholder='Chọn cư dân', style='width: 100%;')
 																		each user in users
-																			option(value=user._id) #{user.userName}	
+																			option(value=user._id) #{user.firstName + ' ' + lastName}	
 														.modal-footer
 															button.btn.btn-success.pull-left(type='submit', onClick='selectExistingUserToApartment("' + data._id + '")') Lưu lại
 															button.btn.btn-default(type='button', data-dismiss='modal') Hủy

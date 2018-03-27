@@ -60,7 +60,7 @@ block content
 							td #{dt.abgName}
 							td #{dt.address}
 							td #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Empty'}
-							td #{dt.createdBy.userName}
+							td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 							td.text-center #{dt.status ? 'Active' : 'Inactive'}
 							td(align='center')
 								a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default

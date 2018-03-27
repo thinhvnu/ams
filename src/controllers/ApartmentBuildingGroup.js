@@ -21,11 +21,15 @@ exports.getIndex = function (req, res, next) {
 			ApartmentBuildingGroup.find({})
 				.populate('manager', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.populate('createdBy', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.exec(function (err, abgs) {
 					if (err) {

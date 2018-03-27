@@ -27,7 +27,9 @@ exports.getIndex = function (req, res, next) {
 		})
 		.populate('createdBy', {
 			'_id': 0,
-			'userName': 1
+			'userName': 1,
+			'firstName': 1,
+			'lastName': 1
 		})
 		.exec(function (err, apartments) {
 			if (err) {
@@ -135,7 +137,9 @@ exports.getView = (req, res, next) => {
 			Apartment.findById(req.params.apartmentId)
 				.populate('manager', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.populate({
 					path: 'building',
@@ -148,7 +152,9 @@ exports.getView = (req, res, next) => {
 				.populate('users')
 				.populate('createdBy', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.exec(function (err, a) {
 					if (err) {

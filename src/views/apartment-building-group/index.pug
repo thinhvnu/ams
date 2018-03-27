@@ -59,7 +59,7 @@ block content
 							td.hidden-xs #{i+1}
 							td #{dt.abgName}
 							td #{dt.address}
-							td #{dt.manager ? dt.manager.userName : 'Empty'}
+							td #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Empty'}
 							td #{dt.createdBy.userName}
 							td.text-center #{dt.status ? 'Active' : 'Inactive'}
 							td(align='center')

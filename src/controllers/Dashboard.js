@@ -33,7 +33,8 @@ exports.getIndex = (req, res, next) => {
             User.find({
                 _id: {
                     $ne: req.session.user._id
-                }
+                },
+                status: 1
             })
                 .sort('-createdAt')
                 .limit(10)

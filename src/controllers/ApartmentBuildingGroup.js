@@ -151,12 +151,12 @@ exports.getEdit = (req, res, next) => {
 		.populate({
 			path: 'manager',
 			model: 'User',
-			select: {'_id': 1, 'userName': 1}
+			select: {'_id': 1, 'userName': 1, 'firstName': 1, 'lastName': 1}
 		})
 		.populate({
 			path: 'createdBy',
 			model: 'User',
-			select: {'userName': 1}
+			select: {'userName': 1, 'firstName': 1, 'lastName': 1}
 		})
 		.populate({
 			path: 'apartmentBuildings',
@@ -164,7 +164,7 @@ exports.getEdit = (req, res, next) => {
 			populate: {
 				path: 'manager',
 				model: 'User',
-				select: { 'userName': 1 }
+				select: { 'userName': 1, 'firstName': 1, 'lastName': 1 }
 			}
 		})
 		.exec(function (err, abg) {
@@ -269,7 +269,7 @@ exports.getView = (req, res, next) => {
 					populate: {
 						path: 'manager',
 						model: 'User',
-						select: { 'userName': 1 }
+						select: { 'userName': 1, 'firstName': 1, 'lastName': 1 }
 					}
 				})
 				.exec(function (err, abg) {

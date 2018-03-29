@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
   avatar: {type: String},
   firstName: {type: String},
   lastName: {type: String},
+  birthDay: {type: String},
   address: {type: String},
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],

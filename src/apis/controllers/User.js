@@ -100,6 +100,7 @@ exports.getInfo = function (req, res) {
 					'firstName': 1,
 					'lastName': 1,
 					'userName': 1,
+					'birthDay': 1,
 					'phoneNumber': 1,
 					'email': 1,
 					'gender': 1,

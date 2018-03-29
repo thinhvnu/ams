@@ -17,5 +17,6 @@ router.post('/create-request', passport.isAuthenticated, serviceController.postC
 /* API get history details */
 router.get('/history-transaction', passport.isAuthenticated, serviceController.getHistoryTransaction);
 
-
+/*API update request history*/
+router.post('/history-update',passport.isAuthenticated,serviceController.updateInvoiceService);
 module.exports = router;

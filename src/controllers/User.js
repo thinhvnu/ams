@@ -22,7 +22,7 @@ exports.getIndex = (req, res) => {
         console.log('err', err)
         return done(err);
       }
-      
+
       res.render('user/index', {
         title: 'Account List',
         current: ['user', 'index'],
@@ -54,7 +54,7 @@ exports.postLogin = (req, res, next) => {
   req.checkBody('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
   console.log('redirectTo', req.session.redirectTo);
-  req.getValidationResult().then(function(errors) {
+  req.getValidationResult().then(function (errors) {
     if (!errors.isEmpty()) {
       var errors = errors.mapped();
       res.render('user/login', {
@@ -73,8 +73,8 @@ exports.postLogin = (req, res, next) => {
         } else {
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
-            if (err) { 
-              return done(err); 
+            if (err) {
+              return done(err);
             }
             if (isMatch) {
               /**
@@ -83,7 +83,7 @@ exports.postLogin = (req, res, next) => {
               var token = passport.jwtCreateToken({
                 userId: user.id
               }), accessRouter = req.originalUrl;;
-              res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
+              res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false });
               return res.redirect(req.session.redirectTo || '/');
             } else {
               return res.redirect('/user/login');
@@ -102,7 +102,7 @@ exports.postLogin = (req, res, next) => {
 exports.logout = (req, res) => {
   // req.logout();
   req.session.destroy();
-  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false});
+  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false });
   res.redirect('/');
 };
 
@@ -114,7 +114,7 @@ exports.getCreate = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  Role.find({}, function(err, roles) {
+  Role.find({}, function (err, roles) {
     res.render('user/create', {
       title: 'Create Account',
       roles: roles
@@ -137,12 +137,12 @@ exports.postCreate = (req, res, next) => {
     req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    req.getValidationResult().then(function(errors) {
+    req.getValidationResult().then(function (errors) {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
 
         console.log('req.body', req.body)
-        Role.find({}, function(err, roles) {
+        Role.find({}, function (err, roles) {
           res.render('user/create', {
             title: 'Create Account',
             roles: roles,
@@ -160,14 +160,14 @@ exports.postCreate = (req, res, next) => {
         user.phoneNumber = req.body.phoneNumber;
         user.password = req.body.password;
         user.gender = req.body.gender;
-        
+
         if (req.body.role instanceof Array) {
           user.roles = req.body.roles;
         } else {
           user.roles.push(req.body.roles);
         }
         user.status = req.body.status;
-      
+
         User.findOne({ email: req.body.email }, (err, existingUser) => {
           if (err) { return next(err); }
           if (existingUser) {
@@ -175,9 +175,9 @@ exports.postCreate = (req, res, next) => {
             return res.redirect('/create');
           }
           user.save((err) => {
-            if (err) { 
+            if (err) {
               console.log('error create new user', err);
-              return next(err); 
+              return next(err);
             }
             // /**
             //  * Using json web token gen token for client
@@ -202,7 +202,7 @@ exports.postCreate = (req, res, next) => {
  * Get edit account
  */
 exports.getEdit = (req, res, next) => {
-  
+
 }
 
 /**
@@ -470,3 +470,5 @@ exports.postForgot = (req, res, next) => {
     .then(() => res.redirect('/forgot'))
     .catch(next);
 };
+
+

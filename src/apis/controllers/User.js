@@ -293,3 +293,66 @@ exports.getSearch = (req, res, next) => {
 		})
 	}
 }
+
+exports.deleteTokenFirebase = (req, res, next) => {
+	try {
+  
+	  let firebaseToken = req.params.token_firebase;
+	  User.findById({ _id: req.session.user._id }).exec(function (err, userFined) {
+		if (err) {
+		  return res.json({
+			success: false,
+			errorCode: '011',
+			message: errors,
+		  });
+		  if (userFined) {
+  
+			// let deviceInfo = JSON.stringify({
+			//   token: deviceToken,
+			//   os: os,
+			//   version: version,
+			//   deviceName: deviceName
+			// });
+			let arrTokenFirebase = userFined.firebaseDeviceToken;
+			if (arrTokenFirebase) {
+			  for (var i = 0; i < arrTokenFirebase.length; i++) {
+				if (arrTokenFirebase[i].token === firebaseToken) {
+				  arrTokenFirebase.splice(i, 1);
+				  break;
+				}
+  
+			  }
+			}
+  
+			userFined.firebaseDeviceToken = arrTokenFirebase;
+			userFined.save(function (err, result) {
+			  if (err) {
+				return res.json({
+				  success: false,
+				  errorCode: '011',
+				  message: errors,
+				});
+			  }
+			  return res.send({
+				success: true,
+				errorCode: 0,
+				data: result,
+				message: 'remove token firebase success'
+			  });
+  
+  
+  
+			})
+		  }
+		}
+  
+	  });
+	} catch (e) {
+	  return res.json({
+		success: false,
+		errorCode: '111',
+		data: [],
+		message: 'Server exception'
+	})
+	}
+  }

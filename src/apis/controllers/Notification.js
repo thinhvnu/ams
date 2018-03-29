@@ -36,7 +36,7 @@ exports.getList = (req, res, next) => {
 
                 let data = [], currentId = null;
 
-                for (let i=0; i<notifications.length; i++) {
+                for (let i = 0; i < notifications.length; i++) {
                     if (notifications[i].notification.id !== currentId) {
                         data.push(
                             {
@@ -65,3 +65,55 @@ exports.getList = (req, res, next) => {
         })
     }
 };
+
+exports.updateSeenStatus = (req, res, next) => {
+    try {
+        let postId = req.params.noti_id;
+        NotificationLog.findById({ _id: postId }).exec(function (err, res) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    errorCode: '002',
+                    data: err,
+                    message: 'Error'
+                })
+            }
+            if (res) {
+                res.status = 2;
+                res.save(function (err, updateNoti) {
+                    if (err) {
+                        return res.json({
+                            success: false,
+                            errorCode: '002',
+                            data: err,
+                            message: 'Error'
+                        })
+                    }
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        message: 'Cập nhật xem thông báo thành công'
+                    });
+                });
+
+            } else {
+                return res.json({
+                    success: false,
+                    errorCode: '002',
+                    data: [],
+                    message: 'Không tìm thấy id thông báo'
+                })
+            }
+
+
+        });
+
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            data: [],
+            message: 'Server exception'
+        })
+    }
+}

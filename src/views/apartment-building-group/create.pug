@@ -11,44 +11,36 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-edit
-					h5 #{title}
-					// .toolbar
-					.toolbar
-						nav(style='padding: 8px;')
-							a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
-								i.fa.fa-times
-					// /.toolbar
-				#div-1.body.collapse.in(aria-expanded='true', style='')
-				form.form-horizontal(method='POST', action='/apartment-building-group/create', style="padding: 0 15px;")
-					.form-group
-						.col-lg-6(class=errors && errors.abgName && 'has-error')
-							label.control-label(for='abgName') Tên khu chung cư
-							input#abg-name.form-control(type='text', name='abgName', value=data && data.abgName, placeholder='Nhập tên khu chung cư')
-							if errors && errors.abgName
-								.help-block #{errors.abgName.msg}
-						.col-lg-6(class=errors && errors.manager && 'has-error')
-							label.control-label(for='manager', style='display: block; text-align: left;') Quản lý
-							select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
-								option(value='') Chọn quản lý
-								each user in users
-									option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.userName}
-							if errors && errors.manager
-								.help-block #{errors.manager.msg}
-					.form-group
-						.col-lg-6(class=errors && errors.address && 'has-error')
-							label.control-label(for='address') Địa chỉ
-							textarea#address.form-control(type='text', name='address', placeholder='Nhập địa chỉ khu chung cư', rows=3) #{data ? data.address : ''}
-							if errors && errors.address
-								.help-block #{errors.address.msg}
-						.col-lg-6
-							label.control-label(for='status', style='display: block; text-align: left;') Status
-							select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
-								option(value=1, selected=(data && data.status === '1') ? true : false) Active
-								option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
-					.form-group  
-						.col-lg-8
-							input#submit.btn.btn-success(type='submit', value='Lưu lại')
+			header
+				.content-header Nhập dữ liệu thêm mới khu chung cư
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/apartment-building-group/create')
+				.form-group
+					.col-lg-6(class=errors && errors.abgName && 'has-error')
+						label.control-label(for='abgName') Tên khu chung cư (*)
+						input#abg-name.form-control(type='text', name='abgName', value=data && data.abgName, placeholder='Nhập tên khu chung cư')
+						if errors && errors.abgName
+							.help-block #{errors.abgName.msg}
+					.col-lg-6(class=errors && errors.manager && 'has-error')
+						label.control-label(for='manager', style='display: block; text-align: left;') Quản lý
+						select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
+							option(value='') Chọn quản lý
+							each user in users
+								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.firstName + ' ' + user.lastName}
+						if errors && errors.manager
+							.help-block #{errors.manager.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.address && 'has-error')
+						label.control-label(for='address') Địa chỉ (*)
+						textarea#address.form-control(type='text', name='address', placeholder='Nhập địa chỉ khu chung cư', rows=3) #{data ? data.address : ''}
+						if errors && errors.address
+							.help-block #{errors.address.msg}
+					.col-lg-6
+						label.control-label(for='status', style='display: block; text-align: left;') Status
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === '1') ? true : false) Active
+							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')

@@ -1,0 +1,56 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			
+		});
+block content
+	.row
+		.col-lg-9.col-md-9
+			h4(style='margin: 0') Lịch sử gửi thông báo
+			hr
+			table#notification-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Thông báo
+						th Người nhận
+						th Thiết bị
+						th Căn hộ
+						th Tòa nhà
+						th Chung cư
+						th.text-center Trạng thái
+						th Ngày gửi
+				tbody
+					each nt, i in notifications
+						tr
+							td.hidden-xs #{i+1}
+							td #{nt.notification.title}
+							td #{nt.sendTo.firstName + ' ' + nt.sendTo.lastName}
+							td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
+							td #{nt.apartment.apartmentName}
+							td #{nt.building.buildingName}
+							td #{nt.buildingGroup ? nt.buildingGroup.abgName : ''}
+							td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
+							td #{nt.createdAt.toLocaleString('vi-VN')}
+		.col-lg-3.col-md-3.chat-container
+			h4(style='margin: 0') Chat với người dùng
+			hr
+			each u in users
+				.user-item(id='user-' + u._id, onclick='createNewChatBox(' + JSON.stringify(u) + ')')
+					.user-avatar
+						if u.avatar
+							img.img-responsive(src=u.avatarUrl)
+						else 
+							i.fa.fa-user-o
+					.user-info
+						.info-center
+							.user-name #{u.firstName + ' ' + u.lastName}
+							//- .phoneNumber #{u.phoneNumber}
+					.online-status
+						.icon-online

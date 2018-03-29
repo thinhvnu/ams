@@ -15,18 +15,20 @@ const passport = require('./../middleware/passport');
  * Index page.
  */
 exports.getIndex = (req, res) => {
-  User.find({}).exec(function (err, users) {
-		if (err) {
-			console.log('err', err)
-			return done(err);
-		}
-		
-		res.render('user/index', {
-			title: 'Account List',
-			current: ['user', 'index'],
-			users: users
-		});
-	});
+  User.find({})
+    .sort('-createdAt')
+    .exec(function (err, users) {
+      if (err) {
+        console.log('err', err)
+        return done(err);
+      }
+      
+      res.render('user/index', {
+        title: 'Account List',
+        current: ['user', 'index'],
+        users: users
+      });
+    });
 };
 
 /**
@@ -78,7 +80,9 @@ exports.postLogin = (req, res, next) => {
               /**
                * Using json web token gen token for client
                */
-              var token = passport.jwtCreateToken(user.id), accessRouter = req.originalUrl;;
+              var token = passport.jwtCreateToken({
+                userId: user.id
+              }), accessRouter = req.originalUrl;;
               res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
               return res.redirect(req.session.redirectTo || '/');
             } else {
@@ -96,7 +100,9 @@ exports.postLogin = (req, res, next) => {
  * Log out.
  */
 exports.logout = (req, res) => {
-  req.logout();
+  // req.logout();
+  req.session.destroy();
+  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false});
   res.redirect('/');
 };
 
@@ -121,64 +127,83 @@ exports.getCreate = (req, res) => {
  * Create a new local account.
  */
 exports.postCreate = (req, res, next) => {
-  req.checkBody('userName', 'UserName is required').notEmpty();
-  req.checkBody('roles', 'Roles is required').notEmpty();
-  req.checkBody('email', 'Email is invalid').isEmail();
-  req.checkBody('password', 'Password must be at least 4 characters long').len(4);
-  req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  try {
+    req.checkBody('firstName', 'firstName is required').notEmpty();
+    req.checkBody('lastName', 'lastName is required').notEmpty();
+    req.checkBody('userName', 'userName is required').notEmpty();
+    req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
+    req.checkBody('email', 'Email is invalid').isEmail();
+    req.checkBody('password', 'Password must be at least 4 characters long').len(4);
+    req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-  req.getValidationResult().then(function(errors) {
-    if (!errors.isEmpty()) {
-      var errors = errors.mapped();
+    req.getValidationResult().then(function(errors) {
+      if (!errors.isEmpty()) {
+        var errors = errors.mapped();
 
-      console.log('req.body', req.body)
-      Role.find({}, function(err, roles) {
-        res.render('user/create', {
-          title: 'Create Account',
-          roles: roles,
-          errors: errors,
-          data: req.body
-        });
-      })
-    } else {
-      const user = new User();
-      user.firstName = req.body.firstName;
-      user.lastName = req.body.lastName;
-      user.userName = req.body.userName;
-      user.email = req.body.email;
-      user.password = req.body.password;
-      user.gender = req.body.gender;
-      
-      if (req.body.role instanceof Array) {
-        user.roles = req.body.roles;
+        console.log('req.body', req.body)
+        Role.find({}, function(err, roles) {
+          res.render('user/create', {
+            title: 'Create Account',
+            roles: roles,
+            errors: errors,
+            data: req.body
+          });
+        })
       } else {
-        user.roles.push(req.body.roles);
-      }
-      user.status = req.body.status;
-    
-      User.findOne({ email: req.body.email }, (err, existingUser) => {
-        if (err) { return next(err); }
-        if (existingUser) {
-          req.flash('errors', { msg: 'Account with that email address already exists.' });
-          return res.redirect('/create');
+        const user = new User();
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.userName = req.body.userName;
+        user.email = req.body.email;
+        user.avatar = req.body.avatar;
+        user.phoneNumber = req.body.phoneNumber;
+        user.password = req.body.password;
+        user.gender = req.body.gender;
+        
+        if (req.body.role instanceof Array) {
+          user.roles = req.body.roles;
+        } else {
+          user.roles.push(req.body.roles);
         }
-        user.save((err) => {
-          if (err) { 
-            console.log('error create new user', err);
-            return next(err); 
+        user.status = req.body.status;
+      
+        User.findOne({ email: req.body.email }, (err, existingUser) => {
+          if (err) { return next(err); }
+          if (existingUser) {
+            req.flash('errors', { msg: 'Account with that email address already exists.' });
+            return res.redirect('/create');
           }
-          /**
-           * Using json web token gen token for client
-           */
-          var token = passport.jwtCreateToken(user.id);
-          res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
-          res.redirect('/user');
+          user.save((err) => {
+            if (err) { 
+              console.log('error create new user', err);
+              return next(err); 
+            }
+            // /**
+            //  * Using json web token gen token for client
+            //  */
+            // var token = passport.jwtCreateToken({
+            //   userId: user.id
+            // });
+            // res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
+            res.redirect('/user');
+          });
         });
-      });
-    }
-  });
+      }
+    });
+  } catch (e) {
+    return res.render('/error', {
+      data: e
+    });
+  }
 };
+
+/**
+ * Get edit account
+ */
+exports.getEdit = (req, res, next) => {
+  
+}
 
 /**
  * GET /account

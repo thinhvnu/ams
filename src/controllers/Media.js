@@ -26,8 +26,8 @@ exports.getFroalaLoadImages = (req, res, next) => {
 	fs.readdir(imageFolder, (err, files) => {
 		files.forEach(file => {
 			data.push({
-				url: imageFolder + file,
-				thumb: imageFolder + file,
+				url: process.env.MEDIA_URL + '/images/store/' + file,
+				thumb: process.env.MEDIA_URL + '/images/store/' + file,
 				tag: file
 			})
 		});
@@ -96,7 +96,7 @@ exports.postUploadImage = (req, res, next) => {
 				// Upload origin image
 				sharp(file.path).toFile(originPath + filename, (err, info) => {});
 				// Upload thumb image
-				sharp(file.path).resize(thumbWidth, thumbHeight).toFile(thumbPath + filename, (err, info) => {
+				sharp(file.path).resize(thumbWidth, thumbHeight).ignoreAspectRatio().toFile(thumbPath + filename, (err, info) => {
 					// Response 
 					res.status(200).end(JSON.stringify({
 						path: process.env.MEDIA_URL + uploadDir + 'thumb/' + filename,

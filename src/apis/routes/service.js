@@ -11,11 +11,11 @@ const passport = require('./../../middleware/apiPassport');
 /* GET users listing. */
 router.get('/', serviceController.getIndex);
 
-/* API create new post */
-// router.post('/create-new', passport.isAuthenticated, postController.postCreateNew);
+/* API create new request */
+router.post('/create-request', passport.isAuthenticated, serviceController.postCreateRequest);
 
-/* API get post details */
-// router.get('/:postId', postController.getDetail);
+/* API get history details */
+router.get('/history-transaction', passport.isAuthenticated, serviceController.getHistoryTransaction);
 
 
 module.exports = router;

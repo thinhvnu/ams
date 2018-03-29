@@ -11,58 +11,51 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-edit
-					h5 #{title}
-					// .toolbar
-					.toolbar
-						nav(style='padding: 8px;')
-							a.btn.btn-danger.btn-xs.close-box(href='javascript:;')
-								i.fa.fa-times
-					// /.toolbar
-				#div-1.body.collapse.in(aria-expanded='true', style='')
-				form.form-horizontal(method='POST', action='/apartment-building/create', style="padding: 0 15px;")
-					.form-group
-						.col-lg-6(class=errors && errors.buildingName && 'has-error')
-							label.control-label(for='buildingName') Tên tòa nhà
-							input#ab-name.form-control(type='text', name='buildingName', value=data && data.buildingName, placeholder='Nhập tên tòa nhà')
-							if errors && errors.buildingName
-								.help-block #{errors.buildingName.msg}
-						.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
-							label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư
-							select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;')
-								option(value='') Chọn khu chung cư
-								each abg in abgs
-									option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
-							if errors && errors.apartmentBuildingGroup
-								.help-block #{errors.apartmentBuildingGroup.msg}
-					.form-group
-						.col-lg-6(class=errors && errors.floor && 'has-error')
-							label.control-label(for='floor', style='display: block; text-align: left;') Số tầng
-							input.form-control.number-floor(name='floor', data-placeholder='Số tầng', style='width: 100%;')
-							if errors && errors.floor
-								.help-block #{errors.floor.msg}
-						.col-lg-6(class=errors && errors.area && 'has-error')
-							label.control-label(for='area', style='display: block; text-align: left;') Diện tích
-							input.form-control.building-area(name='area', data-placeholder='Diện tích (m2)', style='width: 100%;')
-							if errors && errors.area
-								.help-block #{errors.area.msg}
-					.form-group
-						.col-lg-6(class=errors && errors.manager && 'has-error')
-							label.control-label(for='manager', style='display: block; text-align: left;') Quản lý
-							select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
-								option(value='') Chọn quản lý
-								each user in users
-									option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.userName}
-							if errors && errors.manager
-								.help-block #{errors.manager.msg}
-						.col-lg-6
-							label.control-label(for='status', style='display: block; text-align: left;') Status
-							select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
-								option(value=1, selected=(data && data.status === '1') ? true : false) Active
-								option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
-					.form-group  
-						.col-lg-8
-							input#submit.btn.btn-success(type='submit', value='Lưu lại')
+			header
+				.content-header Nhập dữ liệu tòa nhà
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/apartment-building/create')
+				.form-group
+					.col-lg-6(class=errors && errors.buildingName && 'has-error')
+						label.control-label(for='buildingName') Tên tòa nhà (*)
+						input#ab-name.form-control(type='text', name='buildingName', value=data && data.buildingName, placeholder='Nhập tên tòa nhà')
+						if errors && errors.buildingName
+							.help-block #{errors.buildingName.msg}
+					.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư
+						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuildingGroup
+							.help-block #{errors.apartmentBuildingGroup.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.floor && 'has-error')
+						label.control-label(for='floor', style='display: block; text-align: left;') Số tầng (*)
+						input.form-control.number-floor(name='floor', data-placeholder='Số tầng', style='width: 100%;')
+						if errors && errors.floor
+							.help-block #{errors.floor.msg}
+					.col-lg-6(class=errors && errors.area && 'has-error')
+						label.control-label(for='area', style='display: block; text-align: left;') Diện tích (*)
+						input.form-control.building-area(name='area', data-placeholder='Diện tích (m2)', style='width: 100%;')
+						if errors && errors.area
+							.help-block #{errors.area.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.manager && 'has-error')
+						label.control-label(for='manager', style='display: block; text-align: left;') Quản lý (*)
+						select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
+							option(value='') Chọn quản lý
+							each user in users
+								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.userName}
+						if errors && errors.manager
+							.help-block #{errors.manager.msg}
+					.col-lg-6
+						label.control-label(for='status', style='display: block; text-align: left;') Trạng thái
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === '1') ? true : false) Active
+							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				hr
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')

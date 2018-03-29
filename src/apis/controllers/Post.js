@@ -14,7 +14,13 @@ exports.getIndex = function (req, res) {
 		'comments': 1,
 		'tags': 1,
 		'seo': 1,
-		'createdAt': 1
+		'createdAt': 1,
+		'createdBy': 1
+	})
+	.populate({
+		path: 'createdBy',
+		model: 'User',
+		select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
 	})
 	.populate({
 		path: 'comments',
@@ -22,7 +28,7 @@ exports.getIndex = function (req, res) {
 		populate: {
 			path: 'createdBy',
 			model: 'User',
-			select: { '_id': 0, 'userName': 1 }
+			select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
 		}
 	})
 	.sort('-createdAt')
@@ -47,7 +53,7 @@ exports.postCreateNew = (req, res, next) => {
 		if (!errors.isEmpty()) {
             return res.json({
                 success: false,
-                errorCode: 010,
+                errorCode: '010',
                 message: errors,
                 data: req.body
             });
@@ -63,11 +69,12 @@ exports.postCreateNew = (req, res, next) => {
 			newPost.category = data.categoryId ? data.categoryId : null;
 			newPost.status = data.status;
 			newPost.pinPost = data.pinPost;
+			newPost.createdBy = req.session.user._id;
 			newPost.save(function (err, newPost) {
 				if (err) {
 					return res.json({
                         success: false,
-                        errorCode: 010,
+                        errorCode: '010',
                         message: errors,
                         data: req.body
                     })

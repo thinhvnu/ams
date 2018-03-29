@@ -7,6 +7,8 @@ var userController = require('./../controllers/User');
  */
 const passport = require('./../../middleware/apiPassport');
 
+router.post('/register', userController.postRegister);
+
 /* GET users Info. */
 router.get('/info', passport.isAuthenticated, userController.getInfo);
 
@@ -15,5 +17,7 @@ router.post('/update-info', passport.isAuthenticated, userController.postUpdateI
 
 /* POST firebase device token. */
 router.post('/firebase-device-token', passport.isAuthenticated, userController.postFirebaseDeviceToken);
+
+router.get('/search', userController.getSearch);
 
 module.exports = router;

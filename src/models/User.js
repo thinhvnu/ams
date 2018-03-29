@@ -17,16 +17,21 @@ const userSchema = new mongoose.Schema({
   firebaseDeviceToken: Array,
 
   gender: {type: Number}, // 1: male, 2: female, 3: other
-  avata: {type: String},
+  avatar: {type: String},
   firstName: {type: String},
   lastName: {type: String},
   address: {type: String},
 
+  apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
   roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },
   rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
 }, {timestamps: true, usePushEach: true});
+
+userSchema.set('toJSON', {
+  virtuals: true
+});
 
 /**
  * Password hash middleware.
@@ -67,6 +72,13 @@ userSchema.methods.gravatar = function gravatar(size) {
   // const md5 = crypto.createHash('md5').update(this.email).digest('hex');
   // return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 };
+
+/**
+ * Function get avatar image url
+ */
+userSchema.virtual('avatarUrl').get(function () {
+  return process.env.MEDIA_URL + '/images/avatar/thumb/' + this.avatar;
+});
 
 const User = mongoose.model('User', userSchema);
 

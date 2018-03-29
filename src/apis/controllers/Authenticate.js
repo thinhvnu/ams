@@ -25,7 +25,7 @@ exports.accessToken = (req, res, next) => {
          */
         return res.json({
             success: false,
-            errorCode: 001,
+            errorCode: '001',
             message: 'Email or password is empty'
         })
       } else {
@@ -45,7 +45,7 @@ exports.accessToken = (req, res, next) => {
                 /**
                  * Using json web token gen token for client
                  */
-                var token = passport.jwtCreateToken(user.id);
+                var token = passport.jwtCreateToken({userId: user.id});
                 // res.cookie('rtcs_chat_token', token, { httpOnly: false});
                 return res.json({
                     success: true,

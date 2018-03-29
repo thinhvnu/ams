@@ -12,7 +12,7 @@ exports.postUploadImage = (req, res, next) => {
 	let uploadDir = '/media/images/';
 
 	let imageData = req.body.imageData, imageType = req.body.imageType,
-	fileName = 'post-' + Date.now(),
+	fileName = imageType + '-' + Date.now(),
 	ext = null;
 
 	uploadDir += imageType ? (imageType + '/') : 'store/';
@@ -23,7 +23,7 @@ exports.postUploadImage = (req, res, next) => {
 	if (!imageData || !imageType) {
 		return res.json({
 			success: false,
-			errorCode: 100,
+			errorCode: '100',
 			message: 'Image type or Image data empty'
 		});
 	}
@@ -41,7 +41,7 @@ exports.postUploadImage = (req, res, next) => {
 	if (!ext) {
 		return res.json({
 			success: false,
-			errorCode: 101,
+			errorCode: '101',
 			message: 'Data is not image'
 		});
 	}
@@ -53,7 +53,7 @@ exports.postUploadImage = (req, res, next) => {
 			console.log(err);
 			return res.json({
 				success: false,
-				errorCode: 102,
+				errorCode: '102',
 				message: 'Image data error'
 			});
 		} else {
@@ -61,11 +61,55 @@ exports.postUploadImage = (req, res, next) => {
 				success: false,
 				errorCode: 0,
 				data: {
-					imageUrl: process.env.MEDIA_URL + uploadDir + 'origin/' + fileName,
+					imageUrl: process.env.MEDIA_URL + '/images/' + (imageType ? (imageType + '/') : 'store/') + 'origin/' + fileName,
 					fileName: fileName
 				},
 				message: 'Save message successfully'
 			})
 		}
 	});
+}
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.postUploadExcelFile = (req, res, next) => {
+	var fs = require('fs'),
+	path = require('path');
+	formidable = require('formidable'),
+	XLSX = require('xlsx'),
+	form = new formidable.IncomingForm();
+
+    form.on('file', function (name, file) {
+		let uploadFilePath = path.join(__dirname, '/../../..' + '/media/files/import/' + Date.now() + '-' + file.name);
+
+		fs.rename(file.path, uploadFilePath, function (err) {
+			if (err) {
+				return res.json({
+					success: false,
+					errorCode: 1312,
+					message: 'Upload file failed'
+				})
+			};
+			/**
+			 * Read xlsx to data
+			 */
+			let wb = XLSX.readFile(uploadFilePath);
+			let sheet_name_list = wb.SheetNames;
+			let data = XLSX.utils.sheet_to_json(wb.Sheets[sheet_name_list[0]]);
+
+			return res.json({
+				success: true,
+				errorCode: 0,
+				filePath: uploadFilePath,
+				data: data
+			})
+		});
+	});
+
+	// Parse the incoming form fields.
+	form.parse(req);
 }

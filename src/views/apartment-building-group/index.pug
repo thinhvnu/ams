@@ -14,38 +14,58 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.box.dark
-				header
-					.icons
-						i.fa.fa-table
-					h5 #{title}
-				.user-actions
-					a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
-				table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
-					thead
+			.user-actions
+				a.btn.btn-success(href='/apartment-building-group/create') Tạo mới
+				.btn.btn-success(onclick='return downloadFileImport("/apartment-building-group/import-template")')
+					| Tải mẫu nhập liệu &nbsp;
+					i.fa.fa-download
+				.btn.btn-success
+					input#import-excel.mycropper-browse-file(type='file', name='excelFile', onchange='return importFileAbg(this)')
+					label.import-file.custom-file-upload(for='import-excel')
+						| Nhập liệu excel &nbsp;
+						i.fa.fa-file-excel-o
+				button#abg-data-import-file(type='button', data-toggle='modal', data-target='#abgDataImport', style='display: none')
+				#abgDataImport.modal.fade(role='dialog')
+					.modal-dialog
+						// Modal content
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal') ×
+								h4.modal-title Dữ liệu sẽ nhập
+							.modal-body
+								table.table.table-striped
+									thead
+										tr
+											th Tên chung cư
+											th Địa chỉ
+									tbody
+							.modal-footer
+								button#abg-submit-data.btn.btn-success.pull-left Nhập liệu
+								button.btn.btn-default(type='button', data-dismiss='modal') Close
+			hr
+			table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Tên chung cư
+						th Địa chỉ
+						th Người quản lý
+						th Người tạo
+						th.text-center Trạng thái
+						th.text-center.no-sort Hành động
+				tbody
+					each dt, i in data
 						tr
-							th.hidden-xs STT
-							th Tên chung cư
-							th Địa chỉ
-							th Người quản lý
-							th Người tạo
-							th.text-center Trạng thái
-							th.text-center.no-sort Hành động
-					tbody
-						- var i = 1;
-						each dt in data
-							tr
-								td.hidden-xs #{i}
-								td #{dt.abgName}
-								td #{dt.address}
-								td #{dt.manager.userName}
-								td #{dt.createdBy.userName}
-								td.text-center #{dt.status ? 'Active' : 'Inactive'}
-								td(align='center')
-									a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default
-										em.fa.fa-eye
-									a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
-										em.fa.fa-pencil
-									a(href='/apartment-building-group/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa khu chung cư này không?", "/apartment-building-group/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-										em.fa.fa-trash
-							- i += 1
+							td.hidden-xs #{i+1}
+							td #{dt.abgName}
+							td #{dt.address}
+							td #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Empty'}
+							td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
+							td.text-center #{dt.status ? 'Active' : 'Inactive'}
+							td(align='center')
+								a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default
+									em.fa.fa-eye
+								a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
+									em.fa.fa-pencil
+								a(href='/apartment-building-group/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa khu chung cư này không?", "/apartment-building-group/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+									em.fa.fa-trash

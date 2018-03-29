@@ -21,11 +21,15 @@ exports.getIndex = function (req, res, next) {
 			ApartmentBuildingGroup.find({})
 				.populate('manager', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.populate('createdBy', {
 					'_id': 0,
-					'userName': 1
+					'userName': 1,
+					'firstName': 1,
+					'lastName': 1
 				})
 				.exec(function (err, abgs) {
 					if (err) {
@@ -48,6 +52,55 @@ exports.getIndex = function (req, res, next) {
 	});
 }
 
+exports.getImportTemplate = (req, res, next) => {
+	const XLSX = require('xlsx'), path = require('path');
+	let abgData = [], managerData = [], abgWs, managerWs, wb, filePath;
+
+	abgData = [
+		['ten_chung_cu', 'quan_ly', 'dia_chi']
+	];
+	managerData = [
+		['id', 'ho_ten', 'sdt']
+	];
+
+	abgWs = XLSX.utils.aoa_to_sheet(abgData);
+
+	User.find({})
+		.select({
+			_id: 1,
+			firstName: 1,
+			lastName: 1,
+			userName: 1,
+			phoneNumber: 1
+		})
+		.exec((err, users) => {
+			if (users) {
+				for (let i=0; i<users.length; i++) {
+					managerData.push([
+						users[i]._id,
+						users[i].firstName + ' ' + users[i].lastName,
+						users[i].phoneNumber
+					])
+				}
+			}
+
+			managerWs = XLSX.utils.aoa_to_sheet(managerData);
+
+			wb = XLSX.utils.book_new();
+			filePath = path.join(__dirname, '/../..' + '/media/files/import-template/building-group-import.xlsx');
+
+			XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
+			XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
+			XLSX.writeFile(wb, filePath);
+
+			return res.json({
+				success: true,
+				errorCode: 0,
+				fileUrl: process.env.MEDIA_URL + '/files/import-template/building-group-import.xlsx'
+			});
+		})
+}
+
 exports.getCreate = (req, res, next) => {
 	User.find({}, (err, users) => {
 		res.render('apartment-building-group/create', {
@@ -60,7 +113,6 @@ exports.getCreate = (req, res, next) => {
 
 exports.postCreate = (req, res, next) => {
 	req.checkBody('abgName', 'Tên khu chung cư không được để trống').notEmpty();
-	req.checkBody('manager', 'Chọn quản lý').notEmpty();
 	req.checkBody('address', 'Địa chỉ không được để trống').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {
@@ -103,12 +155,12 @@ exports.getEdit = (req, res, next) => {
 		.populate({
 			path: 'manager',
 			model: 'User',
-			select: {'_id': 1, 'userName': 1}
+			select: {'_id': 1, 'userName': 1, 'firstName': 1, 'lastName': 1}
 		})
 		.populate({
 			path: 'createdBy',
 			model: 'User',
-			select: {'userName': 1}
+			select: {'userName': 1, 'firstName': 1, 'lastName': 1}
 		})
 		.populate({
 			path: 'apartmentBuildings',
@@ -116,7 +168,7 @@ exports.getEdit = (req, res, next) => {
 			populate: {
 				path: 'manager',
 				model: 'User',
-				select: { 'userName': 1 }
+				select: { 'userName': 1, 'firstName': 1, 'lastName': 1 }
 			}
 		})
 		.exec(function (err, abg) {
@@ -189,7 +241,7 @@ exports.postUpdate = (req, res, next) => {
  */
 exports.getView = (req, res, next) => {
 	let clientKey = 'abg_view_' + req.params.abgId;
-	console.log('abgId', req.params.abgId);
+	
 	client.get(clientKey, (err, abg) => {
 		if (err) {
 			console.log('err', err);
@@ -221,7 +273,7 @@ exports.getView = (req, res, next) => {
 					populate: {
 						path: 'manager',
 						model: 'User',
-						select: { 'userName': 1 }
+						select: { 'userName': 1, 'firstName': 1, 'lastName': 1 }
 					}
 				})
 				.exec(function (err, abg) {
@@ -229,11 +281,14 @@ exports.getView = (req, res, next) => {
 						console.log('err', err)
 						return next(err);
 					}
-					console.log('abg', abg);
-					res.render('apartment-building-group/view', {
-						title: abg.abgName,
-						current: ['apartment-building-group', 'view'],
-						data: abg
+					
+					User.find({}, (err, users) => {
+						res.render('apartment-building-group/view', {
+							title: abg.abgName,
+							current: ['apartment-building-group', 'view'],
+							data: abg,
+							users: users
+						});
 					});
 
 					/**

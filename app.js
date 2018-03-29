@@ -18,7 +18,7 @@ var config = require('./config/main');
 
 dotenv.config({path: '.env'});
 
-const index = require('./src/routes/index');
+const dashboard = require('./src/routes/dashboard');
 const user = require('./src/routes/user');
 const role = require('./src/routes/role');
 const room = require('./src/routes/room');
@@ -26,17 +26,26 @@ const slider = require('./src/routes/slider');
 const media = require('./src/routes/media');
 const abg = require('./src/routes/apartmentBuildingGroup');
 const ab = require('./src/routes/apartmentBuilding');
+const apartment = require('./src/routes/apartment');
 const service = require('./src/routes/service');
+const utility = require('./src/routes/utility');
 const permission = require('./src/routes/permission');
+const notification = require('./src/routes/notification');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
 const apiChat = require('./src/apis/routes/chat');
+const apiAbg = require('./src/apis/routes/abg');
+const apiBuilding = require('./src/apis/routes/building');
+const apiApartment = require('./src/apis/routes/apartment');
 const apiSlider = require('./src/apis/routes/slider');
 const apiPost = require('./src/apis/routes/post');
 const apiUser = require('./src/apis/routes/user');
 const apiComment = require('./src/apis/routes/comment');
 const apiService = require('./src/apis/routes/service');
+const apiUtility = require('./src/apis/routes/utility');
+const apiNotification = require('./src/apis/routes/notification');
+const apiFeedBack = require('./src/apis/routes/feedback');
 
 var app = express();
 var io = require('socket.io')();
@@ -74,7 +83,7 @@ app.use((req, res, next) => {
 app.use('/libs', express.static(__dirname + '/node_modules/'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.use('/', dashboard);
 app.use('/user', user);
 app.use('/role', role);
 app.use('/room', room);
@@ -82,8 +91,11 @@ app.use('/slider', slider);
 app.use('/media', media);
 app.use('/apartment-building-group', abg);
 app.use('/apartment-building', ab);
+app.use('/apartment', apartment);
 app.use('/service', service);
+app.use('/utility', utility);
 app.use('/permission', permission);
+app.use('/notification', notification);
 
 /**
  * Api router
@@ -91,11 +103,17 @@ app.use('/permission', permission);
 app.use('/api/media', apiMedia);
 app.use('/api/auth', apiAuth);
 app.use('/api/chat', apiChat);
+app.use('/api/abg', apiAbg);
+app.use('/api/building', apiBuilding);
+app.use('/api/apartment', apiApartment);
 app.use('/api/slider', apiSlider);
 app.use('/api/post', apiPost);
 app.use('/api/comment', apiComment);
 app.use('/api/user', apiUser);
 app.use('/api/service', apiService);
+app.use('/api/utility', apiUtility);
+app.use('/api/notification', apiNotification);
+app.use('/api/feedback', apiFeedBack);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

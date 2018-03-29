@@ -18,7 +18,7 @@ exports.getIndex = function (req, res) {
 
 exports.getCreate = function (req, res) {
 	res.render('slider/create', {
-    title: 'Create New Image Slider',
+    title: 'Thêm ảnh slide mới',
     current: ['slider', 'create'],
   });
 };
@@ -35,7 +35,7 @@ exports.postCreate = function (req, res) {
 			var errors = errors.mapped();
 			//If there are errors render the form again, passing the previously entered values and errors
 			return res.render('slider/create', {
-        title: 'Create New Category Slider',
+        title: 'Thêm ảnh slide mới',
         current: ['slider', 'create'],
         data: req.body,
         errors: errors
@@ -58,6 +58,7 @@ exports.postCreate = function (req, res) {
         res.send({ "result": false });
       }
       // Insert child to category
+      req.flash('success', 'Thêm ảnh slide thành công');
       res.redirect('/slider');
     });
 	});

@@ -11,6 +11,9 @@ const passport = require('./../middleware/apiPassport');
 /* GET abg listing. */
 router.get('/', passport.isAuthenticated, abgController.getIndex);
 
+/* GET import template file */
+router.get('/import-template', passport.isAuthenticated, abgController.getImportTemplate);
+
 /* API get create new abg */
 router.get('/create', passport.isAuthenticated, abgController.getCreate);
 

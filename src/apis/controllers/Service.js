@@ -1,30 +1,59 @@
 const Service = require('./../../models/Service');
 const ServiceRequest = require('./../../models/ServiceRequest');
+const ServiceCategory = require('./../../models/ServiceCategory');
+
+exports.getCategories = (req, res, next) => {
+	ServiceCategory.find({
+		status: 1
+	}).exec((err, data) => {
+		if (err) {
+			return res.json({
+				success: false,
+				errorCode: '112',
+				message: 'Có lỗi xảy ra'
+			})
+		}
+
+		return res.json({
+			success: true,
+			errorCode: 0,
+			data: data,
+			message: 'Get data successfully'
+		})
+	})
+}
 
 // Get all services
 exports.getIndex = function (req, res) {
-	Service.find({}, {
-		'_id': 1,
-		'serviceName': 1,
-		'image': 1,
-		'imageUrl': 1,
-		'icon': 1,
-		'iconUrl': 1,
-		'content': 1,
-		'price': 1
-	})
-	.exec(function (err, services) {
-		if (err) {
-			console.log('err', err)
-			return done(err);
-		}
-		res.send({
-			success: true,
-			errorCode: 0,
-			data: services,
-			message: 'Get list services successfully'
+	try {
+		Service.find({
+			status: 1,
+			category: req.params.categoryId
+		})
+		.populate({
+			path: 'category',
+			model: 'ServiceCategory'
+		})
+		.exec(function (err, services) {
+			if (err) {
+				console.log('err', err)
+				return done(err);
+			}
+			res.send({
+				success: true,
+				errorCode: 0,
+				data: services,
+				message: 'Get list services successfully'
+			});
 		});
-	});
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			data: [],
+			message: 'Exception'
+		})
+	}
 };
 
 exports.postCreateRequest = (req, res, next) => {

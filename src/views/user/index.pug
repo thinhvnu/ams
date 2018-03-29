@@ -39,7 +39,5 @@ block content
 							td #{(user.gender === 1) ? 'Male' : ((user.gender === 2) ? 'Female' : 'Other')}
 							td.text-center #{user.status ? 'Active' : 'Inactive'}
 							td(align='center')
-								a.u-action.btn.btn-default
-									em.fa.fa-eye
-								a.u-action.btn.btn-success
+								a(href='/user/edit/' + user._id).u-action.btn.btn-success
 									em.fa.fa-pencil

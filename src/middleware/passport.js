@@ -73,16 +73,12 @@ exports.jwtVerifyToken = (token, cb) => {
                 status: 1
             })
             .populate({
-                path: 'roles',
-                model: 'Role',
-                populate: {
-                    path: 'permissions',
-                    model: 'Permission',
-                    select: { 'accessRouter': 1 }
-                }
+                path: 'role',
+                model: 'Role'
             })
             .exec((err, user) => {
-                if (err) {
+                if (err || !user.role || user.role.type !== 1) {
+                    req.flash('errors','Bạn không có quyền đăng nhập hệ thống');
                     return cb(null);   
                 } else {
                     return cb(user); 

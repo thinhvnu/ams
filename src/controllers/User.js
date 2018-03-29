@@ -82,8 +82,8 @@ exports.postLogin = (req, res, next) => {
                */
               var token = passport.jwtCreateToken({
                 userId: user.id
-              }), accessRouter = req.originalUrl;;
-              res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
+              }), accessRouter = req.originalUrl;
+              res.cookie(process.env.TOKEN_KEY, token, { maxAge: process.env.LOGIN_TOKEN_EXP, httpOnly: false});
               return res.redirect(req.session.redirectTo || '/');
             } else {
               return res.redirect('/user/login');
@@ -114,8 +114,11 @@ exports.getCreate = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  Role.find({}, function(err, roles) {
+  Role.find({
+    status: 1
+  }, function(err, roles) {
     res.render('user/create', {
+      current: ['user', 'create'],
       title: 'Create Account',
       roles: roles
     });
@@ -130,9 +133,8 @@ exports.postCreate = (req, res, next) => {
   try {
     req.checkBody('firstName', 'firstName is required').notEmpty();
     req.checkBody('lastName', 'lastName is required').notEmpty();
-    req.checkBody('userName', 'userName is required').notEmpty();
-    req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
-    req.checkBody('email', 'Email is invalid').isEmail();
+    req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty().exi;
+    req.checkBody('role', 'role is required').notEmpty();
     req.checkBody('password', 'Password must be at least 4 characters long').len(4);
     req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
@@ -154,18 +156,13 @@ exports.postCreate = (req, res, next) => {
         const user = new User();
         user.firstName = req.body.firstName;
         user.lastName = req.body.lastName;
-        user.userName = req.body.userName;
+        user.userName = req.body.userName || req.body.phoneNumber;
         user.email = req.body.email;
         user.avatar = req.body.avatar;
         user.phoneNumber = req.body.phoneNumber;
         user.password = req.body.password;
         user.gender = req.body.gender;
-        
-        if (req.body.role instanceof Array) {
-          user.roles = req.body.roles;
-        } else {
-          user.roles.push(req.body.roles);
-        }
+        user.role = req.body.role;
         user.status = req.body.status;
       
         User.findOne({ email: req.body.email }, (err, existingUser) => {
@@ -202,7 +199,76 @@ exports.postCreate = (req, res, next) => {
  * Get edit account
  */
 exports.getEdit = (req, res, next) => {
+  try {
+    let userId = req.params.userId;
+
+    User.findById(userId)
+      .exec((err, user) => {
+        Role.find({
+          status: 1
+        }, (err, roles) => {
+          return res.render('user/edit', {
+            current: ['user', 'exit'],
+            data: user,
+            roles: roles
+          })
+        })
+      })
+  } catch(e) {
+    req.flash('errors', 'Có lỗi xảy ra');
+    return res.redirect('/user')
+  }
+}
+
+/**
+ * Get edit account
+ */
+exports.postUpdate = (req, res, next) => {
+  req.checkBody('firstName', 'firstName is required').notEmpty();
+  req.checkBody('lastName', 'lastName is required').notEmpty();
+  req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
+  req.checkBody('role', 'role is required').notEmpty();
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+
+  req.getValidationResult().then(function(errors) {
+    if (!errors.isEmpty()) {
+      console.log('errors validate', errors);
+      return res.redirect('/user/edit/' + req.params.userId);
+    }
+    User.findById(req.params.userId, (err, user) => {
+      if (err) {
+        req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại');
+        console.log('err', err);
+        return res.redirect('/user/edit/' + req.params.userId);
+      }
   
+      if (user) {
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.avatar = req.body.avatar;
+        user.phoneNumber = req.body.phoneNumber;
+        user.role = req.body.role;
+        user.email = req.body.email;
+        user.gender = req.body.gender;
+        user.status = req.body.status;
+        // save the user
+        user.save(function (err) {
+          if (err) {
+            console.log('err', err);
+            req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
+            return res.redirect('/user/edit/' + req.params.userId);
+          }
+  
+          req.flash('success', 'Cập nhật thành công ' + user.firstName + ' ' + user.lastName);
+          // Insert child to category
+          return res.redirect('/user');
+        });
+      } else {
+        req.flash('errors', 'Không tìm thấy dữ liệu')
+        return res.redirect('/user');
+      }
+    })
+  })
 }
 
 /**

@@ -52,5 +52,6 @@ block content
 						.info-center
 							.user-name #{u.firstName + ' ' + u.lastName}
 							//- .phoneNumber #{u.phoneNumber}
-					.online-status
-						.icon-online
+					if u.isOnline
+						.online-status
+							.icon-online

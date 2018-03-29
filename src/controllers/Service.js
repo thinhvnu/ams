@@ -1,6 +1,6 @@
 const Service = require('../models/Service');
+const ServiceCategory = require('../models/ServiceCategory');
 
-// Get all posts
 exports.getIndex = function (req, res) {
 	Service.find({}).exec(function (err, services) {
 		if (err) {
@@ -17,10 +17,15 @@ exports.getIndex = function (req, res) {
 };
 
 exports.getCreate = function (req, res) {
-	res.render('service/create', {
-        title: 'Thêm dịch vụ mới',
-        current: ['service', 'create']
-    });
+	ServiceCategory.find({
+		status: 1
+	}).exec((err, categories) => {
+		res.render('service/create', {
+			title: 'Thêm dịch vụ mới',
+			current: ['service', 'create'],
+			categories: categories
+		});
+	})
 };
 
 exports.postCreate = function (req, res) {
@@ -29,16 +34,22 @@ exports.postCreate = function (req, res) {
 	*/ 
 	req.checkBody('serviceName', 'Tên dịch vụ không được để trống').notEmpty();
 	req.checkBody('icon', 'Icon dịch vụ không được để trống').notEmpty();
+	req.checkBody('category', 'Danh mục dịch vụ không được để trống').notEmpty();
 	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
 	
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
-			res.render('service/create', {
-				title: 'Thêm dịch vụ mới',
-				current: ['service', 'create'],
-				errors: errors,
-				data: req.body
+			ServiceCategory.find({
+				status: 1
+			}).exec((err, categories) => {
+				res.render('service/create', {
+					title: 'Thêm dịch vụ mới',
+					current: ['service', 'create'],
+					errors: errors,
+					data: req.body,
+					categories: categories
+				});
 			});
 		} else {
 			var data = req.body;
@@ -50,6 +61,7 @@ exports.postCreate = function (req, res) {
 			newService.content = data.content;
 			newService.price = data.price;
 			newService.status = data.status;
+			newService.category = data.category;
 			newService.createdBy = req.session.user._id;
 			
 			newService.save(function (err, newService) {

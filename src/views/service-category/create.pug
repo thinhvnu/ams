@@ -1,0 +1,81 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
+block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/libs/froala-editor/js/froala_editor.min.js')
+	script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script(src='/javascripts/cropper-editor.js')
+	script.
+		$(function() {
+			$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+	script(type='text/javascript').
+		var cropperEditor = new CropperEditor({ 
+			selector : 'icon-image',
+			uploadDir: '/images/service/',
+			prefixFileName: 'service-category',
+			thumbWidth: 400,
+			thumbHeight: 400,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		cropperEditor.init();
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Nhập dữ liệu danh mục dịch vụ
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/service-category/create')
+				.form-group
+					.col-lg-6.col-md-6(class=errors && errors.name && 'has-error')
+						label.control-label(for='name') Tên danh mục
+						input#serrvice-category-name.form-control(type='text', name='name', value=data && data.name, placeholder='Nhập tên danh mục')
+						if errors && errors.name
+							.help-block #{errors.name.msg}
+					.col-lg-6.col-md-6
+						label.control-label(for='status', style='display: block; text-align: left;') Status
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px !important;')
+							option(value=1, selected=(data && data.status === '1') ? true : false) Active
+							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				.form-group
+					.col-lg-6(class=errors && errors.icon && 'has-error')
+						label.control-label(for='icon') Icon dịch vụ
+						if data && data.image
+							label.custom-file-upload(for='service-icon', style='display: none;')
+								i.fa.fa-cloud-upload
+							input#icon-image.mycropper-browse-file(type='file', name='icon', disabled=true)
+							input#cropper-editor-input-icon-image(type='hidden', name='icon', value=data.icon)
+							#icon-image-preview.image-preview
+								.image-preview-item
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.icon)
+										i.fa.fa-trash
+									img(src='/media/images/service/thumb/' + data.icon)
+						else
+							input#icon-image.mycropper-browse-file(type='file', name='icon')
+							label.custom-file-upload(for='icon-image')
+								i.fa.fa-cloud-upload
+						if errors && errors.icon
+							.help-block #{errors.icon.msg}
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')
+				

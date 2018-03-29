@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   address: {type: String},
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
-  roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+  role: {type: mongoose.Schema.Types.ObjectId, ref: 'Role'},
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },
   rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]

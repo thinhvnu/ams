@@ -38,7 +38,7 @@ function createInboxMessageItem(data) {
     let avatar = document.createElement('span');
     if (data.sender && data.sender.avatar) {
         avatar.className = 'mess-item-avatar';
-        avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-block;background:url(' + data.sender.avatarUrl + ')';
+        avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-block;background:url(' + data.sender.avatarUrl + ') no-repeat center center /cover';
     } else {
         avatar.className = 'mess-item-avatar';
         avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-table;text-align:center;vertical-align:middle;border-radius:50%;background:#ffffff';
@@ -240,8 +240,8 @@ function createNewChatBox(user) {
             let messVal = inputMessage.value;
 
             if (messVal) {
-                let messageItem = createSenderMessageItem(messVal);
-                chatBoxContent.appendChild(messageItem);
+                // let messageItem = createSenderMessageItem(messVal);
+                // chatBoxContent.appendChild(messageItem);
                 /**
                  * Emit message to socket server
                  */
@@ -334,7 +334,7 @@ function createNewChatBox(user) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://backend.thinhnv.net', {query: 'token=' + token});
+const socket = io('http://localhost:6888', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
@@ -360,4 +360,23 @@ socket.on('connect', () => {
             }
         }
     })
+
+    /**
+     * Event owner message 
+     */
+    socket.on('owner_message', (data) => {
+        let chatBoxItem = document.getElementById('chat-box-item-' + (data.to.id || data.to.room));
+       
+        if (!chatBoxItem) {
+            createNewChatBox(data.to);
+        } else {
+            let chatBoxContent = document.querySelector('#chat-box-item-' + (data.to.id || data.to.room) + ' .chat-box-content');
+            console.log('chatbox', chatBoxContent);
+            if (chatBoxContent) {
+                let messEl = createSenderMessageItem(data.messageContent);
+                chatBoxContent.appendChild(messEl);
+                chatBoxContent.scrollTop = chatBoxContent.scrollHeight;
+            }
+        }
+    });
 });

@@ -78,7 +78,6 @@ exports.jwtVerifyToken = (token, cb) => {
             })
             .exec((err, user) => {
                 if (err || !user.role || user.role.type !== 1) {
-                    req.flash('errors','Bạn không có quyền đăng nhập hệ thống');
                     return cb(null);   
                 } else {
                     return cb(user); 

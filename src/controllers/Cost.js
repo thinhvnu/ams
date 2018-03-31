@@ -1,6 +1,8 @@
 const CostType = require('../models/CostType');
 const Cost = require('../models/Cost');
 const Abg = require('../models/ApartmentBuildingGroup');
+const ApartmentBuilding = require('../models/ApartmentBuilding');
+const Apartment = require('../models/Apartment');
 
 // Get all Categories
 exports.getIndex = function (req, res) {
@@ -70,50 +72,67 @@ exports.postCreate = function (req, res) {
 };
 
 exports.getImportTemplate = (req, res, next) => {
+	console.log('req.query', req.query);
+	let buildingId = req.query.buildingId;
+
+	if (!buildingId) {
+		return res.json({
+			success: false,
+			errorCode: '432'
+		});
+	}
+
 	const XLSX = require('xlsx'), path = require('path');
-	let costData = [], managerData = [], abgWs, managerWs, wb, filePath;
+	let costData = [], costWs, filePath;
 
-	abgData = [
-		['ten_chung_cu', 'quan_ly', 'dia_chi']
-	];
-	managerData = [
-		['id', 'ho_ten', 'sdt']
+	costData = [
+		['loai_chi_phi', 'can_ho', 'chung_cu', 'so_tien', 'thang', 'nam']
 	];
 
-	abgWs = XLSX.utils.aoa_to_sheet(abgData);
+	/**
+	 * Query data building
+	 */
+	ApartmentBuilding.find({
+		_id: buildingId
+	})
+	.populate({
+		path: 'buildingGroup',
+		model: 'ApartmentBuildingGroup'
+	})
+	.populate({
+		path: 'apartments',
+		model: 'Apartment'
+	})
+	.exec((err, apartments) => {
+		console.log('apartments', apartments);
+		/**
+		 * Append data to worksheet
+		 */
+		for (let i=0; i<apartments.length; i++) {
+			costData.push(
+				[
+					'Tien dien',
+					'101',
+					'Khu chung cu my dinh',
+					'100000',
+					'12',
+					'2017'
+				]
+			)
+		}
 
-	User.find({})
-		.select({
-			_id: 1,
-			firstName: 1,
-			lastName: 1,
-			userName: 1,
-			phoneNumber: 1
-		})
-		.exec((err, users) => {
-			if (users) {
-				for (let i=0; i<users.length; i++) {
-					managerData.push([
-						users[i]._id,
-						users[i].firstName + ' ' + users[i].lastName,
-						users[i].phoneNumber
-					])
-				}
-			}
+		costWs = XLSX.utils.aoa_to_sheet(costData);
 
-			managerWs = XLSX.utils.aoa_to_sheet(managerData);
+		wb = XLSX.utils.book_new();
+		filePath = path.join(__dirname, '/../..' + '/media/files/import-template/chi-phi-dich-vu.xlsx');
 
-			wb = XLSX.utils.book_new();
-			filePath = path.join(__dirname, '/../..' + '/media/files/import-template/chi-phi-dich-vu.xlsx');
+		XLSX.utils.book_append_sheet(wb, costWs, "Chi Phí");
+		XLSX.writeFile(wb, filePath);
 
-			XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
-			XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
-			XLSX.writeFile(wb, filePath);
-
-			return res.json({
-				success: true,
-				errorCode: 0,
-				fileUrl: process.env.MEDIA_URL + '/files/import-template/building-group-import.xlsx'
-			});
-		})
+		return res.json({
+			success: true,
+			errorCode: 0,
+			fileUrl: process.env.MEDIA_URL + '/files/import-template/chi-phi-dich-vu.xlsx'
+		});
+	})
 }

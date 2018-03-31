@@ -4,7 +4,7 @@ block stylesheets
 block scripts
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
-		//- $('.chosen-apartment-user').chosen({ allow_single_deselect: true, disable_search: false });
+		$('.chosen-abg, .chosen-ab').chosen({ allow_single_deselect: true, disable_search: false });
 block content
 	.row
 		.col-lg-2.col-md-2.col-sm-2.sub-menu
@@ -44,20 +44,19 @@ block content
 					.cost-type(style='margin-bottom: 15px;')
 						.user-actions
 							a.btn.btn-success(href='/cost/create') Thêm
-							.btn.btn-success
+							.btn.btn-success(onclick='return toggleSelect()')
 								| Tải mẫu nhập liệu &nbsp;
-								i.fa.fa-download
 							.btn.btn-success
 								input#import-excel.mycropper-browse-file(type='file', name='excelFile', onchange='return importFileAbg(this)')
 								label.import-file.custom-file-upload(for='import-excel')
 									| Nhập liệu excel &nbsp;
 									i.fa.fa-file-excel-o
 								button#abg-data-import-file(type='button', data-toggle='modal', data-target='#abgDataImport', style='display: none')
-							hr
-							form.form-horizontal
+							form#select-download-option.form-horizontal.hidden
+								hr
 								.form-group
 									.col-lg-5(class=errors && errors.apartmentBuildingGroup && 'has-error')
-										select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+										select#chosen-apartment-building-group.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
 											option(value='') Chọn khu chung cư
 											each abg in abgs
 												option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
@@ -66,7 +65,9 @@ block content
 											option(value='') Chọn tòa nhà
 								.form-group
 									.col-lg-2
-										.btn.btn-success(onclick='return downloadFileImport("/cost/import-template")') Tải file
+										.btn.btn-success(onclick='return downloadCostFileImport("/cost/import-template")')
+											| Tải file &nbsp;
+											i.fa.fa-download
 						hr
 						table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
 							thead

@@ -348,6 +348,28 @@ function downloadFileImport(url) {
   xhttp.send();
 }
 
+function downloadCostFileImport(url) {
+  let chosenAbEl = document.getElementById('choosen-apartment-building');
+
+  if (!chosenAbEl || (chosenAbEl && !chosenAbEl.value)) {
+    alert('Vui long chọn khu chung cư và tòa nhà');
+    return;
+  }
+
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      if (dataRes.success) {
+        window.location.href = dataRes.fileUrl;
+      }
+    }
+  };
+  xhttp.open('GET', url + '?buildingId=' + chosenAbEl.value, true);
+  xhttp.send();
+}
+
 function importFileAbg(selector) {
   if (selector.files && selector.files[0]) {
     let file = selector.files[0];
@@ -411,6 +433,11 @@ function importFileAbg(selector) {
 function selectAllApartments() {
   console.log(111);
   $('#listSendTo option').attr('selected', true).trigger("chosen:updated");
+}
+
+function toggleSelect() {
+  let f = document.getElementById('select-download-option');
+  f.classList.toggle('hidden');
 }
 
 $(document).on('click', 'input', function() {

@@ -8,6 +8,7 @@ var expressValidator = require('express-validator');
 var session = require('express-session');
 var flash = require('express-flash');
 var mongoose = require('mongoose');
+var MongoStore = require('connect-mongo')(session);
 var dotenv = require('dotenv');
 
 /*=== Passport ===*/
@@ -29,6 +30,8 @@ const ab = require('./src/routes/apartmentBuilding');
 const apartment = require('./src/routes/apartment');
 const serviceCategory = require('./src/routes/service-category');
 const service = require('./src/routes/service');
+const cost = require('./src/routes/cost');
+const costType = require('./src/routes/costType');
 const utility = require('./src/routes/utility');
 const permission = require('./src/routes/permission');
 const notification = require('./src/routes/notification');
@@ -69,6 +72,10 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET, // realtime chat system
+  store: new MongoStore({
+    url: process.env.DB_ADDRESS,
+    autoReconnect: true,
+  })
 }));
 // User flash data
 app.use(flash());
@@ -94,6 +101,8 @@ app.use('/apartment-building-group', abg);
 app.use('/apartment-building', ab);
 app.use('/apartment', apartment);
 app.use('/service', service);
+app.use('/cost', cost);
+app.use('/cost-type', costType);
 app.use('/service-category', serviceCategory);
 app.use('/utility', utility);
 app.use('/permission', permission);

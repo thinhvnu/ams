@@ -77,7 +77,7 @@ exports.jwtVerifyToken = (token, cb) => {
                 model: 'Role'
             })
             .exec((err, user) => {
-                if (err || !user.role || user.role.type !== 1) {
+                if (err || (user && (!user.role || user.role.type !== 1))) {
                     return cb(null);   
                 } else {
                     return cb(user); 

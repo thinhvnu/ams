@@ -1,0 +1,90 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		//- $('.chosen-apartment-user').chosen({ allow_single_deselect: true, disable_search: false });
+block content
+	.row
+		.col-lg-2.col-md-2.col-sm-2.sub-menu
+			ul.sub-menu-item.nav.nav-tabs
+				li.active
+					a(data-toggle='tab', href='#costType') Loại chi phí
+				li
+					a(data-toggle='tab', href='#cost') Tiền phí
+		.col-lg-10.col-md-10.col-sm-10
+			.tab-content
+				#costType.tab-pane.fade.in.active
+					.cost-type(style='margin-bottom: 15px;')
+						.user-actions
+							a.btn.btn-success(href='/cost-type/create') Tạo mới
+						hr
+						table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
+							thead
+								tr
+									th.hidden-xs STT
+									th Tên
+									th Người tạo
+									th.text-center Trạng thái
+									th.text-center.no-sort Hành động
+							tbody
+								each dt, i in costTypes
+									tr
+										td.hidden-xs #{i+1}
+										td #{dt.name}
+										td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
+										td.text-center #{dt.status ? 'Active' : 'Inactive'}
+										td(align='center')
+											a(href='/cost-type/edit/' + dt._id).u-action.btn.btn-success
+												em.fa.fa-pencil
+											a(href='/cost-type/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa loại chi phí này không?", "/cost-type/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+												em.fa.fa-trash
+				#cost.tab-pane.fade
+					.cost-type(style='margin-bottom: 15px;')
+						.user-actions
+							a.btn.btn-success(href='/cost/create') Thêm
+							.btn.btn-success
+								| Tải mẫu nhập liệu &nbsp;
+								i.fa.fa-download
+							.btn.btn-success
+								input#import-excel.mycropper-browse-file(type='file', name='excelFile', onchange='return importFileAbg(this)')
+								label.import-file.custom-file-upload(for='import-excel')
+									| Nhập liệu excel &nbsp;
+									i.fa.fa-file-excel-o
+								button#abg-data-import-file(type='button', data-toggle='modal', data-target='#abgDataImport', style='display: none')
+							hr
+							form.form-horizontal
+								.form-group
+									.col-lg-5(class=errors && errors.apartmentBuildingGroup && 'has-error')
+										select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+											option(value='') Chọn khu chung cư
+											each abg in abgs
+												option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+									.col-lg-5(class=errors && errors.apartmentBuilding && 'has-error')
+										select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;')
+											option(value='') Chọn tòa nhà
+								.form-group
+									.col-lg-2
+										.btn.btn-success(onclick='return downloadFileImport("/cost/import-template")') Tải file
+						hr
+						table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
+							thead
+								tr
+									th.hidden-xs STT
+									th Tên
+									th Người tạo
+									th.text-center Trạng thái
+									th.text-center.no-sort Hành động
+							tbody
+								each dt, i in costTypes
+									tr
+										td.hidden-xs #{i+1}
+										td #{dt.name}
+										td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
+										td.text-center #{dt.status ? 'Active' : 'Inactive'}
+										td(align='center')
+											a(href='/cost-type/edit/' + dt._id).u-action.btn.btn-success
+												em.fa.fa-pencil
+											a(href='/cost-type/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa loại chi phí này không?", "/cost-type/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+												em.fa.fa-trash

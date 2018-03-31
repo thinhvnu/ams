@@ -86,16 +86,19 @@ exports.updateInvoiceService = (req, res, next) => {
 	try {
 		req.checkBody('id', 'id không được để trống').notEmpty();
 		req.checkBody('invoice_imgs', 'Ảnh hóa đơn không được để  trống').notEmpty();
+		let id = req.body.id,
+		invoice_imgs = req.body.invoice_imgs;
 
-		ServiceRequest.findById({ _id: id }).exec(function (err, srs) {
+		ServiceRequest.findById(id).exec(function (err, srs) {
 			if (err) {
 				return res.json({
 					success: false,
 					errorCode: '011',
-					message: errors,
+					message: err,
 				});
 			}
-
+		console.log("srs",srs);
+		if(srs){
 			srs.done = true;
 			srs.invoice_imgs = req.body.invoice_imgs;
 			srs.save(function (err, updateServiceRequest) {
@@ -114,6 +117,13 @@ exports.updateInvoiceService = (req, res, next) => {
 					});
 				}
 			})
+		}else{
+			return res.json({
+				success: false,
+				errorCode: '002',
+				message: 'Không tìm thấy id services request'
+			})
+		}
 
 		});
 	} catch (e) {

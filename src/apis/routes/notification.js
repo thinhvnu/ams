@@ -12,7 +12,7 @@ const passport = require('./../../middleware/apiPassport');
 router.get('/list', passport.isAuthenticated, notificationController.getList);
 
 /*GET câp nhật trạng thái đã xem của thông báo*/
-router.get("/updateStatus/:post_id",passport.isAuthenticated,notificationController.updateSeenStatus);
+router.get("/updateStatus/:noti_id",passport.isAuthenticated,notificationController.updateSeenStatus);
 
 
 module.exports = router;

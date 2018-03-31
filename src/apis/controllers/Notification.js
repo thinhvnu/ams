@@ -67,25 +67,31 @@ exports.getList = (req, res, next) => {
 };
 
 exports.updateSeenStatus = (req, res, next) => {
-    try {
-        let postId = req.params.noti_id;
-        NotificationLog.findById({ _id: postId }).exec(function (err, res) {
-            if (err) {
+   try {
+        let noti_id = req.params.noti_id;
+        
+        console.log("noti_id",noti_id);
+        NotificationLog.findById(noti_id, (err, result)=> {
+            
+            if (err) { 
                 return res.json({
                     success: false,
                     errorCode: '002',
-                    data: err,
+                    data: JSON.stringify(err),
                     message: 'Error'
                 })
             }
-            if (res) {
-                res.status = 2;
-                res.save(function (err, updateNoti) {
+            
+            if (result) {
+                result.status = 2;
+                result.save(function (err, updateNoti) {
+                    
                     if (err) {
+
                         return res.json({
                             success: false,
                             errorCode: '002',
-                            data: err,
+                            data: JSON.stringify(err),
                             message: 'Error'
                         })
                     }
@@ -97,10 +103,11 @@ exports.updateSeenStatus = (req, res, next) => {
                 });
 
             } else {
+                
+           
                 return res.json({
                     success: false,
                     errorCode: '002',
-                    data: [],
                     message: 'Không tìm thấy id thông báo'
                 })
             }

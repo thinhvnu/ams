@@ -56,7 +56,7 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 exports.jwtCreateToken = (data) => {
-    let token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: process.env.LOGIN_TOKEN_EXP });
+    let token = jwt.sign(data, process.env.JWT_SECRET);
 
     return token;
 }

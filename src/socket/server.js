@@ -39,6 +39,8 @@ var ioEvents = function(io) {
                 let dataIdentification = {
                     id: user.id,
                     room: user.id,
+                    avatar: user.avatar,
+                    avatarUrl: user.avatarUrl,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     userName: user.userName,

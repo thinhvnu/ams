@@ -60,10 +60,11 @@ function createInboxMessageItem(data) {
 }
 
 function createNewChatBox(user, isGroup = false) {
+    console.log('user', user);
     /**
      * Check exist chatbox
      */
-    let chatBoxItem = document.getElementById('chat-box-item-' + user._id);
+    let chatBoxItem = document.getElementById('chat-box-item-' + user._id || user.room);
     if (chatBoxItem)
         return;
     /**
@@ -113,7 +114,7 @@ function createNewChatBox(user, isGroup = false) {
     let boxTitle = document.createElement('div');
     boxTitle.className = 'box-title';
     boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; text-transform: uppercase;'; 
-    boxTitle.textContent = user.groupName ? user.groupName : (user.firstName + ' ' + user.lastName);
+    boxTitle.textContent = isGroup ? (user.groupName || user.userName) : (user.firstName + ' ' + user.lastName);
     boxHeaderInfo.appendChild(boxTitle);
 
     let headerToolbar = document.createElement('div');
@@ -193,7 +194,7 @@ function createNewChatBox(user, isGroup = false) {
     chatBox.appendChild(chatBoxContent);
 
     /* === Request server get list message ===*/
-    let getMessageUrl = '/api/chat/messages/' + (user._id || user.room);
+    let getMessageUrl = '/api/chat/messages/' + (user._id || user.room) + '?isGroup=' + isGroup;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
@@ -249,6 +250,7 @@ function createNewChatBox(user, isGroup = false) {
                 let dataSend = {
                     sender: socket.identification,
                     to: {
+                        _id: user._id,
                         room: user._id,
                         userName: isGroup ? user.groupName : user.userName,
                         isGroup: isGroup
@@ -264,6 +266,7 @@ function createNewChatBox(user, isGroup = false) {
         }
     }
     mainFooterContainer.appendChild(inputMessage);
+    inputMessage.select();
 
     let btnSend = document.createElement('button');
     btnSend.className = 'send-message';
@@ -272,14 +275,15 @@ function createNewChatBox(user, isGroup = false) {
         let messVal = inputMessage.value;
 
         if (messVal) {
-            let messageItem = createSenderMessageItem(messVal);
-            chatBoxContent.appendChild(messageItem);
+            // let messageItem = createSenderMessageItem(messVal);
+            // chatBoxContent.appendChild(messageItem);
             /**
              * Emit message to socket server
              */
             let dataSend = {
                 sender: socket.identification,
                 to: {
+                    _id: user._id,
                     room: user._id,
                     userName: isGroup ? user.groupName : user.userName,
                     isGroup: isGroup
@@ -337,7 +341,7 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://localhost:6888', {query: 'token=' + token});
+const socket = io('http://backend.thinhnv.net', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
@@ -349,12 +353,28 @@ socket.on('connect', () => {
      */
     socket.on('message', (data) => {
         console.log('data message', data);
+        if (data.sender.id === socket.identification.id) {
+            return;
+        }
+
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.sender.id || data.sender.room));
        
-        if (!chatBoxItem && socket.identification.id !== data.sender.id) {
-            createNewChatBox(data.sender);
+        if (data.to.isGroup) {
+            chatBoxItem = document.getElementById('chat-box-item-' + data.to.room);
+        }
+        console.log("chatboxItem", chatBoxItem);
+        if (!chatBoxItem) {
+            if (data.to.isGroup){
+                createNewChatBox(data.to, true);
+            } else {
+                createNewChatBox(data.sender)
+            }
         } else {
             let chatBoxContent = document.querySelector('#chat-box-item-' + (data.sender.id || data.sender.room) + ' .chat-box-content');
+
+            if (data.to.isGroup) {
+                chatBoxContent = document.querySelector('#chat-box-item-' + data.to.room + ' .chat-box-content');
+            }
 
             if (chatBoxContent) {
                 let messEl = createInboxMessageItem(data);
@@ -368,9 +388,7 @@ socket.on('connect', () => {
      * Event owner message 
      */
     socket.on('owner_message', (data) => {
-        if (data.to.isGroup) {
-            return;
-        }
+        console.log('owner_mess', data);
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.to.id || data.to.room));
        
         if (!chatBoxItem) {

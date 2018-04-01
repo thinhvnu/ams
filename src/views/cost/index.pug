@@ -47,11 +47,33 @@ block content
 							.btn.btn-success(onclick='return toggleSelect()')
 								| Tải mẫu nhập liệu &nbsp;
 							.btn.btn-success
-								input#import-excel.mycropper-browse-file(type='file', name='excelFile', onchange='return importFileAbg(this)')
+								input#import-excel.mycropper-browse-file(type='file', name='excelFile', onchange='return importFileCost(this)')
 								label.import-file.custom-file-upload(for='import-excel')
 									| Nhập liệu excel &nbsp;
 									i.fa.fa-file-excel-o
-								button#abg-data-import-file(type='button', data-toggle='modal', data-target='#abgDataImport', style='display: none')
+								button#cost-data-import-file(type='button', data-toggle='modal', data-target='#costDataImport', style='display: none')
+								#costDataImport.modal.fade(role='dialog')
+									.modal-dialog(style='width: auto;max-width: 90%;')
+										// Modal content
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title Dữ liệu sẽ nhập
+											.modal-body
+												table.table.table-striped
+													thead
+														tr
+															th Loại chi phí
+															th Căn hộ
+															th Tòa nhà
+															th Chung cư
+															th Số Tiền
+															th Tháng
+															th Năm
+													tbody
+											.modal-footer
+												button#abg-submit-data.btn.btn-success.pull-left Nhập liệu
+												button.btn.btn-default(type='button', data-dismiss='modal') Close
 							form#select-download-option.form-horizontal.hidden
 								hr
 								.form-group

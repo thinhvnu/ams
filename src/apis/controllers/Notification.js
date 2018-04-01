@@ -41,6 +41,7 @@ exports.getList = (req, res, next) => {
                         data.push(
                             {
                                 id:notifications[i].notification.id,
+                                status:notifications[i].status,
                                 title: notifications[i].notification.title,
                                 content: notifications[i].notification.content,
                                 createdAt: notifications[i].createdAt

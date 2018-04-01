@@ -40,7 +40,7 @@ exports.getList = (req, res, next) => {
                     if (notifications[i].notification.id !== currentId) {
                         data.push(
                             {
-                                id:notifications[i].notification.id,
+                                id:notifications[i].id,
                                 status:notifications[i].status,
                                 title: notifications[i].notification.title,
                                 content: notifications[i].notification.content,

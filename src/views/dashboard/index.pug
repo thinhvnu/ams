@@ -59,7 +59,7 @@ block content
 			h4(style='margin: 0') Chat nhóm
 			hr
 			each g in groups
-				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ')')
+				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
 					.user-avatar
 						if g.avatar
 							img.img-responsive(src=g.avatarUrl)

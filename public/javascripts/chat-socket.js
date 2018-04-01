@@ -59,12 +59,11 @@ function createInboxMessageItem(data) {
     return messageItem;
 }
 
-function createNewChatBox(user) {
-    console.log('user', user);
+function createNewChatBox(user, isGroup = false) {
     /**
      * Check exist chatbox
      */
-    let chatBoxItem = document.getElementById('chat-box-item-' + user.id);
+    let chatBoxItem = document.getElementById('chat-box-item-' + user._id);
     if (chatBoxItem)
         return;
     /**
@@ -78,7 +77,7 @@ function createNewChatBox(user) {
 
     let chatBox = document.createElement('div');
     chatBox.className = 'chat-box';
-    chatBox.id = 'chat-box-item-' + user.id;
+    chatBox.id = 'chat-box-item-' + user._id;
     chatBox.style = 'width: ' + boxWidth + 'px; height: ' + boxHeight
                     + 'px; position: relative; z-index: 9999; float: right; margin-right: 15px; '
                     + 'background: #ccc; box-shadow:-1px -1px 5px rgba(50, 50, 50, 0.17); border-top-left-radius: 5px;'
@@ -194,8 +193,7 @@ function createNewChatBox(user) {
     chatBox.appendChild(chatBoxContent);
 
     /* === Request server get list message ===*/
-    console.log('userttt', user.id);
-    let getMessageUrl = '/api/chat/messages/' + (user.id || user.room);
+    let getMessageUrl = '/api/chat/messages/' + (user._id || user.room);
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
@@ -251,8 +249,9 @@ function createNewChatBox(user) {
                 let dataSend = {
                     sender: socket.identification,
                     to: {
-                        room: user.id,
-                        userName: user.userName
+                        room: user._id,
+                        userName: isGroup ? user.groupName : user.userName,
+                        isGroup: isGroup
                     },
                     messageContent: messVal
                 }
@@ -281,12 +280,13 @@ function createNewChatBox(user) {
             let dataSend = {
                 sender: socket.identification,
                 to: {
-                    room: user.id,
-                    userName: user.userName
+                    room: user._id,
+                    userName: isGroup ? user.groupName : user.userName,
+                    isGroup: isGroup
                 },
                 messageContent: messVal
             }
-
+            console.log('dataSendttt', dataSend);
             socket.emit('send_message', dataSend);
         }
         inputMessage.value = '';
@@ -341,7 +341,6 @@ const socket = io('http://localhost:6888', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
-        console.log('data', data);
         socket.identification = data;
     });
 
@@ -349,13 +348,14 @@ socket.on('connect', () => {
      * Event receive message from server
      */
     socket.on('message', (data) => {
+        console.log('data message', data);
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.sender.id || data.sender.room));
        
-        if (!chatBoxItem) {
+        if (!chatBoxItem && socket.identification.id !== data.sender.id) {
             createNewChatBox(data.sender);
         } else {
             let chatBoxContent = document.querySelector('#chat-box-item-' + (data.sender.id || data.sender.room) + ' .chat-box-content');
-            console.log('chatbox', chatBoxContent);
+
             if (chatBoxContent) {
                 let messEl = createInboxMessageItem(data);
                 chatBoxContent.appendChild(messEl);
@@ -368,13 +368,15 @@ socket.on('connect', () => {
      * Event owner message 
      */
     socket.on('owner_message', (data) => {
+        if (data.to.isGroup) {
+            return;
+        }
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.to.id || data.to.room));
        
         if (!chatBoxItem) {
             createNewChatBox(data.to);
         } else {
             let chatBoxContent = document.querySelector('#chat-box-item-' + (data.to.id || data.to.room) + ' .chat-box-content');
-            console.log('chatbox', chatBoxContent);
             if (chatBoxContent) {
                 let messEl = createSenderMessageItem(data.messageContent);
                 chatBoxContent.appendChild(messEl);

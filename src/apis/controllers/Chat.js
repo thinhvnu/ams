@@ -156,6 +156,7 @@ exports.postCreateGroup = (req, res, next) => {
                         return res.json({
                             success: true,
                             errorCode: 0,
+                            group: newGroup,
                             message: 'Tạo nhóm thành công'
                         })
                     })

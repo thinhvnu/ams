@@ -72,7 +72,7 @@ block content
 															th Năm
 													tbody
 											.modal-footer
-												button#abg-submit-data.btn.btn-success.pull-left Nhập liệu
+												button#cost-submit-data.btn.btn-success.pull-left Nhập liệu
 												button.btn.btn-default(type='button', data-dismiss='modal') Close
 							form#select-download-option.form-horizontal.hidden
 								hr
@@ -104,23 +104,27 @@ block content
 											| Tải file &nbsp;
 											i.fa.fa-download
 						hr
-						table#ab-list.table.table-responsive.display(cellspacing='0', width='100%')
+						table#cost-list.table.table-responsive.display(cellspacing='0', width='100%')
 							thead
 								tr
 									th.hidden-xs STT
-									th Tên
-									th Người tạo
-									th.text-center Trạng thái
-									th.text-center.no-sort Hành động
+									th Loại chi phí
+									th Căn hộ
+									th Tòa nhà
+									th Chung cư
+									th Số Tiền
+									th Tháng
+									th Năm
+									th Trạng thái
 							tbody
-								each dt, i in costTypes
+								each c, i in costs
 									tr
 										td.hidden-xs #{i+1}
-										td #{dt.name}
-										td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
-										td.text-center #{dt.status ? 'Active' : 'Inactive'}
-										td(align='center')
-											a(href='/cost-type/edit/' + dt._id).u-action.btn.btn-success
-												em.fa.fa-pencil
-											a(href='/cost-type/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa loại chi phí này không?", "/cost-type/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-												em.fa.fa-trash
+										td #{c.costType.name}
+										td #{c.apartment.apartmentName}
+										td #{c.apartment.building.buildingName}
+										td #{c.apartment.building.apartmentBuildingGroup.abgName}
+										td #{c.money}
+										td #{c.month}
+										td #{c.year}
+										td.text-center #{c.status ? 'Đã thanh toán' : 'Chưa thanh toán'}

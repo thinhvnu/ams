@@ -60,7 +60,6 @@ function createInboxMessageItem(data) {
 }
 
 function createNewChatBox(user, isGroup = false) {
-    console.log('user', user);
     /**
      * Check exist chatbox
      */
@@ -341,7 +340,7 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://backend.thinhnv.net', {query: 'token=' + token});
+const socket = io('http://localhost:6888', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {

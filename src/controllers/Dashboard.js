@@ -30,7 +30,6 @@ exports.getIndex = (req, res, next) => {
             model: 'ApartmentBuildingGroup'
         })
         .exec((err, nLogs) => {
-            console.log('user', req.session.user);
             User.find({
                 _id: {
                     $ne: req.session.user._id
@@ -40,7 +39,6 @@ exports.getIndex = (req, res, next) => {
                 .sort('-createdAt')
                 .limit(10)
                 .exec((err, users) => {
-                    console.log(req.session.user);
                     res.render('dashboard/index', {
                         title: 'Phần mềm quản lý chung cư',
                         current: ['dashboard', 'index'],

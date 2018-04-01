@@ -472,7 +472,7 @@ function importFileCost(selector) {
                  * Submit data
                  */
                 let xhttp = new XMLHttpRequest();
-                let params = 'data=' + JSON.stringify(dataRes.data[0]);
+                let params = 'data=' + JSON.stringify(dataRes.data);
                 xhttp.onreadystatechange = function() {
                   if(xhttp.readyState == 4 && xhttp.status == 200) {
                     let dataRes = JSON.parse(this.response);

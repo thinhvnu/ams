@@ -17,12 +17,32 @@ exports.getIndex = function (req, res) {
 		Abg.find({
 			
 		}, (err, abgs) => {
-			res.render('cost/index', {
-				title: 'Chi phí',
-				current: ['cost', null],
-				costTypes: costTypes,
-				abgs: abgs
-			});
+			Cost.find({})
+				.populate({
+					path: 'costType',
+					model: 'CostType'
+				})
+				.populate({
+					path: 'apartment',
+					model: 'Apartment',
+					populate: {
+						path: 'building',
+						model: 'ApartmentBuilding',
+						populate: {
+							path: 'apartmentBuildingGroup',
+							model: 'ApartmentBuildingGroup'
+						}
+					}
+				})
+				.exec((err, costs) => {
+				res.render('cost/index', {
+					title: 'Chi phí',
+					current: ['cost', null],
+					costTypes: costTypes,
+					costs: costs,
+					abgs: abgs
+				});
+			})
 		})
 	});
 };

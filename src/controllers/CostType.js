@@ -57,7 +57,7 @@ exports.postCreate = function (req, res) {
 				console.log('Error in Saving: ' + err);
 				return res.send({ "result": false });
 			}
-			return res.redirect('/cost-type');
+			return res.redirect('/cost');
 		});
 	});
 };

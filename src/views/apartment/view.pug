@@ -38,7 +38,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-address-book-o
-										.content Khu chung cư: #{data.buildingGroup ? data.buildingGroup.abgName : ''}
+										.content Khu chung cư: #{data.building ? data.building.apartmentBuildingGroup.abgName : ''}
 								.col-md-6.col-lg-6
 									.item-detail
 										.icon
@@ -134,7 +134,7 @@ block content
 											em.fa.fa-trash
 										.avatar
 											if dt.avatar
-												img.img.img-responsive(src=dt.avatar)
+												img.img.img-responsive(src=dt.avatarUrl)
 											else 
 												img.img.img-responsive(src='/images/default-user.png')
 										.info

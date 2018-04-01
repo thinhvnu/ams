@@ -143,11 +143,11 @@ exports.getView = (req, res, next) => {
 				})
 				.populate({
 					path: 'building',
-					model: 'ApartmentBuilding'
-				})
-				.populate({
-					path: 'buildingGroup',
-					model: 'ApartmentBuildingGroup'
+					model: 'ApartmentBuilding',
+					populate: {
+						path: 'apartmentBuildingGroup',
+						model: 'ApartmentBuildingGroup'
+					}
 				})
 				.populate('users')
 				.populate('createdBy', {

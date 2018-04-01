@@ -10,9 +10,6 @@ const passport = require('./../../middleware/apiPassport');
 /* GET categories listing. */
 router.get('/categories', serviceController.getCategories);
 
-/* GET services listing. */
-router.get('/:categoryId', serviceController.getIndex);
-
 /* API create new request */
 router.post('/create-request', passport.isAuthenticated, serviceController.postCreateRequest);
 
@@ -21,4 +18,8 @@ router.get('/history-transaction', passport.isAuthenticated, serviceController.g
 
 /*API update request history*/
 router.post('/history-update',passport.isAuthenticated,serviceController.updateInvoiceService);
+
+/* GET services listing. */
+router.get('/:categoryId', serviceController.getIndex);
+
 module.exports = router;

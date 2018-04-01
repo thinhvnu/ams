@@ -36,10 +36,13 @@ exports.getIndex = function (req, res) {
 		})
 		.exec(function (err, services) {
 			if (err) {
-				console.log('err', err)
-				return done(err);
+				return res.json({
+					success: false,
+					errorCode: '112',
+					message: "Error happen"
+				})
 			}
-			res.send({
+			return res.json({
 				success: true,
 				errorCode: 0,
 				data: services,

@@ -29,9 +29,9 @@ serviceRequestSchema.virtual('imageUrl').get(function () {
     return process.env.MEDIA_URL + '/images/service/thumb/' + this.image;
 });
 
-// serviceRequestSchema.virtual('invoice_imgs').get(function () {
-//     return process.env.MEDIA_URL + '/images/service/thumb/' + this.invoice_imgs;
-// });
+serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
+    return process.env.MEDIA_URL + '/images/service/thumb/' + this.invoice_imgs;
+});
 
 const ServiceRequest = mongoose.model('ServiceRequest', serviceRequestSchema);
 

@@ -59,6 +59,10 @@ exports.getApartmentCost = (req, res, next) => {
                     Cost.find({
                         apartment: u.apartments[i]._id,
                         year: req.query.year
+                    })
+                    .populate({
+                        path: 'costType',
+                        model: 'CostType'
                     }).exec((err, costs) => {
                         let c = [[], [], [], [], [], [], [], [], [], [], [], []];
 

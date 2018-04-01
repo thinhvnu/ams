@@ -177,10 +177,13 @@ exports.getHistoryTransaction = (req, res, next) => {
 		.sort('-createdAt')
 		.exec(function (err, srs) {
 			if (err) {
-				console.log('err', err)
-				return done(err);
+				return res.json({
+					success: false,
+					errorCode: '112',
+					message: 'Get list history transaction failed'
+				});
 			}
-			res.send({
+			res.json({
 				success: true,
 				errorCode: 0,
 				data: srs,

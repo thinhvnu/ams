@@ -266,3 +266,27 @@ exports.postAddMemberToGroup = (req, res, next) => {
         console.log('e', e);
     }
 }
+
+exports.getGroup = (req, res, next) => {
+    User.findById(req.session.user._id)
+    .populate({
+        path: 'groups',
+        model: 'ChatGroup'
+    })
+    .exec((err, user) => {
+        if (err) {
+            console.log('err', err);
+            return res.json({
+                success: false,
+                errorCode: '112',
+                message: 'Error happen'
+            })
+        }
+        return res.json({
+            success: true,
+            errorCode: 0,
+            data: user.groups,
+            message: 'Get user groups successfully'
+        });
+    });
+}

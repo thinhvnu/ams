@@ -78,7 +78,7 @@ exports.postRegister = (req, res, next) => {
 }
 // Get all active sliders
 exports.getInfo = function (req, res) {
-    try {
+	try {
 		let currentUser = req.session.user;
 		let clientKey = 'user_info_' + currentUser._id;
 
@@ -119,13 +119,10 @@ exports.getInfo = function (req, res) {
 						errorCode: 0,
 						data: user
 					});
-					/**
-					 * Set redis cache data
-					 */
-					client.set(clientKey, JSON.stringify(user), 'EX', process.env.REDIS_CACHE_TIME);
-				});
-			}
-		});
+			});
+		};
+	});
+	
 	} catch (e) {
 		return res.json({
 			success: false,
@@ -167,7 +164,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 				version: version,
 				deviceName: deviceName
 			});
-			
+
 			if (user.firebaseDeviceToken.indexOf(deviceInfo) === -1) {
 				user.firebaseDeviceToken.push(deviceInfo);
 
@@ -268,35 +265,118 @@ exports.getSearch = (req, res, next) => {
 				},
 			]
 		})
-		.select({
-			_id: 1,
-			firstName: 1,
-			lastName: 1,
-			userName: 1,
-			email: 1,
-			address: 1
-		})
-		.exec((err, users) => {
-			if (err) {
-				return res.json({
-					success: false,
-					errorCode: '211',
-					message: 'Có lỗi xảy ra'
-				})
-			}
-
-			return res.send({
-				success: true,
-				errorCode: 0,
-				data: users,
-				message: 'Query user successfully'
+			.select({
+				_id: 1,
+				firstName: 1,
+				lastName: 1,
+				userName: 1,
+				email: 1,
+				address: 1
 			})
-		})
+			.exec((err, users) => {
+				if (err) {
+					return res.json({
+						success: false,
+						errorCode: '211',
+						message: 'Có lỗi xảy ra'
+					})
+				}
+
+				return res.send({
+					success: true,
+					errorCode: 0,
+					data: users,
+					message: 'Query user successfully'
+				})
+			})
 	} catch (e) {
 		return res.json({
 			success: false,
 			errorCode: '111',
 			message: 'Exception'
+		})
+	}
+}
+
+exports.deleteTokenFirebase = (req, res, next) => {
+	try {
+
+		let firebaseToken = req.params.token_firebase;
+
+		User.findById(req.session.user._id).exec(function (err, userFined) {
+
+			
+			console.log('err', err)
+			if (err) {
+				return res.json({
+					success: false,
+					errorCode: '011',
+					message: err,
+				});
+			}
+
+			
+				if (userFined) {
+					console.log('userFined', userFined)
+
+					// let deviceInfo = JSON.stringify({
+					//   token: deviceToken,
+					//   os: os,
+					//   version: version,
+					//   deviceName: deviceName
+					// });
+					let arrTokenFirebase = userFined.firebaseDeviceToken;
+					console.log('arrTokenFirebase', arrTokenFirebase)
+					if (arrTokenFirebase) {
+						console.log('arrTokenFirebase2', arrTokenFirebase)
+						for (var i = 0; i < arrTokenFirebase.length; i++) {
+							if (arrTokenFirebase[i].token === firebaseToken) {
+								arrTokenFirebase.splice(i, 1);
+								break;
+							}
+
+						}
+					}
+
+					userFined.firebaseDeviceToken = arrTokenFirebase;
+					console.log('userFined', userFined)
+					userFined.save(function (err, result) {
+						console.log('err', err)
+						console.log('result', result)
+						if (err) {
+							return res.json({
+								success: false,
+								errorCode: '011',
+								message: err,
+							});
+						}
+						return res.send({
+							success: true,
+							errorCode: 0,
+							data: result,
+							message: 'remove token firebase success'
+						});
+
+
+
+					})
+				} else {
+					console.log("dmm,mmmmmmmmmmmmmmmmmmmmmmmmm")
+					return res.json({
+						success: false,
+						errorCode: '002',
+						message: 'Không tìm thấy id thông báo'
+					})
+				}
+		});
+
+	
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			data: [],
+			message: 'Server exception'
 		})
 	}
 }

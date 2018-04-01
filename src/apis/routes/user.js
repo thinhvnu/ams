@@ -20,4 +20,7 @@ router.post('/firebase-device-token', passport.isAuthenticated, userController.p
 
 router.get('/search', userController.getSearch);
 
+/* DELETE firebase token logout*/
+router.get('/remove-token-firebase/:token_firebase',passport.isAuthenticated,userController.deleteTokenFirebase);
+
 module.exports = router;

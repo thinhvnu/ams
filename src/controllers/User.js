@@ -22,7 +22,7 @@ exports.getIndex = (req, res) => {
         console.log('err', err)
         return done(err);
       }
-      
+
       res.render('user/index', {
         title: 'Account List',
         current: ['user', 'index'],
@@ -54,7 +54,7 @@ exports.postLogin = (req, res, next) => {
   req.checkBody('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
   console.log('redirectTo', req.session.redirectTo);
-  req.getValidationResult().then(function(errors) {
+  req.getValidationResult().then(function (errors) {
     if (!errors.isEmpty()) {
       var errors = errors.mapped();
       res.render('user/login', {
@@ -73,8 +73,8 @@ exports.postLogin = (req, res, next) => {
         } else {
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
-            if (err) { 
-              return done(err); 
+            if (err) {
+              return done(err);
             }
             if (isMatch) {
               /**
@@ -102,7 +102,7 @@ exports.postLogin = (req, res, next) => {
 exports.logout = (req, res) => {
   // req.logout();
   req.session.destroy();
-  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false});
+  res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false });
   res.redirect('/');
 };
 
@@ -139,12 +139,12 @@ exports.postCreate = (req, res, next) => {
     req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-    req.getValidationResult().then(function(errors) {
+    req.getValidationResult().then(function (errors) {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
 
         console.log('req.body', req.body)
-        Role.find({}, function(err, roles) {
+        Role.find({}, function (err, roles) {
           res.render('user/create', {
             title: 'Create Account',
             roles: roles,
@@ -164,7 +164,7 @@ exports.postCreate = (req, res, next) => {
         user.gender = req.body.gender;
         user.role = req.body.role;
         user.status = req.body.status;
-      
+
         User.findOne({ email: req.body.email }, (err, existingUser) => {
           if (err) { return next(err); }
           if (existingUser) {
@@ -172,9 +172,9 @@ exports.postCreate = (req, res, next) => {
             return res.redirect('/create');
           }
           user.save((err) => {
-            if (err) { 
+            if (err) {
               console.log('error create new user', err);
-              return next(err); 
+              return next(err);
             }
             // /**
             //  * Using json web token gen token for client
@@ -536,3 +536,5 @@ exports.postForgot = (req, res, next) => {
     .then(() => res.redirect('/forgot'))
     .catch(next);
 };
+
+

@@ -13,6 +13,9 @@ router.get('/', passport.isAuthenticated, userController.getIndex);
 router.get('/create', userController.getCreate);
 router.post('/create', userController.postCreate);
 
+router.get('/edit/:userId', userController.getEdit);
+router.post('/update/:userId', userController.postUpdate);
+
 router.get('/login', userController.getLogin);
 router.post('/login', userController.postLogin);
 

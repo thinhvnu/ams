@@ -20,13 +20,14 @@ const userSchema = new mongoose.Schema({
   avatar: {type: String},
   firstName: {type: String},
   lastName: {type: String},
+  birthDay: {type: String},
   address: {type: String},
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
-  roles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Role'}],
+  role: {type: mongoose.Schema.Types.ObjectId, ref: 'Role'},
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },
-  rooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'Room'}]
+  groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}]
 }, {timestamps: true, usePushEach: true});
 
 userSchema.set('toJSON', {

@@ -52,5 +52,20 @@ block content
 						.info-center
 							.user-name #{u.firstName + ' ' + u.lastName}
 							//- .phoneNumber #{u.phoneNumber}
-					.online-status
-						.icon-online
+					if u.isOnline
+						.online-status
+							.icon-online
+			hr
+			h4(style='margin: 0') Chat nhóm
+			hr
+			each g in groups
+				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
+					.user-avatar
+						if g.avatar
+							img.img-responsive(src=g.avatarUrl)
+						else 
+							i.fa.fa-users
+					.user-info
+						.info-center
+							.user-name #{g.groupName}
+							//- .phoneNumber #{u.phoneNumber}

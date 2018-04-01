@@ -16,5 +16,8 @@ router.get('/clients', passport.isAuthenticated, chatController.getClients);
  */
 router.get('/messages/:roomId', passport.isAuthenticated, chatController.getMessages);
 
+router.post('/create-group', passport.isAuthenticated, chatController.postCreateGroup);
+
+router.post('/add-member-to-group/:groupId', passport.isAuthenticated, chatController.postAddMemberToGroup);
 
 module.exports = router;

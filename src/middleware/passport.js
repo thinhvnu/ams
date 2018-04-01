@@ -56,7 +56,7 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 exports.jwtCreateToken = (data) => {
-    let token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: process.env.LOGIN_TOKEN_EXP });
+    let token = jwt.sign(data, process.env.JWT_SECRET);
 
     return token;
 }
@@ -73,13 +73,12 @@ exports.jwtVerifyToken = (token, cb) => {
                 status: 1
             })
             .populate({
-                path: 'roles',
-                model: 'Role',
-                populate: {
-                    path: 'permissions',
-                    model: 'Permission',
-                    select: { 'accessRouter': 1 }
-                }
+                path: 'role',
+                model: 'Role'
+            })
+            .populate({
+                path: 'groups',
+                model: 'ChatGroup'
             })
             .exec((err, user) => {
                 if (err) {

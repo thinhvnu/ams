@@ -113,6 +113,7 @@ exports.getCreate = (req, res, next) => {
 
 exports.postCreate = (req, res, next) => {
 	req.checkBody('abgName', 'Tên khu chung cư không được để trống').notEmpty();
+	req.checkBody('manager', 'Chọn quản lý của khu chung cư').notEmpty();
 	req.checkBody('address', 'Địa chỉ không được để trống').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {

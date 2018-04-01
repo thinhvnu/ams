@@ -348,6 +348,36 @@ function downloadFileImport(url) {
   xhttp.send();
 }
 
+function downloadCostFileImport(url) {
+  let chosenAbEl = document.getElementById('choosen-apartment-building')
+    chosenCostType = document.getElementById('chosen-cost-type'),
+    chosenCostMonth = document.getElementById('choosen-cost-month'),
+    chosenCostYear = document.getElementById('choosen-cost-year');
+
+  if (!chosenCostType.value) {
+    alert('Vui lòng chọn loại chi phí');
+    return;
+  }
+
+  if (!chosenAbEl || (chosenAbEl && !chosenAbEl.value)) {
+    alert('Vui long chọn khu chung cư và tòa nhà');
+    return;
+  }
+
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+
+      if (dataRes.success) {
+        window.location.href = dataRes.fileUrl;
+      }
+    }
+  };
+  xhttp.open('GET', url + '?buildingId=' + chosenAbEl.value + '&costTypeId=' + chosenCostType.value + '&month=' + chosenCostMonth.value + '&year=' + chosenCostYear.value, true);
+  xhttp.send();
+}
+
 function importFileAbg(selector) {
   if (selector.files && selector.files[0]) {
     let file = selector.files[0];
@@ -365,8 +395,8 @@ function importFileAbg(selector) {
           let showData = document.getElementById('abg-data-import-file');
           let tableHtml = '';
           if (tableEl) {
-            for (let i=0, len = dataRes.data.length; i<len; i++) {
-              tableHtml += '<tr><td>' + dataRes.data[i].ten_chung_cu + '</td><td>' + dataRes.data[i].dia_chi + '</td></tr>';
+            for (let i=0, len = dataRes.data[0].length; i<len; i++) {
+              tableHtml += '<tr><td>' + dataRes.data[0][i].ten_chung_cu + '</td><td>' + dataRes.data[0][i].dia_chi + '</td></tr>';
             }
 
             tableEl.innerHTML = tableHtml;
@@ -382,7 +412,7 @@ function importFileAbg(selector) {
                  * Submit data
                  */
                 let xhttp = new XMLHttpRequest();
-                let params = 'data=' + JSON.stringify(dataRes.data);
+                let params = 'data=' + JSON.stringify(dataRes.data[0]);
                 xhttp.onreadystatechange = function() {
                   if(xhttp.readyState == 4 && xhttp.status == 200) {
                     let dataRes = JSON.parse(this.response);
@@ -408,9 +438,74 @@ function importFileAbg(selector) {
   }
 }
 
+function importFileCost(selector) {
+  if (selector.files && selector.files[0]) {
+    let file = selector.files[0];
+    let formData = new FormData();
+    formData.append('fileImport', file);
+
+    let xhr = new XMLHttpRequest();
+    // Open the connection.
+    xhr.open('POST', '/api/media/upload-excel-file', true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        let dataRes = JSON.parse(this.response);
+        if (dataRes.success) {
+          let tableEl = document.querySelector('#costDataImport table tbody');
+          let showData = document.getElementById('cost-data-import-file');
+          let tableHtml = '';
+          if (tableEl) {
+            for (let i=0, len = dataRes.data[0].length; i<len; i++) {
+              tableHtml += '<tr><td>' + dataRes.data[0][i].loai_chi_phi + '</td><td>' + dataRes.data[0][i].can_ho + '</td><td>' + dataRes.data[0][i].toa_nha + '</td><td>' + dataRes.data[0][i].chung_cu + '</td><td>' + dataRes.data[0][i].so_tien + '</td><td>' + dataRes.data[0][i].thang + '</td><td>' + dataRes.data[0][i].nam + '</td></tr>';
+            }
+
+            tableEl.innerHTML = tableHtml;
+
+            if (showData) {
+              showData.click();
+            }
+
+            let costSubmitData = document.getElementById('cost-submit-data');
+            if (costSubmitData) {
+              costSubmitData.addEventListener('click', function() {
+                /**
+                 * Submit data
+                 */
+                let xhttp = new XMLHttpRequest();
+                let params = 'data=' + JSON.stringify(dataRes.data[0]);
+                xhttp.onreadystatechange = function() {
+                  if(xhttp.readyState == 4 && xhttp.status == 200) {
+                    let dataRes = JSON.parse(this.response);
+
+                    if (dataRes.success) {
+                      window.location.reload();
+                    }
+                  }
+                };
+                xhttp.open('POST', '/api/cost/submit-data', true);
+                //Send the proper header information along with the request
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send(params);
+              }.bind(dataRes));
+            }
+          }
+        }
+      } else {
+        alert('An error occurred!');
+      }
+    };
+    xhr.send(formData);
+  }
+}
+
 function selectAllApartments() {
   console.log(111);
   $('#listSendTo option').attr('selected', true).trigger("chosen:updated");
+}
+
+function toggleSelect() {
+  let f = document.getElementById('select-download-option');
+  f.classList.toggle('hidden');
 }
 
 $(document).on('click', 'input', function() {

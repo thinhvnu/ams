@@ -38,7 +38,7 @@ function createInboxMessageItem(data) {
     let avatar = document.createElement('span');
     if (data.sender && data.sender.avatar) {
         avatar.className = 'mess-item-avatar';
-        avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-block;background:url(' + data.sender.avatarUrl + ')';
+        avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-block;background:url(' + data.sender.avatarUrl + ') no-repeat center center /cover';
     } else {
         avatar.className = 'mess-item-avatar';
         avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-table;text-align:center;vertical-align:middle;border-radius:50%;background:#ffffff';
@@ -59,12 +59,12 @@ function createInboxMessageItem(data) {
     return messageItem;
 }
 
-function createNewChatBox(user) {
+function createNewChatBox(user, isGroup = false) {
     console.log('user', user);
     /**
      * Check exist chatbox
      */
-    let chatBoxItem = document.getElementById('chat-box-item-' + user.id);
+    let chatBoxItem = document.getElementById('chat-box-item-' + user._id || user.room);
     if (chatBoxItem)
         return;
     /**
@@ -78,7 +78,7 @@ function createNewChatBox(user) {
 
     let chatBox = document.createElement('div');
     chatBox.className = 'chat-box';
-    chatBox.id = 'chat-box-item-' + user.id;
+    chatBox.id = 'chat-box-item-' + user._id;
     chatBox.style = 'width: ' + boxWidth + 'px; height: ' + boxHeight
                     + 'px; position: relative; z-index: 9999; float: right; margin-right: 15px; '
                     + 'background: #ccc; box-shadow:-1px -1px 5px rgba(50, 50, 50, 0.17); border-top-left-radius: 5px;'
@@ -114,7 +114,7 @@ function createNewChatBox(user) {
     let boxTitle = document.createElement('div');
     boxTitle.className = 'box-title';
     boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; text-transform: uppercase;'; 
-    boxTitle.textContent = user.firstName + ' ' + user.lastName;
+    boxTitle.textContent = isGroup ? (user.groupName || user.userName) : (user.firstName + ' ' + user.lastName);
     boxHeaderInfo.appendChild(boxTitle);
 
     let headerToolbar = document.createElement('div');
@@ -172,11 +172,13 @@ function createNewChatBox(user) {
     accountName.textContent = user.email;
     account.appendChild(accountName);
 
-    let hotline = document.createElement('div');
-    hotline.className = 'hotline';
-    hotline.textContent = 'SĐT: ' + (user.phoneNumber || 'chưa cập nhật'); 
-    hotline.style = 'color: #aaaaaa';
-    account.appendChild(hotline);
+    if (user.phoneNumber) {
+        let hotline = document.createElement('div');
+        hotline.className = 'hotline';
+        hotline.textContent = 'SĐT: ' + (user.phoneNumber); 
+        hotline.style = 'color: #aaaaaa';
+        account.appendChild(hotline);
+    }
 
     let settingEl = document.createElement('span');
     settingEl.className = 'setting';
@@ -192,7 +194,7 @@ function createNewChatBox(user) {
     chatBox.appendChild(chatBoxContent);
 
     /* === Request server get list message ===*/
-    let getMessageUrl = '/api/chat/messages/' + (user.id || user.room);
+    let getMessageUrl = '/api/chat/messages/' + (user._id || user.room) + '?isGroup=' + isGroup;
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
@@ -240,16 +242,18 @@ function createNewChatBox(user) {
             let messVal = inputMessage.value;
 
             if (messVal) {
-                let messageItem = createSenderMessageItem(messVal);
-                chatBoxContent.appendChild(messageItem);
+                // let messageItem = createSenderMessageItem(messVal);
+                // chatBoxContent.appendChild(messageItem);
                 /**
                  * Emit message to socket server
                  */
                 let dataSend = {
                     sender: socket.identification,
                     to: {
-                        room: user.id,
-                        userName: user.userName
+                        _id: user._id,
+                        room: user._id,
+                        userName: isGroup ? user.groupName : user.userName,
+                        isGroup: isGroup
                     },
                     messageContent: messVal
                 }
@@ -262,6 +266,7 @@ function createNewChatBox(user) {
         }
     }
     mainFooterContainer.appendChild(inputMessage);
+    inputMessage.select();
 
     let btnSend = document.createElement('button');
     btnSend.className = 'send-message';
@@ -270,20 +275,22 @@ function createNewChatBox(user) {
         let messVal = inputMessage.value;
 
         if (messVal) {
-            let messageItem = createSenderMessageItem(messVal);
-            chatBoxContent.appendChild(messageItem);
+            // let messageItem = createSenderMessageItem(messVal);
+            // chatBoxContent.appendChild(messageItem);
             /**
              * Emit message to socket server
              */
             let dataSend = {
                 sender: socket.identification,
                 to: {
-                    room: user.id,
-                    userName: user.userName
+                    _id: user._id,
+                    room: user._id,
+                    userName: isGroup ? user.groupName : user.userName,
+                    isGroup: isGroup
                 },
                 messageContent: messVal
             }
-
+            console.log('dataSendttt', dataSend);
             socket.emit('send_message', dataSend);
         }
         inputMessage.value = '';
@@ -346,13 +353,30 @@ socket.on('connect', () => {
      * Event receive message from server
      */
     socket.on('message', (data) => {
+        console.log('data message', data);
+        if (data.sender.id === socket.identification.id) {
+            return;
+        }
+
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.sender.id || data.sender.room));
        
+        if (data.to.isGroup) {
+            chatBoxItem = document.getElementById('chat-box-item-' + data.to.room);
+        }
+        console.log("chatboxItem", chatBoxItem);
         if (!chatBoxItem) {
-            createNewChatBox(data.sender);
+            if (data.to.isGroup){
+                createNewChatBox(data.to, true);
+            } else {
+                createNewChatBox(data.sender)
+            }
         } else {
             let chatBoxContent = document.querySelector('#chat-box-item-' + (data.sender.id || data.sender.room) + ' .chat-box-content');
-            console.log('chatbox', chatBoxContent);
+
+            if (data.to.isGroup) {
+                chatBoxContent = document.querySelector('#chat-box-item-' + data.to.room + ' .chat-box-content');
+            }
+
             if (chatBoxContent) {
                 let messEl = createInboxMessageItem(data);
                 chatBoxContent.appendChild(messEl);
@@ -360,4 +384,23 @@ socket.on('connect', () => {
             }
         }
     })
+
+    /**
+     * Event owner message 
+     */
+    socket.on('owner_message', (data) => {
+        console.log('owner_mess', data);
+        let chatBoxItem = document.getElementById('chat-box-item-' + (data.to.id || data.to.room));
+       
+        if (!chatBoxItem) {
+            createNewChatBox(data.to);
+        } else {
+            let chatBoxContent = document.querySelector('#chat-box-item-' + (data.to.id || data.to.room) + ' .chat-box-content');
+            if (chatBoxContent) {
+                let messEl = createSenderMessageItem(data.messageContent);
+                chatBoxContent.appendChild(messEl);
+                chatBoxContent.scrollTop = chatBoxContent.scrollHeight;
+            }
+        }
+    });
 });

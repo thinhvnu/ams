@@ -1,6 +1,8 @@
 const Service = require('./../../models/Service');
 const ServiceRequest = require('./../../models/ServiceRequest');
+const ServiceCategory = require('./../../models/ServiceCategory');
 
+<<<<<<< HEAD
 // Get all services
 exports.getIndex = function (req, res) {
 	Service.find({}, {
@@ -13,6 +15,40 @@ exports.getIndex = function (req, res) {
 		'content': 1,
 		'price': 1
 	})
+=======
+exports.getCategories = (req, res, next) => {
+	ServiceCategory.find({
+		status: 1
+	}).exec((err, data) => {
+		if (err) {
+			return res.json({
+				success: false,
+				errorCode: '112',
+				message: 'Có lỗi xảy ra'
+			})
+		}
+
+		return res.json({
+			success: true,
+			errorCode: 0,
+			data: data,
+			message: 'Get data successfully'
+		})
+	})
+}
+
+// Get all services
+exports.getIndex = function (req, res) {
+	try {
+		Service.find({
+			status: 1,
+			category: req.params.categoryId
+		})
+		.populate({
+			path: 'category',
+			model: 'ServiceCategory'
+		})
+>>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 		.exec(function (err, services) {
 			if (err) {
 				console.log('err', err)
@@ -25,6 +61,17 @@ exports.getIndex = function (req, res) {
 				message: 'Get list services successfully'
 			});
 		});
+<<<<<<< HEAD
+=======
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			data: [],
+			message: 'Exception'
+		})
+	}
+>>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 };
 
 exports.postCreateRequest = (req, res, next) => {

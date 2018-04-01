@@ -7,9 +7,11 @@ var serviceController = require('./../controllers/Service');
  */
 const passport = require('./../../middleware/apiPassport');
 
+/* GET categories listing. */
+router.get('/categories', serviceController.getCategories);
 
-/* GET users listing. */
-router.get('/', serviceController.getIndex);
+/* GET services listing. */
+router.get('/:categoryId', serviceController.getIndex);
 
 /* API create new request */
 router.post('/create-request', passport.isAuthenticated, serviceController.postCreateRequest);

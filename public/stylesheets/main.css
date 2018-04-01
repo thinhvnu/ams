@@ -390,10 +390,13 @@ input.mycropper-browse-file[type="file"] {
     overflow: hidden;
     text-align: center;
 }
-.user-item .user-avatar .fa-user-o {
+.user-item .user-avatar .fa-user-o, .user-item .user-avatar .fa-users {
     font-size: 38px;
     display: table-cell;
     vertical-align: middle;
+}
+.user-item .user-avatar .fa-users {
+    font-size: 22px;
 }
 .user-item .user-info {
     width: calc(100% - 60px);

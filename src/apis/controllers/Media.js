@@ -99,7 +99,10 @@ exports.postUploadExcelFile = (req, res, next) => {
 			 */
 			let wb = XLSX.readFile(uploadFilePath);
 			let sheet_name_list = wb.SheetNames;
-			let data = XLSX.utils.sheet_to_json(wb.Sheets[sheet_name_list[0]]);
+			let data = [];
+			for (let i=0; i<sheet_name_list.length; i++) {
+				data[i] = XLSX.utils.sheet_to_json(wb.Sheets[sheet_name_list[i]]);
+			}
 
 			return res.json({
 				success: true,

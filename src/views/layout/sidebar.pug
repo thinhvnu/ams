@@ -27,6 +27,10 @@
     a(href="/utility")
         i.icon.fa.fa-cogs
         span.link-title Tiện ích
+.menu-item(class=(current && current[0]=='cost') && 'active')
+    a(href="/cost")
+        i.icon.fa.fa-usd
+        span.link-title Chi phí
 .menu-item(class=(current && current[0]=='user') && 'active')
     a(href="/user")
         i.icon.fa.fa-user-o

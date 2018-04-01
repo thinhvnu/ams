@@ -74,8 +74,11 @@ exports.postCreate = function (req, res) {
 exports.getImportTemplate = (req, res, next) => {
 	console.log('req.query', req.query);
 	let buildingId = req.query.buildingId;
+	let costTypeId = req.query.costTypeId;
+	let month = req.query.month;
+	let year = req.query.year;
 
-	if (!buildingId) {
+	if (!buildingId || !costTypeId || !month || !year) {
 		return res.json({
 			success: false,
 			errorCode: '432'
@@ -83,56 +86,77 @@ exports.getImportTemplate = (req, res, next) => {
 	}
 
 	const XLSX = require('xlsx'), path = require('path');
-	let costData = [], costWs, filePath;
+	let costData = [], costWs, costTypeData = [], costTypeWs, apartmentData = [], apartmentWs, filePath;
 
 	costData = [
-		['loai_chi_phi', 'can_ho', 'chung_cu', 'so_tien', 'thang', 'nam']
+		['loai_chi_phi', 'can_ho', 'toa_nha', 'chung_cu', 'so_tien', 'thang', 'nam']
+	];
+	costTypeData = [
+		['id', 'ten_chi_phi']
+	];
+	apartmentData = [
+		['id', 'ten_can_ho']
 	];
 
 	/**
 	 * Query data building
 	 */
-	ApartmentBuilding.find({
-		_id: buildingId
-	})
+	ApartmentBuilding.findById(buildingId)
 	.populate({
-		path: 'buildingGroup',
+		path: 'apartmentBuildingGroup',
 		model: 'ApartmentBuildingGroup'
 	})
 	.populate({
 		path: 'apartments',
 		model: 'Apartment'
 	})
-	.exec((err, apartments) => {
-		console.log('apartments', apartments);
-		/**
-		 * Append data to worksheet
-		 */
-		for (let i=0; i<apartments.length; i++) {
-			costData.push(
-				[
-					'Tien dien',
-					'101',
-					'Khu chung cu my dinh',
-					'100000',
-					'12',
-					'2017'
-				]
-			)
-		}
+	.exec((err, building) => {
+		CostType.findById(costTypeId)
+		.exec((err, costType) => {
+			/**
+			 * Append data to worksheet
+			 */
+			if (costType) {
+				costTypeData.push([
+					costType._id,
+					costType.name
+				]);
+				for (let i=0; i<building.apartments.length; i++) {
+					costData.push(
+						[
+							costType.name,
+							building.apartments[i].apartmentName,
+							building.buildingName,
+							building.apartmentBuildingGroup.abgName,
+							'',
+							month,
+							year
+						]
+					)
+					apartmentData.push([
+						building.apartments[i]._id,
+						building.apartments[i].apartmentName
+					])
+				}
+			}
 
-		costWs = XLSX.utils.aoa_to_sheet(costData);
+			costWs = XLSX.utils.aoa_to_sheet(costData);
+			costTypeWs = XLSX.utils.aoa_to_sheet(costTypeData);
+			apartmentWs = XLSX.utils.aoa_to_sheet(apartmentData);
 
-		wb = XLSX.utils.book_new();
-		filePath = path.join(__dirname, '/../..' + '/media/files/import-template/chi-phi-dich-vu.xlsx');
+			wb = XLSX.utils.book_new();
+			filePath = path.join(__dirname, '/../..' + '/media/files/import-template/chi-phi-dich-vu.xlsx');
 
-		XLSX.utils.book_append_sheet(wb, costWs, "Chi Phí");
-		XLSX.writeFile(wb, filePath);
+			XLSX.utils.book_append_sheet(wb, costWs, "Tiền phí");
+			XLSX.utils.book_append_sheet(wb, costTypeWs, "Loại chi phí");
+			XLSX.utils.book_append_sheet(wb, apartmentWs, "Căn hộ");
+			XLSX.writeFile(wb, filePath);
 
-		return res.json({
-			success: true,
-			errorCode: 0,
-			fileUrl: process.env.MEDIA_URL + '/files/import-template/chi-phi-dich-vu.xlsx'
-		});
+			return res.json({
+				success: true,
+				errorCode: 0,
+				fileUrl: process.env.MEDIA_URL + '/files/import-template/chi-phi-dich-vu.xlsx'
+			});
+		})
 	})
 }

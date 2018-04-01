@@ -4,7 +4,7 @@ block stylesheets
 block scripts
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
-		$('.chosen-abg, .chosen-ab').chosen({ allow_single_deselect: true, disable_search: false });
+		$('.chosen-abg, .chosen-ab, .chosen-cost-type, .chosen-cost-month, .chosen-cost-year').chosen({ allow_single_deselect: true, disable_search: false });
 block content
 	.row
 		.col-lg-2.col-md-2.col-sm-2.sub-menu
@@ -55,12 +55,25 @@ block content
 							form#select-download-option.form-horizontal.hidden
 								hr
 								.form-group
-									.col-lg-5(class=errors && errors.apartmentBuildingGroup && 'has-error')
+									.col-lg-6.col-md-6
+										select#chosen-cost-type.form-control.chosen-cost-type(name='cosType', data-placeholder='Loại chi phí', style='width: 100%;')
+											option(value='') Chọn loại chi phí
+											each ct in costTypes
+												option(value=ct._id) #{ct.name}
+									.col-lg-3.col-md-3
+										select#choosen-cost-month.form-control.chosen-cost-month(name='costMonth', data-placeholder='Tháng', style='width: 100%;')
+											each m in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+												option(value=m) #{'Tháng ' + m}
+									.col-lg-3.col-md-3
+										select#choosen-cost-year.form-control.chosen-cost-year(name='costYear', data-placeholder='Năm', style='width: 100%;')
+											option(value=new Date().getFullYear()) #{'Năm ' + new Date().getFullYear()}
+								.form-group
+									.col-lg-6.col-md-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
 										select#chosen-apartment-building-group.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
 											option(value='') Chọn khu chung cư
 											each abg in abgs
 												option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
-									.col-lg-5(class=errors && errors.apartmentBuilding && 'has-error')
+									.col-lg-6.col-md-6(class=errors && errors.apartmentBuilding && 'has-error')
 										select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;')
 											option(value='') Chọn tòa nhà
 								.form-group

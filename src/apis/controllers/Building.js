@@ -40,14 +40,15 @@ exports.postAddNewApartment = (req, res, next) => {
                         if (ab) {
                             ab.apartments.pull(a._id);
                             ab.apartments.push(a._id);
-                            ab.save();
+                            ab.save((err, abResult) => {
+                                req.flash('success', 'Thêm căn hộ thành công');
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    message: 'Successfully'
+                                })
+                            });
                         }
-                        req.flash('success', 'Thêm căn hộ thành công');
-                        return res.json({
-                            success: true,
-                            errorCode: 0,
-                            message: 'Successfully'
-                        })
                     })
                 });
             }

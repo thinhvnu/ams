@@ -349,7 +349,15 @@ function downloadFileImport(url) {
 }
 
 function downloadCostFileImport(url) {
-  let chosenAbEl = document.getElementById('choosen-apartment-building');
+  let chosenAbEl = document.getElementById('choosen-apartment-building')
+    chosenCostType = document.getElementById('chosen-cost-type'),
+    chosenCostMonth = document.getElementById('choosen-cost-month'),
+    chosenCostYear = document.getElementById('choosen-cost-year');
+
+  if (!chosenCostType.value) {
+    alert('Vui lòng chọn loại chi phí');
+    return;
+  }
 
   if (!chosenAbEl || (chosenAbEl && !chosenAbEl.value)) {
     alert('Vui long chọn khu chung cư và tòa nhà');
@@ -366,7 +374,7 @@ function downloadCostFileImport(url) {
       }
     }
   };
-  xhttp.open('GET', url + '?buildingId=' + chosenAbEl.value, true);
+  xhttp.open('GET', url + '?buildingId=' + chosenAbEl.value + '&costTypeId=' + chosenCostType.value + '&month=' + chosenCostMonth.value + '&year=' + chosenCostYear.value, true);
   xhttp.send();
 }
 

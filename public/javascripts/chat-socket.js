@@ -114,7 +114,7 @@ function createNewChatBox(user) {
     let boxTitle = document.createElement('div');
     boxTitle.className = 'box-title';
     boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; text-transform: uppercase;'; 
-    boxTitle.textContent = user.firstName + ' ' + user.lastName;
+    boxTitle.textContent = user.groupName ? user.groupName : (user.firstName + ' ' + user.lastName);
     boxHeaderInfo.appendChild(boxTitle);
 
     let headerToolbar = document.createElement('div');
@@ -172,11 +172,13 @@ function createNewChatBox(user) {
     accountName.textContent = user.email;
     account.appendChild(accountName);
 
-    let hotline = document.createElement('div');
-    hotline.className = 'hotline';
-    hotline.textContent = 'SĐT: ' + (user.phoneNumber || 'chưa cập nhật'); 
-    hotline.style = 'color: #aaaaaa';
-    account.appendChild(hotline);
+    if (user.phoneNumber) {
+        let hotline = document.createElement('div');
+        hotline.className = 'hotline';
+        hotline.textContent = 'SĐT: ' + (user.phoneNumber); 
+        hotline.style = 'color: #aaaaaa';
+        account.appendChild(hotline);
+    }
 
     let settingEl = document.createElement('span');
     settingEl.className = 'setting';
@@ -192,6 +194,7 @@ function createNewChatBox(user) {
     chatBox.appendChild(chatBoxContent);
 
     /* === Request server get list message ===*/
+    console.log('userttt', user.id);
     let getMessageUrl = '/api/chat/messages/' + (user.id || user.room);
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {

@@ -345,6 +345,7 @@ const socket = io('http://backend.thinhnv.net', {query: 'token=' + token});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
+        console.log('data', data);
         socket.identification = data;
     });
 

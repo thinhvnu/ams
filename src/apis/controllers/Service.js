@@ -2,20 +2,6 @@ const Service = require('./../../models/Service');
 const ServiceRequest = require('./../../models/ServiceRequest');
 const ServiceCategory = require('./../../models/ServiceCategory');
 
-<<<<<<< HEAD
-// Get all services
-exports.getIndex = function (req, res) {
-	Service.find({}, {
-		'_id': 1,
-		'serviceName': 1,
-		'image': 1,
-		'imageUrl': 1,
-		'icon': 1,
-		'iconUrl': 1,
-		'content': 1,
-		'price': 1
-	})
-=======
 exports.getCategories = (req, res, next) => {
 	ServiceCategory.find({
 		status: 1
@@ -48,7 +34,6 @@ exports.getIndex = function (req, res) {
 			path: 'category',
 			model: 'ServiceCategory'
 		})
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 		.exec(function (err, services) {
 			if (err) {
 				console.log('err', err)
@@ -61,8 +46,6 @@ exports.getIndex = function (req, res) {
 				message: 'Get list services successfully'
 			});
 		});
-<<<<<<< HEAD
-=======
 	} catch (e) {
 		return res.json({
 			success: false,
@@ -71,7 +54,6 @@ exports.getIndex = function (req, res) {
 			message: 'Exception'
 		})
 	}
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 };
 
 exports.postCreateRequest = (req, res, next) => {

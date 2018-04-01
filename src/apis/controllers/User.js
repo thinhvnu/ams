@@ -12,19 +12,11 @@ exports.postRegister = (req, res, next) => {
 		req.checkBody('password', 'Password must be at least 4 characters long').len(4);
 		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-<<<<<<< HEAD
-
-		req.getValidationResult().then(function (errors) {
-			if (!errors.isEmpty()) {
-				var errors = errors.mapped();
-
-=======
 	
 		req.getValidationResult().then(function(errors) {
 		  	if (!errors.isEmpty()) {
 				var errors = errors.mapped();
 
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 				return res.json({
 					success: false,
 					errorCode: '011',
@@ -32,21 +24,6 @@ exports.postRegister = (req, res, next) => {
 					data: req.body,
 					message: 'Validate errors'
 				})
-<<<<<<< HEAD
-			} else {
-				const user = new User();
-				user.firstName = req.body.firstName;
-				user.lastName = req.body.lastName;
-				user.userName = req.body.userName ? req.body.userName : req.body.phoneNumber;
-				user.email = req.body.email;
-				user.avatar = req.body.avatar;
-				user.phoneNumber = req.body.phoneNumber;
-				user.password = req.body.password;
-				user.gender = req.body.gender;
-				user.status = 0;
-
-				User.findOne({ email: req.body.email }, (err, existingUser) => {
-=======
 		  	} else {
 				Role.findOne({
 					status: 1,
@@ -65,7 +42,6 @@ exports.postRegister = (req, res, next) => {
 					user.status = 0;
 				
 					User.findOne({ email: req.body.email }, (err, existingUser) => {
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 					if (err) { return next(err); }
 					if (existingUser) {
 						return res.json({
@@ -75,11 +51,7 @@ exports.postRegister = (req, res, next) => {
 						});
 					}
 					user.save((err) => {
-<<<<<<< HEAD
-						if (err) {
-=======
 						if (err) { 
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 							return res.json({
 								success: false,
 								errorCode: '013',
@@ -92,14 +64,9 @@ exports.postRegister = (req, res, next) => {
 							message: 'Đăng ký tài khoản thành công'
 						});
 					});
-<<<<<<< HEAD
-				});
-			}
-=======
 					});
 				})
 		  	}
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 		});
 	} catch (e) {
 		return res.json({
@@ -127,36 +94,6 @@ exports.getInfo = function (req, res) {
 					data: JSON.parse(user)
 				});
 			} else {
-<<<<<<< HEAD
-				User.find({ _id: currentUser._id })
-					.select({
-						'_id': 0,
-						'firstName': 1,
-						'lastName': 1,
-						'userName': 1,
-						'phoneNumber': 1,
-						'email': 1,
-						'gender': 1,
-						'avatar': 1,
-						'avatarUrl': 1,
-						'address': 1
-					})
-					.exec(function (err, user) {
-						if (err) {
-							console.log('err', err)
-							return done(err);
-						}
-
-						res.json({
-							success: true,
-							errorCode: 0,
-							data: user
-						});
-						/**
-						 * Set redis cache data
-						 */
-						client.set(clientKey, JSON.stringify(user), 'EX', process.env.REDIS_CACHE_TIME);
-=======
 				User.find({_id: currentUser._id})
 				.select({
 					'_id': 0,
@@ -181,10 +118,11 @@ exports.getInfo = function (req, res) {
 						success: true,
 						errorCode: 0,
 						data: user
->>>>>>> de085aa6e7e03a163a5b440bd2ad20d8baf38a74
 					});
-			}
-		});
+			});
+		};
+	});
+	
 	} catch (e) {
 		return res.json({
 			success: false,

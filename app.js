@@ -51,6 +51,7 @@ const apiUtility = require('./src/apis/routes/utility');
 const apiNotification = require('./src/apis/routes/notification');
 const apiFeedBack = require('./src/apis/routes/feedback');
 const apiCost = require('./src/apis/routes/cost');
+const apiPayment = require('./src/apis/routes/payment');
 
 var app = express();
 var io = require('socket.io')();

@@ -31,6 +31,10 @@
     a(href="/cost")
         i.icon.fa.fa-usd
         span.link-title Chi phí
+.menu-item(class=(current && current[0]=='payment') && 'active')
+    a(href="/payment")
+        i.icon.fa.fa-money
+        span.link-title Thanh toán
 .menu-item(class=(current && current[0]=='user') && 'active')
     a(href="/user")
         i.icon.fa.fa-user-o

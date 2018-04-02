@@ -26,23 +26,29 @@ serviceRequestSchema.set('toJSON', {
 
 // Get full image url with media config
 serviceRequestSchema.virtual('imageUrl').get(function () {
-    let imgs = this.images.split(','), urls = '';
+    if (this.images) {
+        let imgs = this.images.split(','), urls = '';
 
-    for (let i=0; i<imgs.length; i++) {
-        urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+        for (let i=0; i<imgs.length; i++) {
+            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+        }
+
+        return urls;
     }
-
-    return urls;
+    return null;
 });
 
 serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
-    let imgs = this.invoice_imgs.split(','), urls = '';
+    if (this.invoice_imgs) {
+        let imgs = this.invoice_imgs.split(','), urls = '';
 
-    for (let i=0; i<imgs.length; i++) {
-        urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+        for (let i=0; i<imgs.length; i++) {
+            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+        }
+
+        return urls;
     }
-
-    return urls;
+    return null;
 });
 
 const ServiceRequest = mongoose.model('ServiceRequest', serviceRequestSchema);

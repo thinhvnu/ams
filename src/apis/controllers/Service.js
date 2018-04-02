@@ -172,7 +172,7 @@ exports.getHistoryTransaction = (req, res, next) => {
 		.populate({
 			path: 'service',
 			model: 'Service',
-			select: { '_id': 0, 'serviceName': 1, 'image': 1, 'imageUrl': 1 }
+			select: { '_id': 0, 'serviceName': 1, 'image': 1, 'imageUrl': 1, 'icon': 1, 'iconUrl': 1 }
 		})
 		.sort('-createdAt')
 		.exec(function (err, srs) {

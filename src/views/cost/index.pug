@@ -9,13 +9,13 @@ block content
 	.row
 		.col-lg-2.col-md-2.col-sm-2.sub-menu
 			ul.sub-menu-item.nav.nav-tabs
-				li.active
-					a(data-toggle='tab', href='#costType') Loại chi phí
 				li
+					a(data-toggle='tab', href='#costType') Loại chi phí
+				li.active
 					a(data-toggle='tab', href='#cost') Tiền phí
 		.col-lg-10.col-md-10.col-sm-10
 			.tab-content
-				#costType.tab-pane.fade.in.active
+				#costType.tab-pane.fade
 					.cost-type(style='margin-bottom: 15px;')
 						.user-actions
 							a.btn.btn-success(href='/cost-type/create') Tạo mới
@@ -40,10 +40,10 @@ block content
 												em.fa.fa-pencil
 											a(href='/cost-type/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa loại chi phí này không?", "/cost-type/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
 												em.fa.fa-trash
-				#cost.tab-pane.fade
+				#cost.tab-pane.fade.in.active
 					.cost-type(style='margin-bottom: 15px;')
 						.user-actions
-							a.btn.btn-success(href='/cost/create') Thêm
+							//- a.btn.btn-success(href='/cost/create') Thêm
 							.btn.btn-success(onclick='return toggleSelect()')
 								| Tải mẫu nhập liệu &nbsp;
 							.btn.btn-success

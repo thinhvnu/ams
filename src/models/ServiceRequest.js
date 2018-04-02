@@ -35,7 +35,7 @@ serviceRequestSchema.virtual('imageUrl').get(function () {
 
         return urls;
     }
-    return null;
+    return '';
 });
 
 serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
@@ -48,7 +48,7 @@ serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
 
         return urls;
     }
-    return null;
+    return '';
 });
 
 const ServiceRequest = mongoose.model('ServiceRequest', serviceRequestSchema);

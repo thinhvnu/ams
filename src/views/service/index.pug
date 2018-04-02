@@ -13,34 +13,68 @@ block scripts
 		});
 block content
 	.row
-		.col-lg-12
-			.user-actions
-				a.btn.btn-success(href='/service/create') Tạo mới
-			hr
-			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
-				thead
-					tr
-						th.hidden-xs STT
-						th Tên dịch vụ
-						th Icon
-						th Ảnh
-						th Giá (VNĐ)
-						th.text-center Trạng thái
-						th.text-center.no-sort
-							em.fa.fa-cog
-				tbody
-					each dt, i in data
-						tr
-							td.hidden-xs #{i + 1}
-							td #{dt.serviceName}
-							td
-								img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 128px;')
-							td
-								img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
-							td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}
-							td.text-center #{dt.status ? 'Public' : 'Draft'}
-							td(align='center')
-								a(href='/service/edit/' + dt._id).u-action.btn.btn-success
-									em.fa.fa-pencil
-								a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-									em.fa.fa-trash
+		.col-lg-2.col-md-2.col-sm-2.sub-menu
+			ul.sub-menu-item.nav.nav-tabs
+				li.active
+					a(data-toggle='tab', href='#serviceCategory') Danh mục
+				li
+					a(data-toggle='tab', href='#service') Dịch vụ
+		.col-lg-10.col-md-10.col-sm-10
+			.tab-content
+				#serviceCategory.tab-pane.fade
+					.user-actions
+						a.btn.btn-success(href='/service/create') Tạo mới
+					hr
+					table#service-list.table.table-responsive.display(cellspacing='0', width='100%')
+						thead
+							tr
+								th.hidden-xs STT
+								th Tên danh mục
+								th Icon
+								th.text-center Trạng thái
+								th.text-center.no-sort
+									em.fa.fa-cog
+						tbody
+							each dt, i in serviceCategories
+								tr
+									td.hidden-xs #{i + 1}
+									td #{dt.name}
+									td
+										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 80px;')
+									td.text-center #{dt.status ? 'Active' : 'Inactive'}
+									td(align='center')
+										a(href='/service-category/edit/' + dt._id).u-action.btn.btn-success
+											em.fa.fa-pencil
+										a(href='/service-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa danh mục này không?", "/service-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+											em.fa.fa-trash
+				#service.tab-pane.fade.in.active
+					.user-actions
+						a.btn.btn-success(href='/service/create') Tạo mới
+					hr
+					table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
+						thead
+							tr
+								th.hidden-xs STT
+								th Tên dịch vụ
+								th Icon
+								th Ảnh
+								th Giá (VNĐ)
+								th.text-center Trạng thái
+								th.text-center.no-sort
+									em.fa.fa-cog
+						tbody
+							each dt, i in data
+								tr
+									td.hidden-xs #{i + 1}
+									td #{dt.serviceName}
+									td
+										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 128px;')
+									td
+										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
+									td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}
+									td.text-center #{dt.status ? 'Public' : 'Draft'}
+									td(align='center')
+										a(href='/service/edit/' + dt._id).u-action.btn.btn-success
+											em.fa.fa-pencil
+										a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+											em.fa.fa-trash

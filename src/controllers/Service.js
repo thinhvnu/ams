@@ -8,11 +8,14 @@ exports.getIndex = function (req, res) {
 			return done(err);
 		}
 		
-		res.render('service/index', {
-			title: 'Tất cả dịch vụ',
-			current: ['service', 'index'],
-			data: services
-		});
+		ServiceCategory.find({}).exec((err, serviceCategories) => {
+			res.render('service/index', {
+				title: 'Tất cả dịch vụ',
+				current: ['service', 'index'],
+				serviceCategories: serviceCategories,
+				data: services
+			});
+		})
 	});
 };
 

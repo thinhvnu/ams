@@ -30,7 +30,7 @@ serviceRequestSchema.virtual('imageUrl').get(function () {
         let imgs = this.images.split(','), urls = '';
 
         for (let i=0; i<imgs.length; i++) {
-            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i] + ',';
         }
 
         return urls;
@@ -43,7 +43,7 @@ serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
         let imgs = this.invoice_imgs.split(','), urls = '';
 
         for (let i=0; i<imgs.length; i++) {
-            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i];
+            urls += process.env.MEDIA_URL + '/images/service/origin/' + imgs[i] + ',';
         }
 
         return urls;

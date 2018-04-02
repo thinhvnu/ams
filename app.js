@@ -35,6 +35,7 @@ const costType = require('./src/routes/costType');
 const utility = require('./src/routes/utility');
 const permission = require('./src/routes/permission');
 const notification = require('./src/routes/notification');
+const payment = require('./src/routes/payment');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
@@ -51,7 +52,6 @@ const apiUtility = require('./src/apis/routes/utility');
 const apiNotification = require('./src/apis/routes/notification');
 const apiFeedBack = require('./src/apis/routes/feedback');
 const apiCost = require('./src/apis/routes/cost');
-const apiPayment = require('./src/apis/routes/payment');
 
 var app = express();
 var io = require('socket.io')();
@@ -109,6 +109,7 @@ app.use('/service-category', serviceCategory);
 app.use('/utility', utility);
 app.use('/permission', permission);
 app.use('/notification', notification);
+app.use('/payment', payment);
 
 /**
  * Api router

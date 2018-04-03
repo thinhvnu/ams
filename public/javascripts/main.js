@@ -77,6 +77,29 @@ function onSelectAbg(value) {
   xhttp.send();
 }
 
+function onSelectAb(value) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let response = JSON.parse(this.response);
+        if (response.data) {
+          let data = response.data;
+
+          let options = '<option value="">Chọn căn hộ</option>';
+
+          for(let i=0; i<data.length; i++) {
+            options += '<option value="' + data[i]._id + '">' + data[i].apartmentName + '</option>'
+          }
+
+          $('#choosen-apartment').empty().append(options).trigger("chosen:updated");
+        }
+        // Action to be performed when the document is read;
+      }
+  };
+  xhttp.open('GET', '/api/building/list-apartment/' + value, true);
+  xhttp.send();
+}
+
 function addUserToApartment(apartmentId) {
   let firstName = document.getElementsByName('firstName')[0],
     lastName = document.getElementsByName('lastName')[0],
@@ -496,6 +519,34 @@ function importFileCost(selector) {
     };
     xhr.send(formData);
   }
+}
+
+function searchCost() {
+  let apartment = document.getElementById('choosen-apartment'),
+    month = document.getElementById('choosen-cost-month'),
+    year = document.getElementById('choosen-cost-year');
+
+    if (apartment && month && year) {
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+          let dataRes = JSON.parse(this.response);
+          console.log('dataRes', dataRes);
+          if (dataRes.success) {
+            let tbody = document.querySelector('#cost-details table tbody'), html = '';
+
+            if (tbody && dataRes.data) {
+              for (let i=0; i<dataRes.data.length; i++) {
+                html += '<tr><td>' + dataRes.data[i].costType.name + '</td><td>' + dataRes.data[i].month + '</td><td>' + dataRes.data[i].year + '</td><td>' + dataRes.data[i].money + '</td></tr>';
+              }
+              tbody.innerHTML = html;
+            }
+          }
+        }
+      };
+      xhttp.open('GET', '/payment/search?apartmentId=' + apartment.value + '&month=' + month.value + '&year=' + year.value, true);
+      xhttp.send();
+    }
 }
 
 function selectAllApartments() {

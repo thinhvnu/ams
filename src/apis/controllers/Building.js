@@ -3,6 +3,21 @@ const Apartment = require('../../models/Apartment');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
+exports.getListApartment = function (req, res) {
+    Apartment.find({building: req.params.buildingId})
+        .exec(function (err, apartments) {
+            if (err) {
+                return done(err);
+            }
+            
+            return res.json({
+                success: true,
+                errorCode: 0,
+                data: apartments
+            });
+        });
+};
+
 exports.postAddNewApartment = (req, res, next) => {
     try {
         req.checkBody('apartmentName', 'Tên căn hộ không được để trống').notEmpty();

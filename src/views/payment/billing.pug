@@ -1,0 +1,85 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			$('.chosen-abg, .chosen-ab, .chosen-apartment, .chosen-cost-month, .chosen-cost-year').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Thanh toán phí dịch vụ
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			.form-horizontal
+				.form-group
+					.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư
+						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuildingGroup
+							.help-block #{errors.apartmentBuildingGroup.msg}
+					.col-lg-6(class=errors && errors.apartmentBuilding && 'has-error')
+						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà
+						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;', onchange='onSelectAb(this.value)')
+							option(value='') Chọn tòa nhà
+						if errors && errors.apartmentBuilding
+							.help-block #{errors.apartmentBuilding.msg}
+				.form-group
+					.col-lg-4(class=errors && errors.apartment && 'has-error')
+						label.control-label(for='apartment', style='display: block; text-align: left;') Căn hộ
+						select#choosen-apartment.form-control.chosen-apartment(name='apartment', data-placeholder='Căn hộ', style='width: 100%;')
+							option(value='') Chọn căn hộ
+						if errors && errors.apartment
+							.help-block #{errors.apartment.msg}
+					.col-lg-4(class=errors && errors.apartmentBuilding && 'has-error')
+						label.control-label(for='month', style='display: block; text-align: left;') Chọn tháng
+						select#choosen-cost-month.form-control.chosen-cost-month(name='costMonth', data-placeholder='Tháng', style='width: 100%;')
+							option(value='') Chọn tháng
+							each m in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+								option(value=m) #{'Tháng ' + m}
+					.col-lg-4.col-md-4
+						label.control-label(for='year', style='display: block; text-align: left;') Chọn năm
+						select#choosen-cost-year.form-control.chosen-cost-year(name='costYear', data-placeholder='Năm', style='width: 100%;')
+							option(value=new Date().getFullYear()) #{'Năm ' + new Date().getFullYear()}
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Tìm kiếm', onclick='return searchCost()')
+				hr
+				#cost-details
+					h3.text-center Hóa đơn thanh toán
+					.row
+						.col-lg-6.col-md-6
+							.apartment
+								b Căn hộ:
+								span#apartment 101
+						.col-lg-6.col-md-6
+							.customer
+								b Chủ căn hộ:
+								span#customer Nguyễn Viết Thịnh
+					.row
+						.col-lg-6.col-md-6
+							.building
+								b Tòa nhà:
+								span#building Tòa nhà A
+						.col-lg-6.col-md-6
+							.building-group
+								b Khu chung cư:
+								span#building-group Khu chung cư A
+					.row
+						.col-lg-12.col-md-12
+							table.table.table-responsive
+								thead(style='background: #eeeeee;')
+									tr
+										th Loại chi phí
+										th Tháng
+										th Năm
+										th Thành tiền
+								tbody

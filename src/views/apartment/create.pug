@@ -50,7 +50,7 @@ block content
 						select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
 							option(value='') Chủ căn hộ
 							each user in users
-								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.userName}
+								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.firstName + ' ' + user.lastName}
 						if errors && errors.manager
 							.help-block #{errors.manager.msg}
 					.col-lg-6

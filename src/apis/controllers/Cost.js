@@ -68,7 +68,7 @@ exports.getApartmentCost = (req, res, next) => {
 
                         for (let j=0; j<costs.length; j++) {
                             if (costs[j].month >= 1 && costs[j].month <= 12) {
-                                c[costs[j].month].push(costs[j]);
+                                c[costs[j].month - 1].push(costs[j]);
                             }
                         }
                         costData[i] = {

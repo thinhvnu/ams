@@ -53,33 +53,45 @@ block content
 					.col-lg-8
 						input#submit.btn.btn-success(type='submit', value='Tìm kiếm', onclick='return searchCost()')
 				hr
-				#cost-details
-					h3.text-center Hóa đơn thanh toán
-					.row
-						.col-lg-6.col-md-6
-							.apartment
-								b Căn hộ:
-								span#apartment 101
-						.col-lg-6.col-md-6
-							.customer
-								b Chủ căn hộ:
-								span#customer Nguyễn Viết Thịnh
-					.row
-						.col-lg-6.col-md-6
-							.building
-								b Tòa nhà:
-								span#building Tòa nhà A
-						.col-lg-6.col-md-6
-							.building-group
-								b Khu chung cư:
-								span#building-group Khu chung cư A
-					.row
-						.col-lg-12.col-md-12
-							table.table.table-responsive
-								thead(style='background: #eeeeee;')
-									tr
-										th Loại chi phí
-										th Tháng
-										th Năm
-										th Thành tiền
-								tbody
+				#cost-details(style='font-size: 16px;display: none;')
+					.print
+						h3.text-center(style='margin-bottom: 30px;text-align: center;') Hóa đơn thanh toán
+						.row
+							.col-lg-6.col-md-6
+								.apartment
+									b Căn hộ:
+									span#apartment 101
+							.col-lg-6.col-md-6
+								.customer
+									b Chủ căn hộ:
+									span#customer Nguyễn Viết Thịnh
+						.row
+							.col-lg-6.col-md-6
+								.building
+									b Tòa nhà:
+									span#building Tòa nhà A
+							.col-lg-6.col-md-6
+								.building-group
+									b Khu chung cư:
+									span#building-group Khu chung cư A
+						.row
+							.col-lg-6.col-md-6
+								label.control-label(for='status', style='display: block; text-align: left;') Trạng thái
+								select#choosen-status.form-control.chosen-status(name='status', data-placeholder='Trạng thái', style='width: 100%;')
+									option(value='1') Đã thanh toán
+						.row
+							.col-lg-12.col-md-12
+								table.table.table-responsive.table-bordered(style='margin-top: 15px;width: 100%;border: 1px solid #ddd;border-spacing: 0;border-collapse: collapse;')
+									thead(style='background: #eeeeee;')
+										tr
+											th(style='border-top: 0;border-bottom-width: 2px;border: 1px solid #ddd;vertical-align: bottom;padding: 8px;line-height: 1.42857143;text-align: left;') Loại chi phí
+											th(style='border-top: 0;border-bottom-width: 2px;border: 1px solid #ddd;vertical-align: bottom;padding: 8px;line-height: 1.42857143;text-align: left;') Tháng
+											th(style='border-top: 0;border-bottom-width: 2px;border: 1px solid #ddd;vertical-align: bottom;padding: 8px;line-height: 1.42857143;text-align: left;') Năm
+											th(style='border-top: 0;border-bottom-width: 2px;border: 1px solid #ddd;vertical-align: bottom;padding: 8px;line-height: 1.42857143;text-align: left;') Thành tiền
+									tbody
+					hr
+					.form-group  
+						.col-lg-8
+							button.btn.btn-success(type='button', onclick='return printBilling()')
+								i.fa.fa-print
+								| &nbsp;In hóa đơn

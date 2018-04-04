@@ -531,14 +531,18 @@ function searchCost() {
       xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
           let dataRes = JSON.parse(this.response);
-          console.log('dataRes', dataRes);
+          
           if (dataRes.success) {
-            let tbody = document.querySelector('#cost-details table tbody'), html = '';
+            let costDetails = document.getElementById('cost-details');
+            let tbody = document.querySelector('#cost-details table tbody'), html = '', total = 0;
 
             if (tbody && dataRes.data) {
+              costDetails.style = 'font-size: 16px;display:block;'
               for (let i=0; i<dataRes.data.length; i++) {
-                html += '<tr><td>' + dataRes.data[i].costType.name + '</td><td>' + dataRes.data[i].month + '</td><td>' + dataRes.data[i].year + '</td><td>' + dataRes.data[i].money + '</td></tr>';
+                html += '<tr><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].costType.name + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].month + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].year + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].money + '</td></tr>';
+                total += parseFloat(dataRes.data[i].money);
               }
+              html += '<tr><td colspan="3" style="text-align: center;" style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">Tổng</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + total + '</td></tr>'
               tbody.innerHTML = html;
             }
           }
@@ -547,6 +551,23 @@ function searchCost() {
       xhttp.open('GET', '/payment/search?apartmentId=' + apartment.value + '&month=' + month.value + '&year=' + year.value, true);
       xhttp.send();
     }
+}
+
+function printBilling() {
+  var mywindow = window.open('', 'PRINT');
+
+  mywindow.document.write('<html><head>');
+  mywindow.document.write('</head><body >');
+  mywindow.document.write(document.querySelector('#cost-details .print').innerHTML);
+  mywindow.document.write('</body></html>');
+
+  mywindow.document.close(); // necessary for IE >= 10
+  mywindow.focus(); // necessary for IE >= 10*/
+
+  mywindow.print();
+  mywindow.close();
+
+  return true;
 }
 
 function selectAllApartments() {

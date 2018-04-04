@@ -537,6 +537,27 @@ function searchCost() {
             let tbody = document.querySelector('#cost-details table tbody'), html = '', total = 0;
 
             if (tbody && dataRes.data) {
+              /**
+               * billing info
+               */
+              let apartment = document.getElementById('apartment'),
+                customer = document.getElementById('customer'),
+                building = document.getElementById('building'),
+                buildingGroup = document.getElementById('building-group');
+              
+              if (apartment) {
+                apartment.textContent = dataRes.data[0].apartment.apartmentName;
+              }
+              if (customer) {
+                customer.textContent = dataRes.data[0].apartment.firstName + ' ' + dataRes.data[0].apartment.lastName;
+              }
+              if (building) {
+                building.textContent = dataRes.data[0].apartment.building.buildingName;
+              }
+              if (buildingGroup) {
+                buildingGroup.textContent = dataRes.data[0].apartment.building.apartmentBuildingGroup.abgName;
+              }
+
               costDetails.style = 'font-size: 16px;display:block;'
               for (let i=0; i<dataRes.data.length; i++) {
                 html += '<tr><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].costType.name + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].month + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].year + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].money + '</td></tr>';

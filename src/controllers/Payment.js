@@ -36,17 +36,17 @@ exports.getSearch = (req, res, next) => {
 				path: 'apartment',
 				model: 'Apartment',
 				populate: {
-					path: 'building',
-					model: 'ApartmentBuilding',
-					populate: {
-						path: 'apartmentBuildingGroup',
-						model: 'ApartmentBuildingGroup'
-					}
-				},
-				populate: {
 					path: 'manager',
 					model: 'User'
-				}
+				},
+				populate: {
+					path: 'building',
+					model: 'ApartmentBuilding',
+					// populate: {
+					// 	path: 'apartmentBuildingGroup',
+					// 	model: 'ApartmentBuildingGroup'
+					// }
+				},
 			}).exec((err, costs) => {
 				return res.json({
 					success: true,

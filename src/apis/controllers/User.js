@@ -1,4 +1,5 @@
 const User = require('../../models/User');
+const Role = require('../../models/Role');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -12,7 +13,7 @@ exports.postRegister = (req, res, next) => {
 		req.checkBody('password', 'Password must be at least 4 characters long').len(4);
 		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
 		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-	
+		
 		req.getValidationResult().then(function(errors) {
 		  	if (!errors.isEmpty()) {
 				var errors = errors.mapped();
@@ -26,9 +27,16 @@ exports.postRegister = (req, res, next) => {
 				})
 		  	} else {
 				Role.findOne({
-					status: 1,
+					status: true,
 					roleCode: 21
 				}, (err, role) => {
+					if (err) {
+						return res.json({
+							success: false,
+							errorCode: '013',
+							message: 'Có lỗi xảy ra'
+						});
+					}
 					const user = new User();
 					user.firstName = req.body.firstName;
 					user.lastName = req.body.lastName;
@@ -41,16 +49,7 @@ exports.postRegister = (req, res, next) => {
 					user.gender = req.body.gender;
 					user.status = 0;
 				
-					User.findOne({ email: req.body.email }, (err, existingUser) => {
-					if (err) { return next(err); }
-					if (existingUser) {
-						return res.json({
-							success: false,
-							errorCode: '012',
-							message: 'Người dùng đã tồn tại'
-						});
-					}
-					user.save((err) => {
+					User.findOne({ phoneNumber: req.body.phoneNumber }, (err, existingUser) => {
 						if (err) { 
 							return res.json({
 								success: false,
@@ -58,12 +57,27 @@ exports.postRegister = (req, res, next) => {
 								message: 'Có lỗi xảy ra'
 							});
 						}
-						return res.json({
-							success: true,
-							errorCode: 0,
-							message: 'Đăng ký tài khoản thành công'
+						if (existingUser) {
+							return res.json({
+								success: false,
+								errorCode: '012',
+								message: 'Người dùng đã tồn tại'
+							});
+						}
+						user.save((err) => {
+							if (err) { 
+								return res.json({
+									success: false,
+									errorCode: '013',
+									message: 'Có lỗi xảy ra'
+								});
+							}
+							return res.json({
+								success: true,
+								errorCode: 0,
+								message: 'Đăng ký tài khoản thành công'
+							});
 						});
-					});
 					});
 				})
 		  	}

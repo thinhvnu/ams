@@ -544,26 +544,8 @@ function searchCost() {
                 customer = document.getElementById('customer'),
                 building = document.getElementById('building'),
                 buildingGroup = document.getElementById('building-group'),
-                status = document.getElementById('choosen-status');
-
-              if (status) {
-                let option1 = document.createElement('option');
-                option1.value = 0;
-                option1.textContent = 'Chưa thanh toán';
-                option1.selected = dataRes.data[0].status === 0 ? true : false;
-
-                let option2 = document.createElement('option');
-                option2.value = 0;
-                option2.textContent = 'Đã thanh toán';
-                option2.selected = dataRes.data[0].status === 0 ? false : true;
-
-                status.appendChild(option1);
-                status.appendChild(option2);
-
-                status.onchange = function() {
-                  alert(1);
-                }.bind(this);
-              }
+                status = document.getElementById('choosen-status')
+                costIds = [];
               
               if (apartment) {
                 apartment.textContent = dataRes.data[0].apartment.apartmentName;
@@ -580,11 +562,43 @@ function searchCost() {
 
               costDetails.style = 'font-size: 16px;display:block;'
               for (let i=0; i<dataRes.data.length; i++) {
+                costIds.push(dataRes.data[i]._id);
                 html += '<tr><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].costType.name + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].month + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].year + '</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + dataRes.data[i].money + '</td></tr>';
                 total += parseFloat(dataRes.data[i].money);
               }
               html += '<tr><td colspan="3" style="text-align: center;" style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">Tổng</td><td style="border: 1px solid #ddd;padding: 8px;line-height: 1.42857143;vertical-align: top;">' + total + '</td></tr>'
               tbody.innerHTML = html;
+
+              if (status) {
+                let option1 = document.createElement('option');
+                option1.value = 0;
+                option1.textContent = 'Chưa thanh toán';
+                option1.selected = dataRes.data[0].status === 0 ? true : false;
+
+                let option2 = document.createElement('option');
+                option2.value = 1;
+                option2.textContent = 'Đã thanh toán';
+                option2.selected = dataRes.data[0].status === 0 ? false : true;
+
+                status.appendChild(option1);
+                status.appendChild(option2);
+
+                status.onchange = function() {
+                  let statusVal = status.value;
+                  let url = '/payment/update-status?status=' + statusVal + '&costIds=' + JSON.stringify(costIds);
+                  let xhttp = new XMLHttpRequest();
+                  xhttp.onreadystatechange = function() {
+                    if(xhttp.readyState == 4 && xhttp.status == 200) {
+                      let dataRes = JSON.parse(this.response);
+                      if (dataRes.success) {
+                        alert('Thanh toán thành công');
+                      }
+                    }
+                  };
+                  xhttp.open('GET', url, true);
+                  xhttp.send();
+                }.bind(this, status);
+              }
             }
           }
         }

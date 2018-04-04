@@ -9,4 +9,6 @@ router.post('/billing', PaymentController.postBilling);
 
 router.get('/search', PaymentController.getSearch);
 
+router.get('/update-status', PaymentController.getUpdateStatus);
+
 module.exports = router;

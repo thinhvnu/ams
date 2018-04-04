@@ -69,3 +69,35 @@ exports.getSearch = (req, res, next) => {
 		})
 	}
 }
+
+exports.getUpdateStatus = (req, res, next) => {
+	let status = req.query.status;
+	let costIds = req.query.costIds;
+
+	if (status && costIds) {
+		Cost.updateMany({
+			_id: {$in: [ '5ac0aa8308599958b9eb21e8', '5ac0aa4808599958b9eb21e7' ]}
+		}, {'$set': {
+			status: status
+		}}, function(err) {
+			if(err) {
+				return res.json({
+					success: false,
+					errorCode: '121',
+					message: 'Update failed'
+				})
+			}
+			return res.json({
+				success: true,
+				errorCode: 0,
+				message: 'Update successfully'
+			})
+		});
+	} else {
+		return res.json({
+			success: false,
+			errorCode: '121',
+			message: 'Update failed'
+		})
+	}
+}

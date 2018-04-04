@@ -66,6 +66,10 @@ table.dataTable thead tr th {
   outline: none;
   font-size: 15px;
   font-weight: 600;
+  vertical-align: middle !important;
+  text-align: center;
+  position: relative;
+  padding-right: 20px;
 }
 table.dataTable thead tr th:first-child{
   border-left: 0;
@@ -74,9 +78,14 @@ table.dataTable thead tr th:last-child{
   border-right: 0;
 }
 table.dataTable thead tr th.sorting::after, table.dataTable thead tr th.sorting_asc::after, table.dataTable thead tr th.sorting_desc::after {
-  font-family: FontAwesome;
+  /* font-family: FontAwesome;
   float: right;
-  margin-right: 5px;
+  margin-right: 5px; */
+  font-family: FontAwesome;
+  position: absolute;
+  float: right;
+  right: 0;
+  padding: 0 5px;
 }
 table.dataTable thead tr th.no-sort {
   pointer-events: none;

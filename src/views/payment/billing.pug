@@ -59,25 +59,25 @@ block content
 						.row
 							.col-lg-6.col-md-6
 								.apartment
-									b Căn hộ:
+									b(style='margin-right: 10px;') Căn hộ:
 									span#apartment 101
 							.col-lg-6.col-md-6
 								.customer
-									b Chủ căn hộ:
+									b(style='margin-right: 10px;') Chủ căn hộ:
 									span#customer Nguyễn Viết Thịnh
 						.row
 							.col-lg-6.col-md-6
 								.building
-									b Tòa nhà:
+									b(style='margin-right: 10px;') Tòa nhà:
 									span#building Tòa nhà A
 							.col-lg-6.col-md-6
 								.building-group
-									b Khu chung cư:
+									b(style='margin-right: 10px;') Khu chung cư:
 									span#building-group Khu chung cư A
 						.row
-							.col-lg-6.col-md-6
-								label.control-label(for='status', style='display: block; text-align: left;') Trạng thái
-								select#choosen-status.form-control.chosen-status(name='status', data-placeholder='Trạng thái', style='width: 100%;')
+							.col-lg-6.col-md-6#cost-status
+								label.control-label(for='status', style='display: inline-block; text-align: left;margin-right: 10px;font-weight: bold;') Trạng thái:
+								select#choosen-status.form-control.chosen-status(name='status', data-placeholder='Trạng thái', style='width: 220px;display: inline-block;')
 						.row
 							.col-lg-12.col-md-12
 								table.table.table-responsive.table-bordered(style='margin-top: 15px;width: 100%;border: 1px solid #ddd;border-spacing: 0;border-collapse: collapse;')

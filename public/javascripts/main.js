@@ -543,13 +543,33 @@ function searchCost() {
               let apartment = document.getElementById('apartment'),
                 customer = document.getElementById('customer'),
                 building = document.getElementById('building'),
-                buildingGroup = document.getElementById('building-group');
+                buildingGroup = document.getElementById('building-group'),
+                status = document.getElementById('choosen-status');
+
+              if (status) {
+                let option1 = document.createElement('option');
+                option1.value = 0;
+                option1.textContent = 'Chưa thanh toán';
+                option1.selected = dataRes.data[0].status === 0 ? true : false;
+
+                let option2 = document.createElement('option');
+                option2.value = 0;
+                option2.textContent = 'Đã thanh toán';
+                option2.selected = dataRes.data[0].status === 0 ? false : true;
+
+                status.appendChild(option1);
+                status.appendChild(option2);
+
+                status.onchange = function() {
+                  alert(1);
+                }.bind(this);
+              }
               
               if (apartment) {
                 apartment.textContent = dataRes.data[0].apartment.apartmentName;
               }
               if (customer) {
-                customer.textContent = dataRes.data[0].apartment.firstName + ' ' + dataRes.data[0].apartment.lastName;
+                customer.textContent = dataRes.data[0].apartment.manager.firstName + ' ' + dataRes.data[0].apartment.manager.lastName;
               }
               if (building) {
                 building.textContent = dataRes.data[0].apartment.building.buildingName;

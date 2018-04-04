@@ -49,7 +49,9 @@ exports.postRegister = (req, res, next) => {
 					user.gender = req.body.gender;
 					user.status = 0;
 				
-					User.findOne({ phoneNumber: req.body.phoneNumber }, (err, existingUser) => {
+					User.findOne({ 
+						phoneNumber: req.body.phoneNumber
+					}, (err, existingUser) => {
 						if (err) { 
 							return res.json({
 								success: false,

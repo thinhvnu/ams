@@ -2,13 +2,19 @@ const Service = require('../models/Service');
 const ServiceCategory = require('../models/ServiceCategory');
 
 exports.getIndex = function (req, res) {
-	Service.find({}).exec(function (err, services) {
+	Service.find({}).sort({
+		orderDisplay: 1
+	}).exec(function (err, services) {
 		if (err) {
 			console.log('err', err)
 			return done(err);
 		}
 		
-		ServiceCategory.find({}).exec((err, serviceCategories) => {
+		ServiceCategory.find({})
+		.sort({
+			orderDisplay: 1
+		})
+		.exec((err, serviceCategories) => {
 			res.render('service/index', {
 				title: 'Tất cả dịch vụ',
 				current: ['service', 'index'],

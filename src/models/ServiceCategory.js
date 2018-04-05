@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const serviceCategorySchema = new mongoose.Schema({
     name: { type: String },
     icon: {type: String},
+    orderDisplay: {type: Number},
     status: { type: Number }, // active, inActive
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},

@@ -19,6 +19,12 @@ router.get('/history-transaction', passport.isAuthenticated, serviceController.g
 /*API update request history*/
 router.post('/history-update',passport.isAuthenticated,serviceController.updateInvoiceService);
 
+/* Update category order */
+router.post('/update-category-order', serviceController.postUpdateCategoryOrder);
+
+/* Update category order */
+router.post('/update-service-order', serviceController.postUpdateServiceOrder);
+
 /* GET services listing. */
 router.get('/:categoryId', serviceController.getIndex);
 

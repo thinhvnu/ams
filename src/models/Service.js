@@ -11,6 +11,7 @@ const serviceSchema = new mongoose.Schema({
     content: {type: String},
     price: {type: Number},
     category: {type: mongoose.Schema.Types.ObjectId, ref: 'ServiceCategory'},
+    orderDisplay: {type: Number},
     status: { type: Number }, // active, inActive
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},

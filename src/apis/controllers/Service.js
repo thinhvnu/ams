@@ -5,6 +5,8 @@ const ServiceCategory = require('./../../models/ServiceCategory');
 exports.getCategories = (req, res, next) => {
 	ServiceCategory.find({
 		status: 1
+	}).sort({
+		orderDisplay: 1
 	}).exec((err, data) => {
 		if (err) {
 			return res.json({
@@ -33,6 +35,9 @@ exports.getIndex = function (req, res) {
 		.populate({
 			path: 'category',
 			model: 'ServiceCategory'
+		})
+		.sort({
+			orderDisplay: 1
 		})
 		.exec(function (err, services) {
 			if (err) {
@@ -194,4 +199,50 @@ exports.getHistoryTransaction = (req, res, next) => {
 				message: 'Get list history transaction successfully'
 			});
 		});
+}
+
+exports.postUpdateCategoryOrder = (req, res, next) => {
+	let orderIds = JSON.parse(req.body.orderIds);
+
+	if (orderIds && orderIds instanceof Array) {
+		for (let i=0; i<orderIds.length; i++) {
+			ServiceCategory.findById(orderIds[i], (err, sc) => {
+				if (sc) {
+					sc.orderDisplay = (i + 1);
+					sc.save();
+				}
+			})
+		}
+		res.json({
+			success: true,
+			errorCode: 0
+		})
+	} else {
+		return res.json({
+			success: false
+		})
+	}
+}
+
+exports.postUpdateServiceOrder = (req, res, next) => {
+	let orderIds = JSON.parse(req.body.orderIds);
+
+	if (orderIds && orderIds instanceof Array) {
+		for (let i=0; i<orderIds.length; i++) {
+			Service.findById(orderIds[i], (err, s) => {
+				if (s) {
+					s.orderDisplay = (i + 1);
+					s.save();
+				}
+			})
+		}
+		res.json({
+			success: true,
+			errorCode: 0
+		})
+	} else {
+		return res.json({
+			success: false
+		})
+	}
 }

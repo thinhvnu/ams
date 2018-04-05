@@ -2,14 +2,52 @@ extends ../layout/main
 block stylesheets
 	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+	//- link(href='https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css', rel='stylesheet')
 block scripts
+	script(src='/javascripts/jquery-ui.min.js')
 	script(src='/javascripts/jquery.dataTables.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
 		$(function() {
-		$('.chosen-select').chosen();
-		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#service-category-list, #service-list').DataTable();
+			$('.chosen-select').chosen();
+			$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+			$('#service-category-list, #service-list').DataTable();
+			$('#service-category-list tbody').sortable({
+				axis: 'y',
+				update: function (event, ui) {
+					let orderEls = document.querySelectorAll('#service-category-list .order'), orders = [];
+					for (let i=0; i<orderEls.length; i++) {
+						orders.push(orderEls[i].getAttribute('id'));
+					}
+					// POST to server using $.post or $.ajax
+					console.log('orders', orders);
+					$.ajax({
+						data: {
+							orderIds: JSON.stringify(orders)
+						},
+						type: 'POST',
+						url: '/api/service/update-category-order'
+					});
+				}
+			});
+			$('#service-list tbody').sortable({
+				axis: 'y',
+				update: function (event, ui) {
+					let orderEls = document.querySelectorAll('#service-list .order'), orders = [];
+					for (let i=0; i<orderEls.length; i++) {
+						orders.push(orderEls[i].getAttribute('id'));
+					}
+					// POST to server using $.post or $.ajax
+					console.log('orders', orders);
+					$.ajax({
+						data: {
+							orderIds: JSON.stringify(orders)
+						},
+						type: 'POST',
+						url: '/api/service/update-service-order'
+					});
+				}
+			});
 		});
 block content
 	.row
@@ -37,7 +75,7 @@ block content
 						tbody
 							each dt, i in serviceCategories
 								tr
-									td.hidden-xs #{i + 1}
+									td.order(id=dt._id) #{i + 1}
 									td #{dt.name}
 									td
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 80px;')
@@ -65,7 +103,7 @@ block content
 						tbody
 							each dt, i in data
 								tr
-									td.hidden-xs #{i + 1}
+									td.order(id=dt._id) #{i + 1}
 									td #{dt.serviceName}
 									td
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 128px;')

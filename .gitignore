@@ -39,6 +39,11 @@
 /media/images/feedback/thumb/*
 !/media/images/feedback/origin/.gitkeep
 !/media/images/feedback/thumb/.gitkeep
+#--cost & cost type--
+/media/images/cost/origin/*
+/media/images/cost/thumb/*
+!/media/images/cost/origin/.gitkeep
+!/media/images/cost/thumb/.gitkeep
 #--store--
 /media/images/store/*
 !/media/images/store/.gitkeep

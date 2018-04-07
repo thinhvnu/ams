@@ -25,6 +25,7 @@ block content
 								tr
 									th.hidden-xs STT
 									th Tên
+									th Icon
 									th Người tạo
 									th.text-center Trạng thái
 									th.text-center.no-sort Hành động
@@ -33,6 +34,8 @@ block content
 									tr
 										td.hidden-xs #{i+1}
 										td #{dt.name}
+										td 
+											img(src=dt.iconUrl, style='width: 100px; height: 100px')
 										td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 										td.text-center #{dt.status ? 'Active' : 'Inactive'}
 										td(align='center')

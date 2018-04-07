@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 /**
- * Group  Mongo DB model
- * @name likeModel
+ * Like  Mongo DB model
+ * @name CommentModel
  */
 const likeSchema = new mongoose.Schema({
     post: {type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
+    action: { type: Number }, // 0: dislike, 1: like
     createdBy: {type: mongoose.Schema.Types.ObjectId},
     updatedBy: {type: mongoose.Schema.Types.ObjectId}
 }, {timestamps: true, usePushEach: true});

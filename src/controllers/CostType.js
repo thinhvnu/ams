@@ -29,7 +29,8 @@ exports.postCreate = function (req, res) {
 	/*
 	* Validate create cost type
 	*/ 
-  req.checkBody('name', 'Tên chi phí không được để trống').notEmpty();
+  	req.checkBody('name', 'Tên chi phí không được để trống').notEmpty();
+	req.checkBody('icon', 'Icon không được để trống').notEmpty();
 
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
@@ -48,6 +49,7 @@ exports.postCreate = function (req, res) {
 		var costType = new CostType();
 	
 		costType.name = req.body.name;
+		costType.icon = req.body.icon;
 		costType.status = req.body.status;
 		costType.createdBy = req.session.user._id;
 		// save the user
@@ -57,7 +59,7 @@ exports.postCreate = function (req, res) {
 				console.log('Error in Saving: ' + err);
 				return res.send({ "result": false });
 			}
-			return res.redirect('/cost');
+			return res.redirect('/cost-type');
 		});
 	});
 };

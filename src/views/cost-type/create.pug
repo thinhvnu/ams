@@ -1,12 +1,38 @@
 extends ../layout/main
 block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/javascripts/cropper-editor.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
 		$(function() {
-		$('.chosen-status').chosen({allow_single_deselect: true, disable_search: true});
+			$('.chosen-status').chosen({allow_single_deselect: true, disable_search: true});
 		});
+	script(type='text/javascript').
+		var iconCropperEditor = new CropperEditor({ 
+			selector : 'icon-image',
+			uploadDir: '/images/cost/',
+			prefixFileName: 'cost-type',
+			thumbWidth: 40,
+			thumbHeight: 40,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		iconCropperEditor.init();
 block content
 	.row
 		.col-lg-12
@@ -21,6 +47,26 @@ block content
 						input#name.form-control(type='text', name='name', value=data && data.name, placeholder='Nhập tên chi phí')
 						if errors && errors.name
 							.help-block #{errors.name.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.icon && 'has-error')
+						label.control-label(for='icon') Icon dịch vụ
+						if data && data.image
+							label.custom-file-upload(for='cost-icon', style='display: none;')
+								i.fa.fa-cloud-upload
+							input#icon-image.mycropper-browse-file(type='file', name='icon', disabled=true)
+							input#cropper-editor-input-icon-image(type='hidden', name='icon', value=data.icon)
+							#icon-image-preview.image-preview
+								.image-preview-item
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.icon)
+										i.fa.fa-trash
+									img(src='/media/images/cost/thumb/' + data.icon)
+						else
+							input#icon-image.mycropper-browse-file(type='file', name='icon')
+							label.custom-file-upload(for='icon-image')
+								i.fa.fa-cloud-upload
+						if errors && errors.icon
+							.help-block #{errors.icon.msg}
+				.form-group
 					.col-lg-4.col-md-4
 						label.control-label(for='status', style='display: block; text-align: left;') Status
 						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')

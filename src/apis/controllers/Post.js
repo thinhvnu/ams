@@ -11,6 +11,7 @@ exports.getIndex = function (req, res) {
 		'description': 1,
 		'content': 1,
 		'category': 1,
+		'likes': 1,
 		'comments': 1,
 		'tags': 1,
 		'seo': 1,
@@ -21,6 +22,15 @@ exports.getIndex = function (req, res) {
 		path: 'createdBy',
 		model: 'User',
 		select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+	})
+	.populate({
+		path: 'likes',
+		model: 'Like',
+		populate: {
+			path: 'createdBy',
+			model: 'User',
+			select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+		}
 	})
 	.populate({
 		path: 'comments',

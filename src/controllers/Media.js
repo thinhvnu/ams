@@ -89,7 +89,7 @@ exports.postUploadImage = (req, res, next) => {
 		// Check the file type, must be either png,jpg or jpeg
 		if (type !== null && (type.ext === 'png' || type.ext === 'jpg' || type.ext === 'jpeg')) {
 				// Assign new file name
-				filename = prefixFileName + '-' + Date.now() + type.ext;//+ '.jpg';// + type.ext;
+				filename = prefixFileName + '-' + Date.now() + '.' + type.ext;//+ '.jpg';// + type.ext;
 				originPath = path.join(__dirname, '/../..' + '/media' + uploadDir + 'origin/');
                 thumbPath = path.join(__dirname, '/../..' + '/media' + uploadDir + 'thumb/');
 				

@@ -1,0 +1,79 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/javascripts/cropper-editor.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			$('.chosen-status').chosen({allow_single_deselect: true, disable_search: true});
+		});
+	script(type='text/javascript').
+		var iconCropperEditor = new CropperEditor({ 
+			selector : 'icon-image',
+			uploadDir: '/images/cost/',
+			prefixFileName: 'cost-type',
+			thumbWidth: 40,
+			thumbHeight: 40,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		iconCropperEditor.init();
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Sửa loại chi phí
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/cost-type/update/' + data._id)
+				.form-group
+					.col-lg-8.col-md-8(class=errors && errors.name && 'has-error')
+						label.control-label(for='name') Tên chi phí
+						input#name.form-control(type='text', name='name', value=data && data.name, placeholder='Nhập tên chi phí')
+						if errors && errors.name
+							.help-block #{errors.name.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.icon && 'has-error')
+						label.control-label(for='icon') Icon chi phí
+						if data && data.icon
+							#icon-image-image-preview.image-preview
+								.image-preview-item
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.icon, onclick='deleteImage("' + data.icon + '", "icon-image")')
+										i.fa.fa-trash
+									img(src=data.iconUrl)
+							input#cropper-editor-input-icon-image(type='hidden', name='icon', value=data.icon)
+							input#icon-image.mycropper-browse-file(type='file', name='icon', disabled)
+							label.custom-file-upload(for='icon-image', style="display: none;")
+								i.fa.fa-cloud-upload
+						else
+							input#icon-image.mycropper-browse-file(type='file', name='icon')
+							label.custom-file-upload(for='icon-image')
+								i.fa.fa-cloud-upload
+						if errors && errors.icon
+							.help-block #{errors.icon.msg}
+				.form-group
+					.col-lg-4.col-md-4
+						label.control-label(for='status', style='display: block; text-align: left;') Status
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === 1) ? true : false) Active
+							option(value=0, selected=(data && data.status === 0) ? true : false) Inactive
+				hr
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')
+				

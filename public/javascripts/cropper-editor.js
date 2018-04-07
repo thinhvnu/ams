@@ -377,6 +377,7 @@ function deleteImage(fileName, inputSelector) {
         var inputEl = document.getElementById('cropper-editor-input-' + inputSelector);
         if (inputEl) {
             var inputImgVal = inputEl.value;
+            console.log('inputImgVal', inputImgVal);
             inputImgVal = inputImgVal.replace(','+fileName, '');
             inputImgVal = inputImgVal.replace(','+fileName + ',', '');
             inputImgVal = inputImgVal.replace(fileName, '');

@@ -12,5 +12,8 @@ const passport = require('../middleware/passport');
 router.get('/', passport.isAuthenticated, CostTypeController.getIndex);
 router.get('/create', passport.isAuthenticated, CostTypeController.getCreate);
 router.post('/create', passport.isAuthenticated, CostTypeController.postCreate);
+router.get('/edit/:costTypeId', passport.isAuthenticated, CostTypeController.getEdit);
+router.post('/update/:costTypeId', passport.isAuthenticated, CostTypeController.postUpdate);
+router.get('/delete/:costTypeId', passport.isAuthenticated, CostTypeController.getDelete);
 
 module.exports = router;

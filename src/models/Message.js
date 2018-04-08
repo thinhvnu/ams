@@ -9,6 +9,7 @@ const messageSchema = new mongoose.Schema({
     recipient: {type: mongoose.Schema.Types.ObjectId},
     messageContent: { type: String },
     status: { type: Number }, // active, deleted
+    isRead: { type: Boolean,  default: false },
     createdBy: {type: mongoose.Schema.Types.ObjectId},
     updatedBy: {type: mongoose.Schema.Types.ObjectId}
 }, {timestamps: true, usePushEach: true});

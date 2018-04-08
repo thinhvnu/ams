@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   role: {type: mongoose.Schema.Types.ObjectId, ref: 'Role'},
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },
-  groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'Group'}]
+  groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'ChatGroup'}]
 }, {timestamps: true, usePushEach: true});
 
 userSchema.set('toJSON', {

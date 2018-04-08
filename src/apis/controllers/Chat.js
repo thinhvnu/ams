@@ -9,50 +9,92 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
  * GET /api/chat/clients
  */
 exports.getClients = (req, res, next) => {
-    let user = req.session.user,
-        cacheKey = 'chat_clients_' + user.id;
+    try {
+        let user = req.session.user,
+            cacheKey = 'chat_clients_' + user.id;
 
-    client.get(cacheKey, (err, users) => {
-        if (err) {
-			console.log('err', err);
-			throw err;
-        }
-        
-        if (users && process.env.CACHE_ENABLE === 1) {
-			return res.json({
-                success: true,
-                errorCode: 0,
-                data: JSON.parse(users),
-                message: 'Get list clients successfully'
-            });
-		} else {
-            User.find({
-                _id: { $ne: user._id },
-                status: 1
-            }, (err, users) => {
-                if (err) {
-                    return res.json({
-                        success: false,
-                        errorCode: '0004',
-                        data: [],
-                        message: 'Error'
-                    });
-                }
-
-                res.json({
+        client.get(cacheKey, (err, users) => {
+            if (err) {
+                console.log('err', err);
+                throw err;
+            }
+            
+            if (users && process.env.CACHE_ENABLE === 1) {
+                return res.json({
                     success: true,
                     errorCode: 0,
-                    data: users,
+                    data: JSON.parse(users),
                     message: 'Get list clients successfully'
                 });
+            } else {
+                // User.find({
+                //     _id: { $ne: user._id },
+                //     status: 1
+                // }, (err, users) => {
+                //     if (err) {
+                //         return res.json({
+                //             success: false,
+                //             errorCode: '0004',
+                //             data: [],
+                //             message: 'Error'
+                //         });
+                //     }
 
-                /**
-                 * Set redis cache data
-                 */
-                client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
-            });
-        }
-    });
+                //     res.json({
+                //         success: true,
+                //         errorCode: 0,
+                //         data: users,
+                //         message: 'Get list clients successfully'
+                //     });
+
+                //     /**
+                //      * Set redis cache data
+                //      */
+                //     client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
+                // });
+                User.findById(user._id).populate('groups').exec((err, u) => {
+                    Message.find({
+                        $or:[ 
+                            {'sender': user._id},
+                            {'recipient': user._id}
+                        ]
+                    }).distinct('sender').exec((err, ids) => {
+                        if (ids && ids.length > 0) {
+                            User.find({
+                                _id: { 
+                                    $ne: user._id,
+                                    $in: ids
+                                }
+                            }).exec((err, users) => {
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    data: {
+                                        users: users,
+                                        groups: u.groups
+                                    },
+                                    message: 'Get list clients successfully'
+                                })
+                            })
+                        } else {
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                data: []
+                            })
+                        }
+                    }) 
+                })
+            }
+        });
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            data: [],
+            message: 'Server Exception'
+        })
+    }
 };
 
 exports.getMessages = (req, res, next) => {
@@ -67,7 +109,8 @@ exports.getMessages = (req, res, next) => {
                 pageSize = parseInt(req.query.pageSize);
             }
         }
-        if (req.query.isGroup) {
+        
+        if (req.query.isGroup === true || req.query.isGroup === 'true') {
             Message.find({
                 'recipient': req.params.roomId
             }, {

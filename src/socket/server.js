@@ -50,7 +50,10 @@ var ioEvents = function(io) {
                         phoneNumber: user.phoneNumber,
                         email: user.email
                     };
-                    socket.emit('join_chat_successfully', dataIdentification);
+                    setTimeout(function(){
+                        console.log('ttt');
+                        socket.emit('join_chat_successfully', dataIdentification);
+                    }, 10000);
                     socket.identification = dataIdentification;
     
                     /**

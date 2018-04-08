@@ -52,7 +52,10 @@ exports.getClients = (req, res, next) => {
                 //      */
                 //     client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
                 // });
-                User.findById(user._id).populate('groups').exec((err, u) => {
+                User.findById(user._id).populate({
+                    path: 'groups',
+                    model: 'Group'
+                }).exec((err, u) => {
                     Message.find({
                         $or:[ 
                             {'sender': user._id},

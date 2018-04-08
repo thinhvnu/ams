@@ -15,7 +15,9 @@ var ioEvents = function(io) {
          * if user loged in => exist socket.request.user
          */
         var token = socket.handshake.query.token;
+        console.log('token', token);
         if (token) {
+            console.log('has token');
             passport.jwtVerifyToken(token, user => {
         
                 if (user && user.id) {

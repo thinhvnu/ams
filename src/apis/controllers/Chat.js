@@ -69,18 +69,45 @@ exports.getClients = (req, res, next) => {
                                             recipient: user._id,
                                             isRead: false
                                         }).exec((err, c) => {
-                                            listUsers[i] = {...{messUnread: c}, ...users[i].toObject()};
+                                            listUsers[i] = {...{messUnread: c}, ...users[i].toObject(), ...{avatarUrl: users[i].avatarUrl}};
                                             count ++;
                                             if (count >= users.length) {
-                                                return res.json({
-                                                    success: true,
-                                                    errorCode: 0,
-                                                    data: {
-                                                        users: listUsers,
-                                                        groups: u.groups
-                                                    },
-                                                    message: 'Get list clients successfully'
-                                                })
+                                                if (u && u.groups && u.groups.length) {
+                                                    let groups = [], jCount = 0;
+                                                    for (let j=0; j<u.groups.length; j++) {
+                                                        Message.count({
+                                                            sender: {
+                                                                $ne: user._id
+                                                            },
+                                                            recipient: u.groups[j]._id,
+                                                            isRead: false
+                                                        }).exec((err, c) => {
+                                                            groups[j] = {...{messUnread: c}, ...u.groups[j].toObject()}
+                                                            jCount ++;
+                                                            if (jCount >= u.groups.length) {
+                                                                return res.json({
+                                                                    success: true,
+                                                                    errorCode: 0,
+                                                                    data: {
+                                                                        users: listUsers,
+                                                                        groups: groups
+                                                                    },
+                                                                    message: 'Get list clients successfully'
+                                                                })
+                                                            }
+                                                        });
+                                                    }
+                                                } else {
+                                                    return res.json({
+                                                        success: true,
+                                                        errorCode: 0,
+                                                        data: {
+                                                            users: listUsers,
+                                                            groups: u.groups
+                                                        },
+                                                        message: 'Get list clients successfully'
+                                                    })
+                                                }
                                             }
                                         })
                                     }

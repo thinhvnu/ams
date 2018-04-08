@@ -62,25 +62,37 @@ exports.getClients = (req, res, next) => {
                                 }
                             }).exec((err, users) => {
                                 let listUsers = users, count = 0;
-                                for (let i=0; i<users.length; i++) {
-                                    Message.count({
-                                        sender: users[i]._id,
-                                        recipient: user._id,
-                                        isRead: false
-                                    }).exec((err, c) => {
-                                        listUsers[i] = {...{messUnread: c}, ...users[i].toObject()};
-                                        count ++;
-                                        if (count >= users.length || true) {
-                                            return res.json({
-                                                success: true,
-                                                errorCode: 0,
-                                                data: {
-                                                    users: listUsers,
-                                                    groups: u.groups
-                                                },
-                                                message: 'Get list clients successfully'
-                                            })
-                                        }
+                                if (users.length > 0) {
+                                    for (let i=0; i<users.length; i++) {
+                                        Message.count({
+                                            sender: users[i]._id,
+                                            recipient: user._id,
+                                            isRead: false
+                                        }).exec((err, c) => {
+                                            listUsers[i] = {...{messUnread: c}, ...users[i].toObject()};
+                                            count ++;
+                                            if (count >= users.length) {
+                                                return res.json({
+                                                    success: true,
+                                                    errorCode: 0,
+                                                    data: {
+                                                        users: listUsers,
+                                                        groups: u.groups
+                                                    },
+                                                    message: 'Get list clients successfully'
+                                                })
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        data: {
+                                            users: [],
+                                            groups: u.groups
+                                        },
+                                        message: 'Get list clients successfully'
                                     })
                                 }
                             });

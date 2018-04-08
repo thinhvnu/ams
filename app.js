@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
+var sharedsession = require("express-socket.io-session");
 var flash = require('express-flash');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
@@ -71,7 +72,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(cookieParser());
 // Use session
-app.use(session({
+var ss = session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET, // realtime chat system
@@ -79,7 +80,11 @@ app.use(session({
     url: process.env.DB_ADDRESS,
     autoReconnect: true,
   })
-}));
+});
+app.use(ss);
+io.use(sharedsession(ss, {
+  autoSave:true
+})); 
 // User flash data
 app.use(flash());
 

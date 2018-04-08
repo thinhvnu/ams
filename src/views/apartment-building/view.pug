@@ -1,11 +1,28 @@
 extends ../layout/main
 block stylesheets
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.min.css')
+	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.pkgd.min.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 block scripts
+	script(src='/libs/froala-editor/js/froala_editor.min.js')
+	script(src='/libs/froala-editor/js/froala_editor.pkgd.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
 		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true })
 		$('.chosen-select-deselect, .chosen-manager, .select-recipients').chosen({ allow_single_deselect: true, disable_search: false })
+		$('#notification-content').froalaEditor({
+			heightMin: 180,
+			// Button show xs
+			toolbarButtons: [
+				'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '-',
+				'insertLink', 'insertImage', 'insertVideo', 'embedly', 'insertTable', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting', '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'
+			],
+			toolbarButtonsXS: ['bold', 'italic', 'underline', 'fontFamily', 'fontSize', '-', 'insertTable', 'insertImage', 'undo', 'redo'],
+			// Set the image upload URL.
+			imageUploadURL: '/media/upload_image',
+			// Load all images from folder
+			imageManagerLoadURL: '/media/load_images'
+		});
 block content
 	.row
 		.col-lg-2.col-md-2.col-sm-2.sub-menu
@@ -154,6 +171,10 @@ block content
 												.col-md-12
 													label.control-label(for='title') Tiêu đề
 													input#notification-title.form-control(type='text', name='title', value=data && data.title, placeholder='Nhập tiêu đề thông báo')
+											.form-group
+												.col-md-12
+													label.control-label(for='description') Nội dung tóm tắt
+													textarea#notification-description.form-control(type='text', name='description', placeholder='Nhập nội dung tóm tắt', rows='3') #{data.description ? data.description : ''}
 											.form-group
 												.col-md-12
 													label.control-label(for='content') Nội dung

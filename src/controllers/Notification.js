@@ -46,6 +46,7 @@ exports.postCreate = function (req, res) {
 			var newNotification = new Notification();
 			
 			newNotification.title = data.title;
+			newNotification.description = data.description;
 			newNotification.content = data.content;
 			if (data.sendTo instanceof Array)
 				newNotification.sendTo = data.sendTo;

@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
  */
 const notificationSchema = new mongoose.Schema({
     title: {type: String},
+    description: {type: String},
     content: {type: String},
     apartments: { type: Array },
     buildings: { type: Array },

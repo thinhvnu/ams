@@ -76,7 +76,7 @@ exports.getUpdateStatus = (req, res, next) => {
 
 	if (status && costIds) {
 		Cost.updateMany({
-			_id: {$in: [ '5ac0aa8308599958b9eb21e8', '5ac0aa4808599958b9eb21e7' ]}
+			_id: {$in: JSON.parse(costIds)}
 		}, {'$set': {
 			status: status
 		}}, function(err) {

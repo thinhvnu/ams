@@ -16,6 +16,8 @@ router.get('/clients', passport.isAuthenticated, chatController.getClients);
  */
 router.get('/messages/:roomId', passport.isAuthenticated, chatController.getMessages);
 
+router.get('/update-read-message/:roomId', passport.isAuthenticated, chatController.getUpdateReadMessage);
+
 router.post('/create-group', passport.isAuthenticated, chatController.postCreateGroup);
 
 router.post('/add-member-to-group/:groupId', passport.isAuthenticated, chatController.postAddMemberToGroup);

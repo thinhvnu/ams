@@ -1,3 +1,5 @@
+
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = require('./../../models/User');
 const ChatGroup = require('./../../models/ChatGroup');
@@ -31,29 +33,44 @@ exports.getClients = (req, res, next) => {
                     path: 'groups',
                     model: 'ChatGroup'
                 }).exec((err, u) => {
-                    Message.find({
-                        $or:[ 
-                            {'sender': user._id},
-                            {'recipient': user._id}
-                        ]
-                    }).distinct('sender').exec((err, ids) => {
-                        if (ids && ids.length > 0) {
+                    Message.aggregate([
+                        // your where clause: note="test2" and notetwo = "meet2"
+                        {
+                            $match: { 
+                                $or: [
+                                    {'sender': mongoose.Types.ObjectId(user._id)},
+                                    {'recipient': mongoose.Types.ObjectId(user._id)}
+                                ]
+                            }
+                        },
+                        {
+                            $sort: {createdAt: -1}
+                        },
+                        // group by key, score to get distinct
+                        {"$group" : {_id : {sender:"$sender", recipient:"$recipient"}}}, 
+                    ]).exec((err, data) => {
+                        if (data && data.length > 0) {
+                            let ids = [];
+                            for (let i=0; i<data.length; i++) {
+                                ids.push(data[i]._id.sender);
+                                ids.push(data[i]._id.recipient);
+                            }
                             User.find({
                                 _id: { 
                                     $ne: user._id,
-                                    $in: ids.reverse()
+                                    $in: ids
                                 }
                             }).exec((err, users) => {
                                 let listUsers = users, count = 0;
                                 for (let i=0; i<users.length; i++) {
                                     Message.count({
                                         sender: users[i]._id,
-                                        recipient: u._id
+                                        recipient: user._id,
+                                        isRead: false
                                     }).exec((err, c) => {
-                                        listUsers[i] = {...{messUnread: c}, ...users[i]}
-
+                                        listUsers[i] = {...{messUnread: c}, ...users[i].toObject()};
                                         count ++;
-                                        if (count === users.length) {
+                                        if (count >= users.length || true) {
                                             return res.json({
                                                 success: true,
                                                 errorCode: 0,
@@ -74,7 +91,7 @@ exports.getClients = (req, res, next) => {
                                 data: []
                             })
                         }
-                    }) 
+                    })
                 })
             }
         });
@@ -181,6 +198,32 @@ exports.getMessages = (req, res, next) => {
             errorCode: '111',
             data: [],
             message: 'Exception'
+        })
+    }
+}
+
+exports.getUpdateReadMessage = (req, res, next) => {
+    try {
+        Message.updateMany({'sender': req.params.roomId, 'recipient': req.session.user._id}, {isRead: true}, (err, result) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    errorCode: '112',
+                    message: 'An error happend'
+                })
+            } else {
+                return res.json({
+                    success: true,
+                    errorCode: 0,
+                    message: 'Updated successfully'
+                })
+            }
+        })
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            message: 'Server exception'
         })
     }
 }

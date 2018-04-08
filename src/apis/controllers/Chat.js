@@ -27,31 +27,6 @@ exports.getClients = (req, res, next) => {
                     message: 'Get list clients successfully'
                 });
             } else {
-                // User.find({
-                //     _id: { $ne: user._id },
-                //     status: 1
-                // }, (err, users) => {
-                //     if (err) {
-                //         return res.json({
-                //             success: false,
-                //             errorCode: '0004',
-                //             data: [],
-                //             message: 'Error'
-                //         });
-                //     }
-
-                //     res.json({
-                //         success: true,
-                //         errorCode: 0,
-                //         data: users,
-                //         message: 'Get list clients successfully'
-                //     });
-
-                //     /**
-                //      * Set redis cache data
-                //      */
-                //     client.set(cacheKey, JSON.stringify(users), 'EX', process.env.REDIS_CACHE_TIME);
-                // });
                 User.findById(user._id).populate({
                     path: 'groups',
                     model: 'ChatGroup'
@@ -66,19 +41,32 @@ exports.getClients = (req, res, next) => {
                             User.find({
                                 _id: { 
                                     $ne: user._id,
-                                    $in: ids
+                                    $in: ids.reverse()
                                 }
                             }).exec((err, users) => {
-                                return res.json({
-                                    success: true,
-                                    errorCode: 0,
-                                    data: {
-                                        users: users,
-                                        groups: u.groups
-                                    },
-                                    message: 'Get list clients successfully'
-                                })
-                            })
+                                let listUsers = users, count = 0;
+                                for (let i=0; i<users.length; i++) {
+                                    Message.count({
+                                        sender: users[i]._id,
+                                        recipient: u._id
+                                    }).exec((err, c) => {
+                                        listUsers[i] = {...{messUnread: c}, ...users[i]}
+
+                                        count ++;
+                                        if (count === users.length) {
+                                            return res.json({
+                                                success: true,
+                                                errorCode: 0,
+                                                data: {
+                                                    users: listUsers,
+                                                    groups: u.groups
+                                                },
+                                                message: 'Get list clients successfully'
+                                            })
+                                        }
+                                    })
+                                }
+                            });
                         } else {
                             return res.json({
                                 success: true,

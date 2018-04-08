@@ -54,7 +54,7 @@ exports.getClients = (req, res, next) => {
                 // });
                 User.findById(user._id).populate({
                     path: 'groups',
-                    model: 'Group'
+                    model: 'ChatGroup'
                 }).exec((err, u) => {
                     Message.find({
                         $or:[ 

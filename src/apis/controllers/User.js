@@ -34,7 +34,7 @@ exports.postRegister = (req, res, next) => {
 						return res.json({
 							success: false,
 							errorCode: '013',
-							message: 'Có lỗi xảy ra'
+							message: 'Có lỗi xảy ra' + JSON.stringify(err)
 						});
 					}
 					const user = new User();

@@ -31,7 +31,16 @@ postSchema.set('toJSON', {
 });
 // Get full image url with media config
 postSchema.virtual('imageUrl').get(function () {
-    return process.env.MEDIA_URL + '/images/post/thumb/' + this.image;
+    if (this.images) {
+        let imgs = this.images.split(','), urls = '';
+
+        for (let i=0; i<imgs.length; i++) {
+            urls += process.env.MEDIA_URL + '/images/post/origin/' + imgs[i] + ',';
+        }
+
+        return urls;
+    }
+    return '';
 });
 
 const Post = mongoose.model('Post', postSchema);

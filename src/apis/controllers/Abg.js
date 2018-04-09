@@ -16,7 +16,7 @@ exports.getList = (req, res, next) => {
         return res.json({
             success: true,
             errorCode: 0,
-            data: abs
+            data: abgs
         });
     })
 }

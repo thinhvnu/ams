@@ -7,7 +7,7 @@ var abgController = require('./../controllers/Abg');
  */
 const passport = require('./../../middleware/apiPassport');
 
-
+router.get('/list', abgController.getList);
 /* GET list building. */
 router.get('/list-building/:abgId', abgController.getListBuilding);
 /* POST submit data. */

@@ -1,3 +1,4 @@
+const Apartment = require('../models/Apartment');
 const ApartmentBuilding = require('../models/ApartmentBuilding');
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const User = require('../models/User');
@@ -124,6 +125,74 @@ exports.postCreate = (req, res, next) => {
 	});
 }
 
+exports.getEdit = (req, res, next) => {
+	ApartmentBuildingGroup.find({}, (err, abgs) => {
+		User.find({}, (err, users) => {
+			res.render('apartment-building/create', {
+				title: 'Thêm tòa nhà',
+				current: ['apartment-building', 'create'],
+				users: users,
+				abgs: abgs
+			});
+		});
+	});
+}
+
+exports.postUpdate = (req, res, next) => {
+	req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
+	req.checkBody('apartmentBuildingGroup', 'Chọn khu chung cư').notEmpty();
+	req.checkBody('floor', 'Số tầng của tòa nhà ?').notEmpty();
+	req.checkBody('manager', 'Chọn quản lý').notEmpty();
+	
+	req.getValidationResult().then(function (errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.mapped();
+
+			ApartmentBuildingGroup.find({}, (err, abgs) => {
+				User.find({}, (err, users) => {
+					res.render('apartment-building/create', {
+						title: 'Thêm tòa nhà',
+						users: users,
+						abgs: abgs,
+						errors: errors,
+						data: req.body
+					});
+				});
+			});
+		} else {
+			const apartmentBuilding = new ApartmentBuilding();
+			apartmentBuilding.buildingName = req.body.buildingName;
+			apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
+			apartmentBuilding.floor = req.body.floor;
+			apartmentBuilding.area = req.body.area;
+			apartmentBuilding.manager = req.body.manager;
+			apartmentBuilding.status = req.body.status;
+			apartmentBuilding.createdBy = req.session.user._id;
+			// apartmentBuilding.updatedBy = req.session.user._id;
+
+			apartmentBuilding.save((err, ab) => {
+				if (err) {
+					console.log('error create new abg', err);
+					return next(err);
+				}
+				/**
+				 * Save to apartment building group
+				 */
+				ApartmentBuildingGroup.findById(ab.apartmentBuildingGroup, (err, abg) => {
+					if (abg) {
+						abg.apartmentBuildings.push(ab._id);
+						abg.save();
+					}
+				})
+
+				client.del('get_list_abs', () => {
+					res.redirect('/apartment-building');
+				})
+			});
+		}
+	});
+}
+
 /**
  * 
  * @param {*} req : abgId
@@ -195,4 +264,29 @@ exports.getView = (req, res, next) => {
 				});
 		}
 	});
+}
+
+exports.getDelete = (req, res, nex) => {
+	ApartmentBuilding.findOne({ _id: req.params.buildingId }, (err, building) => {
+	  if (err || !building) {
+		req.flash('errors', 'Xóa tòa nhà không thành công');
+		return res.redirect('/apartment-building');
+	  } else {
+		ApartmentBuildingGroup.findById(building.apartmentBuildingGroup, (err, abg) => {
+			if (abg) {
+				abg.apartmentBuildings.push(building._id);
+				abg.save((err, result) => {
+					Apartment.deleteMany({_id: {$in: building.apartments}});
+					building.remove((err, r) => {
+						req.flash('success', 'Xóa tòa nhà thành công');
+						return res.redirect('/apartment-building');
+					})
+				});
+			} else {
+				req.flash('errors', 'Xóa tòa nhà không thành công');
+				return res.redirect('/apartment-building');
+			}
+		})
+	  }
+	})
 }

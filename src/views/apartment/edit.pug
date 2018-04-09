@@ -1,0 +1,64 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+		$('.chosen-manager, .chosen-abg, .chosen-ab').chosen();
+		$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Chỉnh sửa dữ liệu căn hộ
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/apartment/update/' + data._id)
+				.form-group
+					.col-lg-6(class=errors && errors.apartmentName && 'has-error')
+						label.control-label(for='apartmentName') Tên căn hộ (*)
+						input#ab-name.form-control(type='text', name='apartmentName', value=data && data.apartmentName, placeholder='Nhập tên căn hộ')
+						if errors && errors.apartmentName
+							.help-block #{errors.apartmentName.msg}
+					.col-lg-6(class=errors && errors.area && 'has-error')
+						label.control-label(for='area', style='display: block; text-align: left;') Diện tích
+						input.form-control.building-area(name='area', data-placeholder='Diện tích (m2)', style='width: 100%;', value=(data && data.area) ? data.area : '')
+						if errors && errors.area
+							.help-block #{errors.area.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư (*)
+						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.building.apartmentBuildingGroup._id) === JSON.stringify(abg._id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuildingGroup
+							.help-block #{errors.apartmentBuildingGroup.msg}
+					.col-lg-6(class=errors && errors.apartmentBuilding && 'has-error')
+						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà
+						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;')
+							option(value='') Chọn tòa nhà
+							each ab in abs
+								option(value=ab._id, selected=(data && JSON.stringify(data.building._id) === JSON.stringify(ab.id)) ? true : false) #{ab.buildingName}
+						if errors && errors.apartmentBuilding
+							.help-block #{errors.apartmentBuilding.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.manager && 'has-error')
+						label.control-label(for='manager', style='display: block; text-align: left;') Chủ căn hộ
+						select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
+							option(value='') Chủ căn hộ
+							each user in users
+								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.firstName + ' ' + user.lastName}
+						if errors && errors.manager
+							.help-block #{errors.manager.msg}
+					.col-lg-6
+						label.control-label(for='status', style='display: block; text-align: left;') Trạng thái
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === '1') ? true : false) Active
+							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				hr
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')

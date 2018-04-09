@@ -11,8 +11,8 @@ block content
 			ul.sub-menu-item.nav.nav-tabs
 				li.active
 					a(data-toggle='tab', href='#details') Thông tin
-				li
-					a(data-toggle='tab', href='#notification') Thông báo
+				//- li
+				//- 	a(data-toggle='tab', href='#notification') Thông báo
 		.col-lg-10.col-md-10.col-sm-10
 			.tab-content
 				#details.tab-pane.fade.in.active
@@ -141,35 +141,35 @@ block content
 						li
 							a(data-toggle='tab', href='#addExist') Chọn từ danh sách
 					.tab-content
-						#newNotification.tab-pane.fade.in.active
-							.noti-devider
-							header.noti-header
-								.icon
-									i.fa.fa-commenting-o
-								h5.detail-title &nbsp;Nhập nội dung thông báo
-							.body
-								.row
-									.col-md-8
-										form.form-horizontal(method='POST', action='/apartment-building-group/create')
-											.form-group
-												.col-md-12
-													label.control-label(for='title') Tiêu đề
-													input#notification-title.form-control(type='text', name='title', value=data && data.title, placeholder='Nhập tiêu đề thông báo')
-											.form-group
-												.col-md-12
-													label.control-label(for='content') Nội dung
-													textarea#notification-content.form-control(type='text', name='content', placeholder='Nhập nội dung thông báo', rows='3') #{data.content ? data.content : ''}
-											.form-group
-												.col-md-12
-													label.control-label(for='sendTo', style='display: block;text-align: left;') Gửi tới
-													select.select-recipients.form-control(multiple=true, name='sendTo', data-placeholder='Send to', style='width: 100%;display: block;')
-														each dt in data.apartmentBuildings
-															option(value=dt._id) #{dt.buildingName}
+						//- #newNotification.tab-pane.fade.in.active
+						//- 	.noti-devider
+						//- 	header.noti-header
+						//- 		.icon
+						//- 			i.fa.fa-commenting-o
+						//- 		h5.detail-title &nbsp;Nhập nội dung thông báo
+						//- 	.body
+						//- 		.row
+						//- 			.col-md-8
+						//- 				form.form-horizontal(method='POST', action='/apartment-building-group/create')
+						//- 					.form-group
+						//- 						.col-md-12
+						//- 							label.control-label(for='title') Tiêu đề
+						//- 							input#notification-title.form-control(type='text', name='title', value=data && data.title, placeholder='Nhập tiêu đề thông báo')
+						//- 					.form-group
+						//- 						.col-md-12
+						//- 							label.control-label(for='content') Nội dung
+						//- 							textarea#notification-content.form-control(type='text', name='content', placeholder='Nhập nội dung thông báo', rows='3') #{data.content ? data.content : ''}
+						//- 					.form-group
+						//- 						.col-md-12
+						//- 							label.control-label(for='sendTo', style='display: block;text-align: left;') Gửi tới
+						//- 							select.select-recipients.form-control(multiple=true, name='sendTo', data-placeholder='Send to', style='width: 100%;display: block;')
+						//- 								each dt in data.apartmentBuildings
+						//- 									option(value=dt._id) #{dt.buildingName}
 
-									.col-md-4
-								hr
-								.btn.btn-success
-									| Gửi thông báo &nbsp;
+						//- 			.col-md-4
+						//- 		hr
+						//- 		.btn.btn-success
+						//- 			| Gửi thông báo &nbsp;
 										
 
 

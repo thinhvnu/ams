@@ -46,6 +46,8 @@ exports.postRegister = (req, res, next) => {
 					user.phoneNumber = req.body.phoneNumber;
 					user.role = role ? role.id : '';
 					user.password = req.body.password;
+					if (req.body.building)
+						user.building = req.body.building;
 					user.gender = req.body.gender;
 					user.status = 0;
 				

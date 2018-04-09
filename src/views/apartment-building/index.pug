@@ -45,5 +45,5 @@ block content
 									em.fa.fa-eye
 								a(href='/apartment-building/edit/' + dt._id).u-action.btn.btn-success
 									em.fa.fa-pencil
-								a(href='/apartment-building/delete/' + dt._id).u-action.btn.btn-danger
+								a(href='/apartment-building/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa tòa nhà này không?", "/apartment-building/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
 									em.fa.fa-trash

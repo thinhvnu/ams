@@ -274,7 +274,7 @@ exports.getDelete = (req, res, nex) => {
 	  } else {
 		ApartmentBuildingGroup.findById(building.apartmentBuildingGroup, (err, abg) => {
 			if (abg) {
-				abg.apartmentBuildings.push(building._id);
+				abg.apartmentBuildings.pull(building._id);
 				abg.save((err, result) => {
 					Apartment.deleteMany({_id: {$in: building.apartments}});
 					building.remove((err, r) => {

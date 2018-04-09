@@ -11,44 +11,79 @@ exports.postCreateNew = (req, res, next) => {
                 data: req.body
             });
 		} else {
-			var data = req.body;
-			var newLike = new Like();
+
+
+            var data = req.body;
             
-            newLike.post = data.postId
-            newLike.action = data.action; // 0: dislike, 1: like
-            newLike.createdBy = req.session.user._id;
-            
-			newLike.save(function (err, like) {
-				if (err) {
+            Like.findOne({post:data.postId,createdBy:req.session.user._id}).exec(function(err,result){
+                if (err) {
 					return res.json({
                         success: false,
                         errorCode: '010',
-                        message: errors,
+                        message: err,
                         data: req.body
                     })
-				} else {
-                    Post.findById(data.postId, (err, post) => {
-                        // console.log("postId",data.postId);
-                        // console.log("post--------------",post);
-
-                        if (err || !post) {
+                }else if(result){
+                    console.log("result",result);
+                    result.action = data.postId;
+                    
+                    result.save(function (err, like) {
+                        if (err || !like) {
                             return res.json({
                                 success: false,
-                                errorCode: '121',
-                                message: 'Comment failed'
-                            });
-                        }
-                        post.likes.push(like._id);
-                        post.save((err, p) => {
+                                errorCode: '010',
+                                message: err,
+                                data: req.body
+                            })
+                        } else {
                             return res.json({
                                 success: true,
                                 errorCode: 0,
-                                message: 'Comment successfully'
+                                message: 'like-unlike successfully'
                             });
-                        });
+                        }
+                    });
+                }else{
+                    var newLike = new Like();
+            
+                    newLike.post = data.postId
+                    newLike.action = data.action; // 0: dislike, 1: like
+                    newLike.createdBy = req.session.user._id;
+                    
+                    newLike.save(function (err, like) {
+                        if (err) {
+                            return res.json({
+                                success: false,
+                                errorCode: '010',
+                                message: errors,
+                                data: req.body
+                            })
+                        } else {
+                            Post.findById(data.postId, (err, post) => {
+                                // console.log("postId",data.postId);
+                                // console.log("post--------------",post);
+        
+                                if (err || !post) {
+                                    return res.json({
+                                        success: false,
+                                        errorCode: '121',
+                                        message: 'like failed'
+                                    });
+                                }
+                                post.likes.push(like._id);
+                                post.save((err, p) => {
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        message: 'like-unlike successfully'
+                                    });
+                                });
+                            })
+                        }
                     })
-				}
-			})
+                }
+            });
+			
 		}
 	});
 }

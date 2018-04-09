@@ -48,6 +48,7 @@ exports.postRegister = (req, res, next) => {
 					user.password = req.body.password;
 					if (req.body.building)
 						user.building = req.body.building;
+					user.birthDay = req.body.birthDay;
 					user.gender = req.body.gender;
 					user.status = 0;
 				

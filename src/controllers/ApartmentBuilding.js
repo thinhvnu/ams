@@ -127,14 +127,17 @@ exports.postCreate = (req, res, next) => {
 
 exports.getEdit = (req, res, next) => {
 	ApartmentBuildingGroup.find({}, (err, abgs) => {
-		User.find({}, (err, users) => {
-			res.render('apartment-building/create', {
-				title: 'Thêm tòa nhà',
-				current: ['apartment-building', 'create'],
-				users: users,
-				abgs: abgs
+		ApartmentBuilding.findById(req.params.buildingId).exec((err, building) => {
+			User.find({}, (err, users) => {
+				res.render('apartment-building/edit', {
+					title: 'Sửa thông tin tòa nhà',
+					current: ['apartment-building', 'edit'],
+					users: users,
+					abgs: abgs,
+					data: building
+				});
 			});
-		});
+		})
 	});
 }
 
@@ -148,17 +151,19 @@ exports.postUpdate = (req, res, next) => {
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
 
-			ApartmentBuildingGroup.find({}, (err, abgs) => {
-				User.find({}, (err, users) => {
-					res.render('apartment-building/create', {
-						title: 'Thêm tòa nhà',
-						users: users,
-						abgs: abgs,
-						errors: errors,
-						data: req.body
-					});
-				});
-			});
+			// ApartmentBuildingGroup.find({}, (err, abgs) => {
+			// 	User.find({}, (err, users) => {
+			// 		res.render('apartment-building/create', {
+			// 			title: 'Thêm tòa nhà',
+			// 			users: users,
+			// 			abgs: abgs,
+			// 			errors: errors,
+			// 			data: req.body
+			// 		});
+			// 	});
+			// });
+			req.flash('errors', 'Cập nhật dữ liệu không thành công' + JSON.stringify(errors));
+			return res.redirect('/apartment-building/edit/' + req.params.buildingId);
 		} else {
 			const apartmentBuilding = new ApartmentBuilding();
 			apartmentBuilding.buildingName = req.body.buildingName;
@@ -276,11 +281,12 @@ exports.getDelete = (req, res, nex) => {
 			if (abg) {
 				abg.apartmentBuildings.pull(building._id);
 				abg.save((err, result) => {
-					Apartment.deleteMany({_id: {$in: building.apartments}});
-					building.remove((err, r) => {
-						req.flash('success', 'Xóa tòa nhà thành công');
-						return res.redirect('/apartment-building');
-					})
+					Apartment.deleteMany({_id: {$in: building.apartments}}, (err, r) => {
+						building.remove((err, r) => {
+							req.flash('success', 'Xóa tòa nhà thành công');
+							return res.redirect('/apartment-building');
+						})
+					});
 				});
 			} else {
 				req.flash('errors', 'Xóa tòa nhà không thành công');

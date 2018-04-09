@@ -59,7 +59,7 @@ exports.postRegister = (req, res, next) => {
 							return res.json({
 								success: false,
 								errorCode: '013',
-								message: 'Có lỗi xảy ra'
+								message: 'Có lỗi xảy ra' + JSON.stringify(err)
 							});
 						}
 						if (existingUser) {
@@ -74,7 +74,7 @@ exports.postRegister = (req, res, next) => {
 								return res.json({
 									success: false,
 									errorCode: '013',
-									message: 'Có lỗi xảy ra'
+									message: 'Có lỗi xảy ra' + JSON.stringify(err)
 								});
 							}
 							return res.json({

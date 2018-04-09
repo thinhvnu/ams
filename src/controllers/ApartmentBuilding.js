@@ -165,34 +165,37 @@ exports.postUpdate = (req, res, next) => {
 			req.flash('errors', 'Cập nhật dữ liệu không thành công' + JSON.stringify(errors));
 			return res.redirect('/apartment-building/edit/' + req.params.buildingId);
 		} else {
-			const apartmentBuilding = new ApartmentBuilding();
-			apartmentBuilding.buildingName = req.body.buildingName;
-			apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
-			apartmentBuilding.floor = req.body.floor;
-			apartmentBuilding.area = req.body.area;
-			apartmentBuilding.manager = req.body.manager;
-			apartmentBuilding.status = req.body.status;
-			apartmentBuilding.createdBy = req.session.user._id;
-			// apartmentBuilding.updatedBy = req.session.user._id;
+			ApartmentBuilding.findById(req.params.buildingId).exec((err, apartmentBuilding) => {
+				if (apartmentBuilding) {
+					apartmentBuilding.buildingName = req.body.buildingName;
+					apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
+					apartmentBuilding.floor = req.body.floor;
+					apartmentBuilding.area = req.body.area;
+					apartmentBuilding.manager = req.body.manager;
+					apartmentBuilding.status = req.body.status;
+					apartmentBuilding.createdBy = req.session.user._id;
+					// apartmentBuilding.updatedBy = req.session.user._id;
 
-			apartmentBuilding.save((err, ab) => {
-				if (err) {
-					console.log('error create new abg', err);
-					return next(err);
+					apartmentBuilding.save((err, ab) => {
+						if (err) {
+							console.log('error create new abg', err);
+							return next(err);
+						}
+						/**
+						 * Save to apartment building group
+						 */
+						ApartmentBuildingGroup.findById(ab.apartmentBuildingGroup, (err, abg) => {
+							if (abg) {
+								abg.apartmentBuildings.push(ab._id);
+								abg.save();
+							}
+						})
+
+						client.del('get_list_abs', () => {
+							res.redirect('/apartment-building');
+						})
+					});
 				}
-				/**
-				 * Save to apartment building group
-				 */
-				ApartmentBuildingGroup.findById(ab.apartmentBuildingGroup, (err, abg) => {
-					if (abg) {
-						abg.apartmentBuildings.push(ab._id);
-						abg.save();
-					}
-				})
-
-				client.del('get_list_abs', () => {
-					res.redirect('/apartment-building');
-				})
 			});
 		}
 	});

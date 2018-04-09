@@ -138,15 +138,16 @@ block content
 									| <div class="row">
 								.col-md-4.col-lg-4
 									.apartment-item.well
-										.a-name #{dt.apartmentName}
-										.a-content
-											.a-content-item #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Trống'}
-											.a-content-item
-												i.fa.fa-area-chart
-												| #{dt.area ? dt.area : 0} (m2)
-											.a-content-item
-												i.fa.fa-users
-												| #{dt.users ? dt.users.length : 0}
+										a(href='/apartment/view/' + dt._id, target='_blank')
+											.a-name #{dt.apartmentName}
+											.a-content
+												.a-content-item #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Trống'}
+												.a-content-item
+													i.fa.fa-area-chart
+													| #{dt.area ? dt.area : 0} (m2)
+												.a-content-item
+													i.fa.fa-users
+													| #{dt.users ? dt.users.length : 0}
 										
 								if (i % 3 === 2 || i === data.apartments.length - 1)
 									| </div>

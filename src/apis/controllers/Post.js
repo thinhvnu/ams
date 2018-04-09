@@ -21,17 +21,17 @@ exports.getIndex = function (req, res) {
 	.populate({
 		path: 'createdBy',
 		model: 'User',
-		select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+		select: { '_id': 1, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
 	})
-	.populate({
-		path: 'likes',
-		model: 'Like',
-		populate: {
-			path: 'createdBy',
-			model: 'User',
-			select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
-		}
-	})
+	// .populate({
+	// 	path: 'likes',
+	// 	model: 'Like',
+	// 	populate: {
+	// 		path: 'createdBy',
+	// 		model: 'User',
+	// 		select: { '_id': 0, 'avatar': 1, 'userName': 1, 'firstName': 1, 'lastName': 1 }
+	// 	}
+	// })
 	.populate({
 		path: 'comments',
 		model: 'Comment',

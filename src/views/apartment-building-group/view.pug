@@ -106,7 +106,8 @@ block content
 									| <div class="row">
 								.col-md-6.col-lg-6
 									.apartment-building-item.well
-										.building-name.text-center(style='font-weight: bold;') #{dt.buildingName}
+										.building-name.text-center(style='font-weight: bold;')
+											a(href='/apartment-building/view/' + dt._id, target='_blank') #{dt.buildingName}
 										.building-content
 											.row
 												.col-md-6.col-lg-6

@@ -6,7 +6,7 @@ exports.getIndex = function (req, res) {
 		'_id': 1,
 		'title': 1,
 		'alias': 1,
-		'image': 1,
+		'images': 1,
 		'imageUrl': 1,
 		'description': 1,
 		'content': 1,

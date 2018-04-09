@@ -7,7 +7,7 @@ var LikeController = require('./../controllers/Like');
  */
 const passport = require('./../../middleware/apiPassport');
 
-/* API create new post */
+/* API like post */
 router.post('/create-new', passport.isAuthenticated, LikeController.postCreateNew);
 
 

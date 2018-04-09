@@ -27,7 +27,10 @@ exports.postCreateNew = (req, res, next) => {
                         data: req.body
                     })
 				} else {
-                    Like.findById(data.postId, (err, post) => {
+                    Post.findById(data.postId, (err, post) => {
+                        // console.log("postId",data.postId);
+                        // console.log("post--------------",post);
+
                         if (err || !post) {
                             return res.json({
                                 success: false,

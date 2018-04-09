@@ -167,14 +167,20 @@ exports.postUpdate = (req, res, next) => {
 		} else {
 			ApartmentBuilding.findById(req.params.buildingId).exec((err, apartmentBuilding) => {
 				if (apartmentBuilding) {
+					ApartmentBuildingGroup.findById(apartmentBuilding.apartmentBuildingGroup, (err, abg) => {
+						if (abg) {
+							abg.apartmentBuildings.pull(apartmentBuilding._id);
+							abg.save();
+						}
+					})
 					apartmentBuilding.buildingName = req.body.buildingName;
 					apartmentBuilding.apartmentBuildingGroup = req.body.apartmentBuildingGroup;
 					apartmentBuilding.floor = req.body.floor;
 					apartmentBuilding.area = req.body.area;
 					apartmentBuilding.manager = req.body.manager;
 					apartmentBuilding.status = req.body.status;
-					apartmentBuilding.createdBy = req.session.user._id;
-					// apartmentBuilding.updatedBy = req.session.user._id;
+					// apartmentBuilding.createdBy = req.session.user._id;
+					apartmentBuilding.updatedBy = req.session.user._id;
 
 					apartmentBuilding.save((err, ab) => {
 						if (err) {

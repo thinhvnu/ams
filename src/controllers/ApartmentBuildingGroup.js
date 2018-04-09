@@ -1,5 +1,6 @@
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const ApartmentBuilding = require('../models/ApartmentBuilding');
+const Apartment = require('../models/Apartment');
 const User = require('../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
@@ -302,13 +303,22 @@ exports.getView = (req, res, next) => {
 }
 
 exports.getDelete = (req, res, next) => {
-	ApartmentBuildingGroup.remove({_id: req.params.abgId}, (err) => {
+	ApartmentBuildingGroup.findOne({_id: req.params.abgId}, (err, abg) => {
 		if (err) {
 			req.flash('errors', 'Có lỗi xảy ra');
+			return res.redirect('/apartment-building-group');
 		} else {
-			req.flash('success', 'Xóa thành công');
+			ApartmentBuilding.find({apartmentBuildingGroup: abg._id}).exec((err, buildings) => {
+				for (let i=0; i<buildings.length; i++) {
+					Apartment.deleteMany({building: {$in: buildings[i].apartments}}, (err, r) => {
+						buildings[i].remove();
+					});
+				}
+			})
+			abg.remove((err, result) => {
+				req.flash('success', 'Xóa thành công');
+				res.redirect('/apartment-building-group');
+			})
 		}
-		
-		return res.redirect('/apartment-building-group');
 	})
 }

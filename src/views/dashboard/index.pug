@@ -31,7 +31,7 @@ block content
 						tr
 							td.hidden-xs #{i+1}
 							td #{nt.notification.title}
-							td #{nt.sendTo.firstName + ' ' + nt.sendTo.lastName}
+							td #{nt.sendTo ? (nt.sendTo.firstName + ' ' + nt.sendTo.lastName) : ''}
 							td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
 							td #{nt.apartment.apartmentName}
 							td #{nt.building.buildingName}

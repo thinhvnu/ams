@@ -66,10 +66,8 @@ exports.postCreate = function (req, res) {
     newSlider.name = req.body.name;
     newSlider.image = req.body.image;
     newSlider.link = req.body.link;
-    if (req.body.apartmentBuildingGroup)
-      newSlider.buildingGroup = req.body.apartmentBuildingGroup;
-    if (req.body.apartmentBuilding)
-      newSlider.building = req.body.apartmentBuilding;
+    newSlider.buildingGroup = req.body.apartmentBuildingGroup || null;
+    newSlider.building = req.body.apartmentBuilding || null;
     newSlider.status = req.body.status;
     // save the user
     newSlider.save(function (err) {
@@ -112,10 +110,8 @@ exports.postUpdate = (req, res, nex) => {
       slider.name = req.body.name;
       slider.image = req.body.image;
       slider.link = req.body.link;
-      if (req.body.apartmentBuildingGroup)
-        slider.buildingGroup = req.body.apartmentBuildingGroup;
-      if (req.body.apartmentBuilding)
-        slider.building = req.body.apartmentBuilding;
+      slider.buildingGroup = req.body.apartmentBuildingGroup || null;
+      slider.building = req.body.apartmentBuilding || null;
       slider.status = req.body.status;
       // save the user
       slider.save(function (err) {

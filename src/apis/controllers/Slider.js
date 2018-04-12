@@ -25,7 +25,7 @@ exports.getHomeSlider = function (req, res) {
 				if (user) {
 					let sliderIn = [];
 					if (user.apartments && user.apartments.length > 0) {
-						for(let i=0; i<apartments; i++) {
+						for(let i=0; i<user.apartments.length; i++) {
 							sliderIn.push(apartments[i].building);
 						}
 					} else {

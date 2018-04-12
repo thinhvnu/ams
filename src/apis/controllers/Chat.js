@@ -243,21 +243,41 @@ exports.getMessages = (req, res, next) => {
 
 exports.getUpdateReadMessage = (req, res, next) => {
     try {
-        Message.updateMany({'sender': req.params.roomId, 'recipient': req.session.user._id}, {isRead: true}, (err, result) => {
-            if (err) {
-                return res.json({
-                    success: false,
-                    errorCode: '112',
-                    message: 'An error happend'
-                })
-            } else {
-                return res.json({
-                    success: true,
-                    errorCode: 0,
-                    message: 'Updated successfully'
-                })
-            }
-        })
+        if (req.query.isGroup) {
+            Message.updateMany({'recipient': req.params.roomId, 'sender': {
+                $ne: req.session.user._id
+            }}, {isRead: true}, (err, result) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                        errorCode: '112',
+                        message: 'An error happend'
+                    })
+                } else {
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        message: 'Updated successfully'
+                    })
+                }
+            })
+        } else {
+            Message.updateMany({'sender': req.params.roomId, 'recipient': req.session.user._id}, {isRead: true}, (err, result) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                        errorCode: '112',
+                        message: 'An error happend'
+                    })
+                } else {
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        message: 'Updated successfully'
+                    })
+                }
+            })
+        }
     } catch (e) {
         return res.json({
             success: false,

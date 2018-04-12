@@ -4,6 +4,9 @@ const Post = require('./../../models/Post');
 exports.getCategory = (req, res, next) => {
 	PostCategory.find({
 		status: 1
+	}).sort({
+		orderDisplay: 1,
+		updatedAt: -1
 	}).exec((err, postCategories) => {
 		if (err) {
 			return res.json({

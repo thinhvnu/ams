@@ -19,10 +19,18 @@
     a(href="/apartment")
         i.icon.fa.fa-home
         span.link-title Căn hộ
+.menu-item(class=(current && current[0]=='post-category') && 'active')
+    a(href="/post-category")
+        i.icon.fa.fa-users
+        span.link-title Cộng đồng
 .menu-item(class=(current && current[0]=='service') && 'active')
     a(href="/service")
         i.icon.fa.fa-coffee
         span.link-title Dịch vụ
+.menu-item(class=(current && current[0]=='service-request') && 'active')
+    a(href="/service-request")
+        i.icon.fa.fa-phone
+        span.link-title Yêu cầu dịch vụ
 .menu-item(class=(current && current[0]=='utility') && 'active')
     a(href="/utility")
         i.icon.fa.fa-cogs

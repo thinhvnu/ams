@@ -5,7 +5,7 @@ const User = require('./../models/User');
  * Login Required middleware.
  */
 exports.isAuthenticated = (req, res, next) => {
-    if (req.session.user && true) {
+    if (req.session.user && false) {
         console.log('verify successfully');
         res.locals.user = req.session.user;
         next();

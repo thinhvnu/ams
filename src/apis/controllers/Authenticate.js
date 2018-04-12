@@ -26,7 +26,7 @@ exports.accessToken = (req, res, next) => {
       return res.json({
           success: false,
           errorCode: '001',
-          message: 'Email or password is empty'
+          message: 'Tên đăng nhập và mật khẩu không được để trống'
       })
     } else {
       User.findOne({
@@ -34,8 +34,18 @@ exports.accessToken = (req, res, next) => {
       }, (err, user) => {
         if (err) throw err;
         if (!user) {
-          return res.json({ success: false, errorCode: 002, message: 'Authentication failed. User not found.' });
+          return res.json({ success: false, errorCode: 002, message: 'Tài khoản không tồn tại' });
         } else {
+          /**
+           * Case user inactive
+           */
+          if (user.status === 0) {
+            return res.json({
+                success: false,
+                errorCode: '002',
+                message: 'Tài khoản chưa kích hoạt'
+            })
+          }
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
             if (err) { 

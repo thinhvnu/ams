@@ -20,10 +20,11 @@ block content
 			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
-						th.hidden-xs ID
-						th Name
-						th Image
-						th Link
+						th.hidden-xs STT
+						th Tên
+						th Ảnh
+						th Tòa nhà
+						th Khu chung cư
 						th.text-center Status
 						th.text-center.no-sort
 							em.fa.fa-cog
@@ -34,7 +35,8 @@ block content
 							td #{slider.name}
 							td
 								img.img-responsive(src=process.env.MEDIA_URL + '/images/slider/thumb/' + slider.image, style='width: 128px;')
-							td #{slider.link}
+							td #{slider.building ? slider.building.buildingName : ''}
+							td #{slider.buildingGroup ? slider.buildingGroup.abgName : ''}
 							td.text-center #{slider.status ? 'Public' : 'Draft'}
 							td(align='center')
 								a(href='/slider/edit/' + slider._id).u-action.btn.btn-success

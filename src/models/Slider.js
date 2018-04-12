@@ -8,6 +8,8 @@ const sliderSchema = new mongoose.Schema({
     name: {type: String},
     image: {type: String},
     link: {type: String},
+    building: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'},
+    buildingGroup: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuildingGroup'},
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: Boolean,
 }, {timestamps: true});

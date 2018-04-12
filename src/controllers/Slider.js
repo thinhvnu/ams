@@ -1,8 +1,19 @@
-var Slider = require('../models/Slider');
+const Slider = require('../models/Slider');
+const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 
 // Get all images slider
 exports.getIndex = function (req, res) {
-	Slider.find().exec(function (err, sliders) {
+  Slider.find({})
+  .populate({
+    path: 'buildingGroup',
+    model: 'ApartmentBuildingGroup'
+  })
+  .populate({
+    path: 'building',
+    model: 'ApartmentBuilding'
+  }).sort({
+    updatedAt: -1
+  }).exec(function (err, sliders) {
 		if (err) {
 			console.log('err', err)
 			return done(err);
@@ -17,10 +28,15 @@ exports.getIndex = function (req, res) {
 };
 
 exports.getCreate = function (req, res) {
-	res.render('slider/create', {
-    title: 'Thêm ảnh slide mới',
-    current: ['slider', 'create'],
-  });
+  ApartmentBuildingGroup.find({
+    status: 1
+  }).exec((err, abgs) => {
+    res.render('slider/create', {
+      title: 'Thêm ảnh slide mới',
+      current: ['slider', 'create'],
+      abgs: abgs
+    });
+  })
 };
 
 exports.postCreate = function (req, res) {
@@ -50,6 +66,10 @@ exports.postCreate = function (req, res) {
     newSlider.name = req.body.name;
     newSlider.image = req.body.image;
     newSlider.link = req.body.link;
+    if (req.body.apartmentBuildingGroup)
+      newSlider.buildingGroup = req.body.apartmentBuildingGroup;
+    if (req.body.apartmentBuilding)
+      newSlider.building = req.body.apartmentBuilding;
     newSlider.status = req.body.status;
     // save the user
     newSlider.save(function (err) {
@@ -65,12 +85,19 @@ exports.postCreate = function (req, res) {
 };
 
 exports.getEdit = (req, res, nex) => {
-  Slider.findById(req.params.sliderId, (err, slider) => {
-    res.render('slider/edit', {
-      title: 'Chỉnh sửa ảnh slide',
-      current: ['slider', 'edit'],
-      data: slider
-    });
+  Slider.findById(req.params.sliderId)
+  .populate('building').exec((err, slider) => {
+    ApartmentBuildingGroup.find({
+      status: 1
+    }).exec((err, abgs) => {
+      res.render('slider/edit', {
+        title: 'Chỉnh sửa ảnh slide',
+        current: ['slider', 'edit'],
+        data: slider,
+        abgs: abgs,
+        abs: slider.building ? [slider.building] : []
+      });
+    })
   })
 }
 
@@ -85,6 +112,10 @@ exports.postUpdate = (req, res, nex) => {
       slider.name = req.body.name;
       slider.image = req.body.image;
       slider.link = req.body.link;
+      if (req.body.apartmentBuildingGroup)
+        slider.buildingGroup = req.body.apartmentBuildingGroup;
+      if (req.body.apartmentBuilding)
+        slider.building = req.body.apartmentBuilding;
       slider.status = req.body.status;
       // save the user
       slider.save(function (err) {

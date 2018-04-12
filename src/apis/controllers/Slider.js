@@ -23,7 +23,7 @@ exports.getHomeSlider = function (req, res) {
 				model: 'Apartment'
 			}).exec((err, user) => {
 				if (user) {
-					let sliderIn = [];
+					let sliderIn = [null];
 					if (user.apartments && user.apartments.length > 0) {
 						for(let i=0; i<user.apartments.length; i++) {
 							sliderIn.push(user.apartments[i].building);

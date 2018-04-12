@@ -1,8 +1,31 @@
+const PostCategory = require('./../../models/PostCategory');
 const Post = require('./../../models/Post');
 
+exports.getCategory = (req, res, next) => {
+	PostCategory.find({
+		status: 1
+	}).exec((err, postCategories) => {
+		if (err) {
+			return res.json({
+				success: false,
+				errorCode: '112',
+				message: 'Có lỗi xảy ra trong quá trình truy vấn dữ liệu'
+			})
+		}
+		return res.json({
+			success: false,
+			errorCode: 0,
+			data: postCategories,
+			message: 'Lấy dữ liệu cộng đồng thành công'
+		})
+	})
+}
 // Get all posts
-exports.getIndex = function (req, res) {
-	Post.find({}, {
+exports.getPostsOfCategory = function (req, res) {
+	console.log('categoryId', req.params.categoryId);
+	Post.find({
+		category: req.params.categoryId
+	}, {
 		'_id': 1,
 		'title': 1,
 		'alias': 1,
@@ -44,8 +67,12 @@ exports.getIndex = function (req, res) {
 	.sort('-createdAt')
 	.exec(function (err, posts) {
 		if (err) {
-			console.log('err', err)
-			return done(err);
+			return res.json({
+				success: false,
+				errorCode: '112',
+				data: [],
+				message: 'Xảy ra lỗi trong quá trình truy vấn dữ liệu: ' + JSON.stringify(err)
+			})
 		}
 		res.send({
 			success: true,
@@ -57,14 +84,16 @@ exports.getIndex = function (req, res) {
 };
 
 exports.postCreateNew = (req, res, next) => {
-    req.checkBody('content', 'Nội dung không được để trống').notEmpty();
+	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
+	req.checkBody('category', 'Chọn cộng đồng của bài viết').notEmpty();
 	
     var errors = req.getValidationResult().then(function(errors) {
+		console.log('errors', errors);
 		if (!errors.isEmpty()) {
             return res.json({
                 success: false,
                 errorCode: '010',
-                message: errors,
+                message: errors.array(),
                 data: req.body
             });
 		} else {
@@ -76,7 +105,9 @@ exports.postCreateNew = (req, res, next) => {
 			newPost.images = data.images;
 			newPost.description = data.description;
 			newPost.content = data.content;
-			newPost.category = data.categoryId ? data.categoryId : null;
+			if (data.category) {
+				newPost.category = data.category;
+			}
 			newPost.status = data.status;
 			newPost.pinPost = data.pinPost;
 			newPost.createdBy = req.session.user._id;

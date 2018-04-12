@@ -7,9 +7,13 @@ var postController = require('./../controllers/Post');
  */
 const passport = require('./../../middleware/apiPassport');
 
+/**
+ * Get list post categories
+ */
+router.get('/categories', postController.getCategory);
 
 /* GET users listing. */
-router.get('/', postController.getIndex);
+router.get('/category/:categoryId', postController.getPostsOfCategory);
 
 /* API create new post */
 router.post('/create-new', passport.isAuthenticated, postController.postCreateNew);

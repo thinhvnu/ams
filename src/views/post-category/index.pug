@@ -1,0 +1,41 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+		$('.chosen-select').chosen();
+		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
+		$('#slider-list').DataTable();
+		});
+block content
+	.row
+		.col-lg-12
+			.user-actions
+				a.btn.btn-success(href='/post-category/create') Tạo mới
+			hr
+			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Tên danh mục
+						th Icon
+						th.text-center Trạng thái
+						th.text-center.no-sort
+							em.fa.fa-cog
+				tbody
+					each dt, i in data
+						tr
+							td.hidden-xs #{i + 1}
+							td #{dt.name}
+							td
+								img.img-responsive(src=process.env.MEDIA_URL + '/images/post/thumb/' + dt.icon, style='width: 128px;')
+							td.text-center #{dt.status ? 'Active' : 'Inactive'}
+							td(align='center')
+								a(href='/post-category/edit/' + dt._id).u-action.btn.btn-success
+									em.fa.fa-pencil
+								a(href='/post-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa cộng đồng này không?", "/post-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+									em.fa.fa-trash

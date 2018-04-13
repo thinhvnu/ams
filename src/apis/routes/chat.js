@@ -24,4 +24,6 @@ router.post('/add-member-to-group/:groupId', passport.isAuthenticated, chatContr
 
 router.get('/group', passport.isAuthenticated, chatController.getGroup);
 
+router.get('/admin', passport.isAuthenticated, chatController.getAdmin);
+
 module.exports = router;

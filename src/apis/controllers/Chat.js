@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./../../models/User');
 const ChatGroup = require('./../../models/ChatGroup');
 const Message = require('./../../models/Message');
+const Apartment = require('./../../models/Apartment');
+const ApartmentBuilding = require('./../../models/ApartmentBuilding');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -425,4 +427,50 @@ exports.getGroup = (req, res, next) => {
             message: 'Get user groups successfully'
         });
     });
+}
+
+exports.getAdmin = (req, res, next) => {
+    let user = req.session.user._id;
+
+    try {
+        if (user.apartments && user.apartments[0]) {
+            /* Return admin of building */
+            Apartment.findById(user.apartments[0]).exec((err, apartment) => {
+                if (apartment) {
+                    ApartmentBuilding.findById(apartment.building)
+                    .populate({
+                        path: 'manager',
+                        model: 'User',
+                        select: {_id: 1, firstName: 1, lastName: 1, phoneNumber: 1, avatar: 1, avatarUrl: 1}
+                    }).exec((err, building) => {
+                        if (building) {
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                data: building.manager
+                            })
+                        } else {
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                data: {}
+                            })
+                        }
+                    })
+                } else {
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        data: {}
+                    })
+                }
+            });
+        }
+    } catch (e) {
+        return res.json({
+            success: true,
+            errorCode: 0,
+            data: {}
+        })
+    }
 }

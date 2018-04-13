@@ -13,6 +13,8 @@ router.get('/categories', serviceController.getCategories);
 /* API create new request */
 router.post('/create-request', passport.isAuthenticated, serviceController.postCreateRequest);
 
+router.post('/delete-request/:srId', passport.isAuthenticated, serviceController.getDeleteRequest);
+
 /* API get history details */
 router.get('/history-transaction', passport.isAuthenticated, serviceController.getHistoryTransaction);
 

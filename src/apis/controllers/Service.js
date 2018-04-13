@@ -119,6 +119,38 @@ exports.postCreateRequest = (req, res, next) => {
 		}
 	});
 }
+
+exports.getDeleteRequest = (req, res, next) => {
+	let user = req.session.user, srId = req.params.srId;
+
+	if (!user || !srId) {
+		return res.json({
+			success: false,
+			errorCode: '112',
+			message: 'Xóa yêu cầu dịch vụ không thành công'
+		})
+	} else {
+		ServiceRequest.remove({
+			_id: srId,
+			createdBy: user._id
+		}, (err, result) => {
+			if (err) {
+				return res.json({
+					success: false,
+					errorCode: '112',
+					message: 'Có lỗi xảy ra'
+				})
+			} else {
+				return res.json({
+					success: true,
+					errorCode: 0,
+					message: 'Xóa yêu cầu dịch vụ thành công'
+				})
+			}
+		})
+	}
+}
+
 exports.updateInvoiceService = (req, res, next) => {
 	try {
 		req.checkBody('id', 'id không được để trống').notEmpty();

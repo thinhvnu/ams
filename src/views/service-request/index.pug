@@ -32,8 +32,11 @@ block content
 							td.hidden-xs #{i + 1}
 							td #{dt.fullName}
 							td #{dt.phoneNumber}
-							td #{dt.address}
+							td #{dt.address ? dt.address : ''}
 							td
-								img.img-responsive(src=((dt.imageUrl) ? dt.imageUrl[0] : ''), style='width: 128px;')
+								if dt.imageUrl
+									img.img-responsive(src=((dt.imageUrl) ? dt.imageUrl[0] : ''), style='width: 128px;')
+								else 
+									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}
 							

@@ -56,7 +56,9 @@ block content
 						.online-status
 							.icon-online
 			hr
-			h4(style='margin: 0') Chat nhóm
+			h4(style='margin: 0') 
+				|Chat nhóm
+				i.fa.fa-plus-circle(style='margin-left: 15px;')
 			hr
 			each g in groups
 				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')

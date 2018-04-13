@@ -15,7 +15,7 @@ block content
 	.row
 		.col-lg-12
 			.user-actions
-				a.btn.btn-success(href='/service-category/create') Tạo mới
+				p Các yêu cầu dịch vụ
 			hr
 			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
@@ -35,7 +35,7 @@ block content
 							td #{dt.address ? dt.address : ''}
 							td
 								if dt.imageUrl
-									img.img-responsive(src=((dt.imageUrl) ? dt.imageUrl[0] : ''), style='width: 128px;')
+									img.img-responsive(src=((dt.imageUrl) ? dt.imageUrl.split(',')[0] : ''), style='width: 128px;')
 								else 
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}

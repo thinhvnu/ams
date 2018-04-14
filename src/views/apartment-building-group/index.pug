@@ -56,9 +56,9 @@ block content
 				tbody
 					each dt, i in data
 						tr
-							td.hidden-xs #{i+1}
-							td.text-center #{dt.abgName}
-							td.text-center #{dt.address}
+							td.text-center.hidden-xs #{i+1}
+							td #{dt.abgName}
+							td #{dt.address}
 							td.text-center #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Empty'}
 							td.text-center #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 							td.text-center #{dt.status ? 'Active' : 'Inactive'}

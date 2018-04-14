@@ -5,7 +5,7 @@ var abgController = require('./../controllers/ApartmentBuildingGroup');
 /**
  * API keys and Passport configuration.
  */
-const passport = require('./../middleware/apiPassport');
+const passport = require('./../middleware/passport');
 
 
 /* GET abg listing. */

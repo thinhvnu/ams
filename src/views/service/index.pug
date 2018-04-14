@@ -111,7 +111,7 @@ block content
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
 									//- td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}
 									td.text-center #{dt.status ? 'Public' : 'Draft'}
-									td(align='center')
+									td(align='center', style='width:150px;')
 										a(href='/service/edit/' + dt._id).u-action.btn.btn-success
 											em.fa.fa-pencil
 										a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action

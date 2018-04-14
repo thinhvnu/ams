@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
   lastName: {type: String},
   birthDay: {type: String},
   address: {type: String},
+  apartmentAddress: {tye: String},
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
   buildings: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'}],
@@ -79,7 +80,7 @@ userSchema.methods.gravatar = function gravatar(size) {
  * Function get avatar image url
  */
 userSchema.virtual('avatarUrl').get(function () {
-  return process.env.MEDIA_URL + '/images/avatar/thumb/' + this.avatar;
+  return process.env.MEDIA_URL + '/images/avatar/origin/' + this.avatar;
 });
 
 const User = mongoose.model('User', userSchema);

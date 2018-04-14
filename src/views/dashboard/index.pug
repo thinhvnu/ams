@@ -8,6 +8,10 @@ block scripts
 	script.
 		$(function() {
 			$('#notification-list').DataTable();
+			$(function() {
+				$('.chosen-manager, .chosen-abg, .chosen-ab').chosen();
+				$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+			});
 		});
 block content
 	.row
@@ -58,7 +62,46 @@ block content
 			hr
 			h4(style='margin: 0') 
 				|Chat nhóm
-				i.fa.fa-plus-circle(style='margin-left: 15px;')
+				i.fa.fa-plus-circle(style='margin-left: 15px;cursor: pointer;', type='button', data-toggle='modal', data-target='#createNewGroup')
+				#createNewGroup.modal.fade(role='dialog')
+					#create-new-group.form-horizontal
+						.modal-dialog
+							.modal-content
+								.modal-header
+									button.close(type='button', data-dismiss='modal') ×
+									h4.model-title Tạo nhóm chat mới
+								.modal-body
+									.form-group
+										.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
+											label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Khu chung cư (*)
+											select#choosen-abg.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+												option(value='') Chọn khu chung cư
+												each abg in abgs
+													option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+											if errors && errors.apartmentBuildingGroup
+												.help-block #{errors.apartmentBuildingGroup.msg}
+										.col-lg-6(class=errors && errors.apartmentBuilding && 'has-error')
+											label.control-label(for='apartmentBuilding', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Tòa nhà(*)
+											select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;')
+												option(value='') Chọn tòa nhà
+												//- each abg in abgs
+												//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+											if errors && errors.apartmentBuilding
+												.help-block #{errors.apartmentBuilding.msg}
+									.form-group
+										.col-lg-6(class=errors && errors.manager && 'has-error')
+											label.control-label(for='groupName', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Tên nhóm(*)
+											input#groupName.form-control(name='groupName', data-placeholder='Tên nhóm', style='width: 100%;')
+											if errors && errors.groupName
+												.help-block #{errors.groupName.msg}
+										.col-lg-6
+											label.control-label(for='status', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Trạng thái
+											select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+												option(value=1) Active
+												option(value=0) Inactive
+								.modal-footer
+									button.btn.btn-success.pull-left(type='submit', onClick='createNewGroup()') Đồng ý
+									button.btn.btn-default(type='button', data-dismiss='modal') Hủy
 			hr
 			each g in groups
 				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')

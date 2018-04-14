@@ -1,6 +1,7 @@
 const User = require('./../models/User');
 const Notification = require('./../models/Notification');
 const NotificationLog = require('./../models/NotificationLog');
+const ApartmentBuildingGroup = require('./../models/ApartmentBuildingGroup');
 
 exports.getIndex = (req, res, next) => {
     try {
@@ -39,12 +40,17 @@ exports.getIndex = (req, res, next) => {
                 .sort('-createdAt')
                 .limit(10)
                 .exec((err, users) => {
-                    res.render('dashboard/index', {
-                        title: 'Phần mềm quản lý chung cư',
-                        current: ['dashboard', 'index'],
-                        notifications: nLogs,
-                        users: users,
-                        groups: req.session.user.groups || []
+                    ApartmentBuildingGroup.find({
+                        status: 1
+                    }).sort('-createdAt').exec((err, abgs) => {
+                        res.render('dashboard/index', {
+                            title: 'Phần mềm quản lý chung cư',
+                            current: ['dashboard', 'index'],
+                            notifications: nLogs,
+                            users: users,
+                            groups: req.session.user.groups || [],
+                            abgs: abgs
+                        });
                     });
                 })
         })

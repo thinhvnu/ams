@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   lastName: {type: String},
   birthDay: {type: String},
   address: {type: String},
-  apartmentAddress: {tye: String},
+  apartmentAddress: {type: String},
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
   buildings: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'}],

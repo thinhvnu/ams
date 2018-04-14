@@ -82,11 +82,11 @@ block content
 						input#serrvice-name.form-control(type='text', name='serviceName', value=data && data.serviceName, placeholder='Nhập tên dịch vụ')
 						if errors && errors.serviceName
 							.help-block #{errors.serviceName.msg}
-					.col-lg-6(class=errors && errors.price && 'has-error')
-						label.control-label(for='price') Giá dịch vụ (VNĐ)
-						input#serrvice-price.form-control(type='text', name='price', value=data && data.price, placeholder='Giá dịch vụ')
-						if errors && errors.price
-							.help-block #{errors.price.msg}
+					//- .col-lg-6(class=errors && errors.price && 'has-error')
+					//- 	label.control-label(for='price') Giá dịch vụ (VNĐ)
+					//- 	input#serrvice-price.form-control(type='text', name='price', value=data && data.price, placeholder='Giá dịch vụ')
+					//- 	if errors && errors.price
+					//- 		.help-block #{errors.price.msg}
 				.form-group
 					.col-lg-6(class=errors && errors.icon && 'has-error')
 						label.control-label(for='icon') Icon dịch vụ

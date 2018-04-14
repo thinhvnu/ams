@@ -293,6 +293,8 @@ exports.getUpdateReadMessage = (req, res, next) => {
  * Create group chat
  */
 exports.postCreateGroup = (req, res, next) => {
+    req.checkBody('abgId', 'Vui lòng chọn khu chung cư').notEmpty();
+    req.checkBody('buildingId', 'Vui lòng chọn tòa nhà').notEmpty();
     req.checkBody('groupName', 'Vui lòng đặt tên nhóm').notEmpty();
 
     var errors = req.getValidationResult().then(function(errors) {
@@ -301,41 +303,65 @@ exports.postCreateGroup = (req, res, next) => {
 			return res.json({
                 success: false,
                 errorCode: '221',
+                errors: errors,
                 message: 'Tên nhóm chat không được để trống'
             })
         }
-
-        let newGroup = new ChatGroup();
-        newGroup.groupName = req.body.groupName;
-        newGroup.status = 1;
-        newGroup.createdBy = req.session.user._id;
-        newGroup.members.push(req.session.user._id);
-        newGroup.save((err, ng) => {
-            if (err) {
-                console.log('err', err);
-                return res.json({
-                    success: false,
-                    errorCode: '222',
-                    message: 'Có lỗi trong quá trình xử lý'
-                });
+        User.findById(req.body.buildingId).exec((err, userAdmin) => {
+            let newGroup = new ChatGroup();
+            newGroup.groupName = req.body.groupName;
+            newGroup.building = req.body.buildingId;
+            newGroup.buildingGroup = req.body.abgId;
+            newGroup.status = 1;
+            newGroup.createdBy = req.session.user._id;
+            newGroup.members.push(req.session.user._id);
+            if (userAdmin) {
+                newGroup.members.push(userAdmin._id);
             }
-            User.findById(req.session.user._id).exec((err, user) => {
-                if (user) {
-                    if (!user.groups) {
-                        user.groups = [];
-                    }
-                    user.groups.pull(ng._id);
-                    user.groups.push(ng._id);
-                    user.save((err, u) => {
-                        return res.json({
-                            success: true,
-                            errorCode: 0,
-                            group: newGroup,
-                            message: 'Tạo nhóm thành công'
-                        })
-                    })
+            newGroup.save((err, ng) => {
+                if (err) {
+                    console.log('err', err);
+                    return res.json({
+                        success: false,
+                        errorCode: '222',
+                        message: 'Có lỗi trong quá trình xử lý'
+                    });
                 }
-            })
+                // ApartmentBuilding.findById(buildingId).exec((err, building) => {
+
+                // });
+                User.findById(req.session.user._id).exec((err, user) => {
+                    if (user) {
+                        /* Join user create group */
+                        if (!user.groups) {
+                            user.groups = [];
+                        }
+                        user.groups.pull(ng._id);
+                        user.groups.push(ng._id);
+                        user.save((err, u) => {
+                            if (userAdmin) {
+                                userAdmin.groups.pull(ng._id);
+                                userAdmin.groups.push(ng._id);
+                                userAdmin.save((err, result) => {
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        group: newGroup,
+                                        message: 'Tạo nhóm thành công'
+                                    })
+                                })
+                            } else {
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    group: newGroup,
+                                    message: 'Tạo nhóm thành công'
+                                })
+                            }
+                        })
+                    }
+                })
+            });
         });
     })
 }

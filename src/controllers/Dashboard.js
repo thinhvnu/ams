@@ -40,18 +40,24 @@ exports.getIndex = (req, res, next) => {
                 .sort('-createdAt')
                 .limit(10)
                 .exec((err, users) => {
-                    ApartmentBuildingGroup.find({
-                        status: 1
-                    }).sort('-createdAt').exec((err, abgs) => {
-                        res.render('dashboard/index', {
-                            title: 'Phần mềm quản lý chung cư',
-                            current: ['dashboard', 'index'],
-                            notifications: nLogs,
-                            users: users,
-                            groups: req.session.user.groups || [],
-                            abgs: abgs
-                        });
-                    });
+                    User.findById(req.session.user._id)
+                    .populate({
+                        path: 'groups',
+                        model: 'ChatGroup'
+                    }).exec((err, user) => {
+                        ApartmentBuildingGroup.find({
+                            status: 1
+                        }).sort('-createdAt').exec((err, abgs) => {
+                            res.render('dashboard/index', {
+                                title: 'Phần mềm quản lý chung cư',
+                                current: ['dashboard', 'index'],
+                                notifications: nLogs,
+                                users: users,
+                                user: user,
+                                abgs: abgs
+                            });
+                        });  
+                    })
                 })
         })
     } catch (e) {

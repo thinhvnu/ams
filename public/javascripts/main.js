@@ -320,12 +320,11 @@ function createNewGroup() {
   let abg = document.getElementById('choosen-abg'),
     apartmentBuilding = document.getElementById('choosen-apartment-building'),
     groupName = document.getElementById('groupName'),
-    params = 'apartmentName=' + apartmentName.value + '&floor=' + floor.value + 
-    '&area=' + area.value + '&manager=' + manager.value + '&status=' + status.value +
-    '&buildingId=' + buildingId;
+    params = 'abgId=' + abg.value + '&buildingId=' + apartmentBuilding.value + 
+    '&groupName=' + groupName.value;
 
   let http = new XMLHttpRequest();
-  let url = "/api/building/add-new-apartment";
+  let url = "/api/chat/create-group";
   http.open("POST", url, true);
   
   //Send the proper header information along with the request
@@ -342,37 +341,29 @@ function createNewGroup() {
       }
 
       if (dataRes.errors) {
-        if (dataRes.errors.apartmentName) {
-          apartmentName.parentNode.classList.remove('has-error');
-          apartmentName.parentNode.classList.add('has-error');
-          if (apartmentName.parentNode.lastChild.classList.contains('help-block')) {
-            apartmentName.parentNode.lastChild.remove();
+        if (dataRes.errors.groupName) {
+          groupName.parentNode.classList.remove('has-error');
+          groupName.parentNode.classList.add('has-error');
+          if (groupName.parentNode.lastChild.classList.contains('help-block')) {
+            groupName.parentNode.lastChild.remove();
           }
-          apartmentName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.apartmentName.msg + '</div>';
+          groupName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.groupName.msg + '</div>';
         }
-        if (dataRes.errors.floor) {
-          floor.parentNode.classList.remove('has-error');
-          floor.parentNode.classList.add('has-error');
-          if (floor.parentNode.lastChild.classList.contains('help-block')) {
-            floor.parentNode.lastChild.remove();
+        if (dataRes.errors.buildingId) {
+          apartmentBuilding.parentNode.classList.remove('has-error');
+          apartmentBuilding.parentNode.classList.add('has-error');
+          if (apartmentBuilding.parentNode.lastChild.classList.contains('help-block')) {
+            apartmentBuilding.parentNode.lastChild.remove();
           }
-          floor.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.floor.msg + '</div>';
+          // apartmentBuilding.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.buildingId.msg + '</div>';
         }
-        if (dataRes.errors.area) {
-          area.parentNode.classList.remove('has-error');
-          area.parentNode.classList.add('has-error');
-          if (area.parentNode.lastChild.classList.contains('help-block')) {
-            area.parentNode.lastChild.remove();
+        if (dataRes.errors.abgId) {
+          abg.parentNode.classList.remove('has-error');
+          abg.parentNode.classList.add('has-error');
+          if (abg.parentNode.lastChild.classList.contains('help-block')) {
+            abg.parentNode.lastChild.remove();
           }
-          area.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.area.msg + '</div>';
-        }
-        if (dataRes.errors.manager) {
-          manager.parentNode.classList.remove('has-error');
-          manager.parentNode.classList.add('has-error');
-          if (manager.parentNode.lastChild.classList.contains('help-block')) {
-            manager.parentNode.lastChild.remove();
-          }
-          // manager.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.manager.msg + '</div>';
+          // abg.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.abgId.msg + '</div>';
         }
       }
     }

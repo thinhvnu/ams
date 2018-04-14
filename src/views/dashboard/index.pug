@@ -72,6 +72,17 @@ block content
 									h4.model-title Tạo nhóm chat mới
 								.modal-body
 									.form-group
+										.col-lg-12.col-md-12(class=errors && errors.groupName && 'has-error')
+											label.control-label(for='groupName', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Tên nhóm(*)
+											input#groupName.form-control(name='groupName', data-placeholder='Tên nhóm', style='width: 100%;')
+											if errors && errors.groupName
+												.help-block #{errors.groupName.msg}
+										//- .col-lg-6
+										//- 	label.control-label(for='status', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Trạng thái
+										//- 	select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+										//- 		option(value=1) Active
+										//- 		option(value=0) Inactive
+									.form-group
 										.col-lg-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
 											label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Khu chung cư (*)
 											select#choosen-abg.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
@@ -88,22 +99,11 @@ block content
 												//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
 											if errors && errors.apartmentBuilding
 												.help-block #{errors.apartmentBuilding.msg}
-									.form-group
-										.col-lg-6(class=errors && errors.manager && 'has-error')
-											label.control-label(for='groupName', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Tên nhóm(*)
-											input#groupName.form-control(name='groupName', data-placeholder='Tên nhóm', style='width: 100%;')
-											if errors && errors.groupName
-												.help-block #{errors.groupName.msg}
-										.col-lg-6
-											label.control-label(for='status', style='display: block; text-align: left;font-size: 14px;margin-bottom: 5px;') Trạng thái
-											select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
-												option(value=1) Active
-												option(value=0) Inactive
 								.modal-footer
 									button.btn.btn-success.pull-left(type='submit', onClick='createNewGroup()') Đồng ý
 									button.btn.btn-default(type='button', data-dismiss='modal') Hủy
 			hr
-			each g in groups
+			each g in user.groups
 				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
 					.user-avatar
 						if g.avatar

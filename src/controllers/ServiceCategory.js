@@ -77,7 +77,7 @@ exports.getDelete = (req, res, nex) => {
 				}
 				ServiceRequest.deleteMany({service: {$in: serviceIds}}, (err, result) => {
 					Service.deleteMany({_id: {$in: serviceIds}}, (err, r) => {
-						ServiceCategory.remove((err, re) => {
+						category.remove((err, re) => {
 							req.flash('success', 'Xóa danh mục dịch vụ thành công');
 							return res.redirect('/service-category');
 						})

@@ -26,6 +26,7 @@ block content
 						th Địa chỉ
 						th Ảnh 
 						th Dịch vụ
+						th Ghi chú
 						th Trạng thái
 				tbody
 					each dt, i in data
@@ -40,5 +41,6 @@ block content
 								else 
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}
+							td #{dt.note}
 							td #{dt.done ? 'Đã thanh toán' : 'Chưa thanh toán'}
 							

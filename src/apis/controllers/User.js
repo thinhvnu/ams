@@ -127,7 +127,8 @@ exports.getInfo = function (req, res) {
 					'gender': 1,
 					'avatar': 1,
 					'avatarUrl': 1,
-					'address': 1
+					'address': 1,
+					'apartmentAddress': 1
 				})
 				.exec(function (err, user) {
 					if (err) {

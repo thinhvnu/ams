@@ -5,13 +5,14 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
 
 exports.postRegister = (req, res, next) => {
 	try {
-		req.checkBody('firstName', 'firstName is required').notEmpty();
-		req.checkBody('lastName', 'lastName is required').notEmpty();
+		req.checkBody('firstName', 'Vui lòng cung cấp họ tên').notEmpty();
+		req.checkBody('lastName', 'Vui lòng cung cấp họ tên').notEmpty();
 		// req.checkBody('userName', 'userName is required').notEmpty();
-		req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
+		req.checkBody('phoneNumber', 'Vui lòng nhập số điện thoại').notEmpty();
+		req.checkBody('apartmentAddress', 'Vui lòng nhập địa chỉ').notEmpty();
 		// req.checkBody('email', 'Email is invalid').isEmail();
-		req.checkBody('password', 'Password must be at least 4 characters long').len(4);
-		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+		req.checkBody('password', 'Mật khẩu ít nhất 6 kí tự').len(6);
+		req.checkBody('confirmPassword', 'Mật khẩu không trùng khớp').equals(req.body.password);
 		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 		
 		req.getValidationResult().then(function(errors) {
@@ -21,7 +22,7 @@ exports.postRegister = (req, res, next) => {
 				return res.json({
 					success: false,
 					errorCode: '011',
-					errors: errors,
+					errors: JSON.stringify(errors),
 					data: req.body,
 					message: 'Validate errors'
 				})
@@ -50,6 +51,7 @@ exports.postRegister = (req, res, next) => {
 						user.building = req.body.building;
 					user.birthDay = req.body.birthDay;
 					user.gender = req.body.gender;
+					user.apartmentAddress = req.body.apartmentAddress;
 					user.status = 0;
 				
 					User.findOne({ 

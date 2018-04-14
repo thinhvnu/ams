@@ -47,7 +47,7 @@ block content
 			form.form-horizontal(method='POST', action='/service-category/create')
 				.form-group
 					.col-lg-6.col-md-6(class=errors && errors.name && 'has-error')
-						label.control-label(for='name') Tên danh mục
+						label.control-label(for='name') Tên danh mục (*)
 						input#serrvice-category-name.form-control(type='text', name='name', value=data && data.name, placeholder='Nhập tên danh mục')
 						if errors && errors.name
 							.help-block #{errors.name.msg}

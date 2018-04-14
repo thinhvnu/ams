@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const serviceRequestSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     phoneNumber: { type: String, required: true },
+    code: {type: Number},
     address: { type: String },
     images: { type: String },
     description: { type: String },

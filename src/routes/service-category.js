@@ -12,6 +12,6 @@ const passport = require('../middleware/passport');
 router.get('/', passport.isAuthenticated, ServiceCategoryController.getIndex);
 router.get('/create', passport.isAuthenticated, ServiceCategoryController.getCreate);
 router.post('/create', passport.isAuthenticated, ServiceCategoryController.postCreate);
-router.get('/delete/:serviceId', passport.isAuthenticated, ServiceCategoryController.getDelete)
+router.get('/delete/:categoryId', passport.isAuthenticated, ServiceCategoryController.getDelete)
 
 module.exports = router;

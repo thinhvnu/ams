@@ -1,4 +1,6 @@
 const ServiceCategory = require('../models/ServiceCategory');
+const Service = require('../models/Service');
+const ServiceRequest = require('../models/ServiceRequest');
 
 // Get all posts
 exports.getIndex = function (req, res) {
@@ -62,12 +64,27 @@ exports.postCreate = function (req, res) {
 };
 
 exports.getDelete = (req, res, nex) => {
-	Service.remove({ _id: req.params.serviceId }, (err) => {
-	  if (err) {
+	ServiceCategory.findOne({ _id: req.params.categoryId }, (err, category) => {
+	  if (err || !category) {
 		req.flash('errors', 'Xóa dịch vụ không thành công');
+		return res.redirect('/service-category');
 	  } else {
-		req.flash('success', 'Xóa dịch vụ thành công');
+		if (category) {
+			Service.find({category: category._id}).exec((err, services) => {
+				let serviceIds = [];
+				for (let i=0; i<services.length; i++) {
+					serviceIds.push(services[i]._id);
+				}
+				ServiceRequest.deleteMany({service: {$in: serviceIds}}, (err, result) => {
+					Service.deleteMany({_id: {$in: serviceIds}}, (err, r) => {
+						ServiceCategory.remove((err, re) => {
+							req.flash('success', 'Xóa danh mục dịch vụ thành công');
+							return res.redirect('/service-category');
+						})
+					})
+				})
+			})
+		}
 	  }
-	  return res.redirect('/service-category');
-	})
+	});
 }

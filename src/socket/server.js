@@ -157,20 +157,31 @@ var ioEvents = function(io) {
                 'createdAt': 1
             })
             .populate({
+                path: 'createdBy',
+                model: 'User',
+                select: {
+                    _id: 1,
+                    firstName: 1,
+                    lastName: 1,
+                    avatar: 1,
+                    avatarUrl: 1
+                }
+            })
+            .populate({
                 path: 'comments',
                 model: 'Comment',
                 populate: {
                     path: 'createdBy',
                     model: 'User',
-                    select: { '_id': 0, 'userName': 1 }
+                    select: { '_id': 0, 'userName': 1, 'firstName': 1, 'lastName': 1, 'avatar': 1, 'avatarUrl': 1 }
                 }
             })
             .exec(function (err, post) {
-                if (err) {
-                    console.log('err', err)
-                    return done(err);
-                }
-                io.sockets.emit('comment', post);
+                // if (err) {
+                //     // console.log('err', err)
+                //     // return done(err);
+                // }
+                io.sockets.emit('comment', post.comments);
             });
         })
 

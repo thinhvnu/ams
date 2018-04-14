@@ -29,7 +29,7 @@ exports.getHomeSlider = function (req, res) {
 							sliderIn.push(user.apartments[i].building);
 						}
 					} else {
-						sliderIn = [null];
+						sliderIn = [];
 					}
 					Slider.find({
 						status: 1,

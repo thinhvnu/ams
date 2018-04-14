@@ -17,7 +17,7 @@ exports.postRegister = (req, res, next) => {
 		
 		req.getValidationResult().then(function(errors) {
 		  	if (!errors.isEmpty()) {
-				var errors = errors.mapped();
+				var errors = errors.array();
 
 				return res.json({
 					success: false,

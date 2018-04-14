@@ -347,7 +347,7 @@ function createNewGroup() {
           if (groupName.parentNode.lastChild.classList.contains('help-block')) {
             groupName.parentNode.lastChild.remove();
           }
-          groupName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.groupName.msg + '</div>';
+          // groupName.parentNode.innerHTML += '<div class="help-block">' + dataRes.errors.groupName.msg + '</div>';
         }
         if (dataRes.errors.buildingId) {
           apartmentBuilding.parentNode.classList.remove('has-error');

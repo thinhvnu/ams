@@ -16,8 +16,8 @@ block scripts
 	script(src='/javascripts/cropper-editor.js')
 	script.
 		$(function() {
-			$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
-			$('#utility-content').froalaEditor({
+			$('.chosen-status, .chosen-type').chosen({ allow_single_deselect: true, disable_search: true });
+			$('#page-content').froalaEditor({
 				heightMin: 280,
 				// Button show xs
 				toolbarButtons: [
@@ -31,6 +31,8 @@ block scripts
 				imageManagerLoadURL: '/media/load_images'
 			});
 		});
+	script(type='text/javascript').
+		cropperEditor.init();
 block content
 	.row
 		.col-lg-12
@@ -38,37 +40,23 @@ block content
 				.content-header Nhập dữ liệu tiện ích
 			hr
 			#div-1.body.collapse.in(aria-expanded='true', style='')
-			form.form-horizontal(method='POST', action='/utility/create')
+			form.form-horizontal(method='POST', action='/static-page/create')
 				.form-group
-					.col-lg-8(class=errors && errors.utilityName && 'has-error')
-						label.control-label(for='utilityName') Tên tiện ích
-						input#utility-name.form-control(type='text', name='utilityName', value=data && data.utilityName, placeholder='Nhập tên tiện ích')
-						if errors && errors.utilityName
-							.help-block #{errors.utilityName.msg}
-				.form-group
-					.col-lg-6(class=errors && errors.image && 'has-error')
-						label.control-label(for='image') Ảnh dịch vụ
-						if data && data.image
-							label.custom-file-upload(for='utility-image', style='display: none;')
-								i.fa.fa-cloud-upload
-							input#utility-image.mycropper-browse-file(type='file', name='image', disabled=true)
-							input#cropper-editor-input-utility-image(type='hidden', name='image', value=data.image)
-							#utility-image-image-preview.image-preview
-								.image-preview-item
-									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image)
-										i.fa.fa-trash
-									img(src='/media/images/utility/thumb/' + data.image)
-						else
-							input#utility-image.mycropper-browse-file(type='file', name='image')
-							label.custom-file-upload(for='utility-image')
-								i.fa.fa-cloud-upload
-						if errors && errors.image
-							.help-block #{errors.image.msg}
+					.col-lg-8(class=errors && errors.title && 'has-error')
+						label.control-label(for='title') Tiêu đề
+						input#page-title.form-control(type='text', name='title', value=data && data.title, placeholder='Tiêu đề')
+						if errors && errors.title
+							.help-block #{errors.title.msg}
 				.form-group
 					.col-lg-12
-						label.control-label(for='content') Nội dung dịch vụ
-						textarea#utility-content.form-control(type='text', name='content', placeholder='Nội dung dịch vụ', rows=3) #{data ? data.content : ''}
+						label.control-label(for='content') Nội dung
+						textarea#page-content.form-control(type='text', name='content', placeholder='Nội dung', rows=3) #{data ? data.content : ''}
 				.form-group
+					.col-lg-6
+						label.control-label(for='type', style='display: block; text-align: left;') Loại trang
+						select.form-control.chosen-type(name='type', data-placeholder='Loại trang', style='width: 150px;')
+							option(value=1, selected=(data && data.type === 1) ? true : false) Điều khoản & chính sách
+							option(value=2, selected=(data && data.type === 2) ? true : false) Về chúng tôi
 					.col-lg-6
 						label.control-label(for='status', style='display: block; text-align: left;') Status
 						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')

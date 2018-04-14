@@ -242,6 +242,8 @@ exports.postUpdateInfo = (req, res, next) => {
 				user.phoneNumber = data.phoneNumber ? data.phoneNumber : user.phoneNumber;
 				user.gender = data.gender ? data.gender : user.gender;
 				user.avatar = data.avatar ? data.avatar : user.avatar;
+				user.birthDay = data.birthDay,
+				user.apartmentAddress = data.apartmentAddress;
 				user.address = data.address ? data.address : user.address;
 
 				user.save((err, user) => {

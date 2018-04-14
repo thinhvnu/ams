@@ -5,7 +5,7 @@ var abController = require('./../controllers/ApartmentBuilding');
 /**
  * API keys and Passport configuration.
  */
-const passport = require('./../middleware/apiPassport');
+const passport = require('./../middleware/passport');
 
 
 /* GET ab listing. */

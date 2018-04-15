@@ -233,7 +233,7 @@ exports.postUpdateInfo = (req, res, next) => {
 
 			let data = req.body;
 			if (user) {
-				return res.json(user);
+				// return res.json(user);
 				user.firstName = data.firstName ? data.firstName : user.firstName;
 				user.lastName = data.lastName ? data.lastName : user.lastName;
 				user.email = data.email ? data.email : user.email;

@@ -479,7 +479,7 @@ exports.getAdmin = (req, res, next) => {
                                 return res.json({
                                     success: true,
                                     errorCode: 0,
-                                    data: apartment.building ? building.manager : ''
+                                    data: apartment.building ? apartment.building.manager : ''
                                 })
                             } else {
                                 return res.json({

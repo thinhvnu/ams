@@ -22,7 +22,7 @@ block content
 					tr
 						th.hidden-xs STT
 						th Tiêu đề
-						th Nội dung
+						//- th Nội dung
 						th.text-center.no-sort
 							em.fa.fa-cog
 				tbody
@@ -30,7 +30,7 @@ block content
 						tr
 							td.hidden-xs #{i + 1}
 							td #{dt.title}
-							td #{dt.content}
+							//- td #{dt.content}
 							td(align='center')
 								a(href='/static-page/edit/' + dt._id).u-action.btn.btn-success
 									em.fa.fa-pencil

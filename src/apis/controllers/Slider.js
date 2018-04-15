@@ -1,4 +1,5 @@
 const Slider = require('../../models/Slider');
+const Apartment = require('../../models/Apartment');
 const User = require('../../models/User');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
@@ -25,9 +26,7 @@ exports.getHomeSlider = function (req, res) {
 				if (user) {
 					let sliderIn = [null];
 					if (user.apartments && user.apartments.length > 0) {
-						for(let i=0; i<user.apartments.length; i++) {
-							sliderIn.push(user.apartments[i].building);
-						}
+						sliderIn.push(user.apartments[0].building);
 					} else {
 						sliderIn = [];
 					}
@@ -62,7 +61,8 @@ exports.getHomeSlider = function (req, res) {
 					});
 				} else {
 					Slider.find({
-						status: 1
+						status: 1,
+						building: null
 					}, {
 						'_id': 0,
 						'name': 1,
@@ -73,8 +73,12 @@ exports.getHomeSlider = function (req, res) {
 						'originalAlt': 1,
 					}).exec(function (err, sliders) {
 						if (err) {
-							console.log('err', err)
-							return done(err);
+							res.json({
+								success: true,
+								errorCode: 0,
+								data: [],
+								message: 'Có lỗi xảy ra'
+							});
 						}
 						
 						res.json({

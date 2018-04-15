@@ -414,3 +414,13 @@ exports.deleteTokenFirebase = (req, res, next) => {
 		})
 	}
 }
+
+exports.getLogout = (req, res, next) => {
+	req.session.destroy();
+	res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false });
+	return res.json({
+		success: true,
+		errorCode: 0,
+		message: 'Logout successfully'
+	})
+}

@@ -20,7 +20,11 @@ exports.getIndex = (req, res) => {
     .exec(function (err, users) {
       if (err) {
         console.log('err', err)
-        return done(err);
+        return res.json({
+          success: false,
+          errorCode: '121',
+          message: 'Lỗi không xác định'
+        })
       }
 
       res.render('user/index', {
@@ -74,7 +78,11 @@ exports.postLogin = (req, res, next) => {
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
             if (err) {
-              return done(err);
+              return res.json({
+								success: false,
+								errorCode: '121',
+								message: 'Lỗi không xác định'
+							})
             }
             if (isMatch) {
               /**

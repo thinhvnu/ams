@@ -12,7 +12,11 @@ exports.getIndex = function (req, res) {
 	.exec(function (err, utilities) {
 		if (err) {
 			console.log('err', err)
-			return done(err);
+			return res.json({
+				success: false,
+				errorCode: '121',
+				message: 'Lỗi không xác định'
+			})
 		}
 		res.send({
 			success: true,

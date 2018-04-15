@@ -49,7 +49,11 @@ exports.accessToken = (req, res, next) => {
           // check if password matches
           user.comparePassword(req.body.password, (err, isMatch) => {
             if (err) { 
-              return done(err); 
+              return res.json({
+								success: false,
+								errorCode: '121',
+								message: 'Lỗi không xác định'
+							})
             }
             if (isMatch) {
               /**

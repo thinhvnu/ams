@@ -141,10 +141,9 @@ exports.getInfo = function (req, res) {
 						errorCode: 0,
 						data: user
 					});
-			});
-		};
-	});
-	
+				});
+			};
+		});
 	} catch (e) {
 		return res.json({
 			success: false,
@@ -242,8 +241,8 @@ exports.postUpdateInfo = (req, res, next) => {
 				user.phoneNumber = data.phoneNumber ? data.phoneNumber : user.phoneNumber;
 				user.gender = data.gender ? data.gender : user.gender;
 				user.avatar = data.avatar ? data.avatar : user.avatar;
-				user.birthDay = data.birthDay,
-				user.apartmentAddress = data.apartmentAddress;
+				user.birthDay = data.birthDay ? data.birthDay : user.birthDay;
+				user.apartmentAddress = data.apartmentAddress ? data.apartmentAddress : user.apartmentAddress;
 				user.address = data.address ? data.address : user.address;
 
 				user.save((err, user) => {

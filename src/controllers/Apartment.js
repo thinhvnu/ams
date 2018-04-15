@@ -296,8 +296,10 @@ exports.getDelete = (req, res, nex) => {
 					})
 				});
 			} else {
-				req.flash('errors', 'Xóa căn hộ không thành công');
-				return res.redirect('/apartment');
+				apartment.remove((err, r) => {
+					req.flash('success', 'Xóa căn hộ thành công');
+					return res.redirect('/apartment');
+				});
 			}
 		})
 	  }

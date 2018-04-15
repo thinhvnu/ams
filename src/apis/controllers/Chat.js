@@ -463,9 +463,10 @@ exports.getAdmin = (req, res, next) => {
             /* Return admin of building */
             User.findById(req.session.user._id).exec((err, user) => {
                 console.log('user', user);
-                if (user.apartments && user.apartments[0]) {
-                    Apartment.findById(user.apartments[0]).exec((err, apartment) => {
-                        if (apartment) {
+                if (user.apartments) {
+                    Apartment.find({_id: {$in: user.apartments}}).exec((err, apartments) => {
+                        if (apartments && apartments.length > 0) {
+                            let apartment = apartments[0];
                             ApartmentBuilding.findById(apartment.building)
                             .populate({
                                 path: 'manager',

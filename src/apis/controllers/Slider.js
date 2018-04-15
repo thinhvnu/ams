@@ -33,7 +33,9 @@ exports.getHomeSlider = function (req, res) {
 					if (building) {
 						Slider.find({
 							status: 1,
-							building: building
+							building: {
+								$in: [building, null]
+							}
 						}, {
 							'_id': 0,
 							'name': 1,

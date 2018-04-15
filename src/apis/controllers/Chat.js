@@ -465,6 +465,7 @@ exports.getAdmin = (req, res, next) => {
                 console.log('user', user);
                 if (user.apartments) {
                     Apartment.find({_id: {$in: user.apartments}}).exec((err, apartments) => {
+                        
                         if (apartments && apartments.length > 0) {
                             let apartment = apartments[0];
                             ApartmentBuilding.findById(apartment.building)

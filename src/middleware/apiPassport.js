@@ -5,11 +5,11 @@ const User = require('./../models/User');
  * Login Required middleware.
  */
 exports.isAuthenticated = (req, res, next) => {
-    // if (req.session.user && false) {
-    //     console.log('verify successfully');
-    //     res.locals.user = req.session.user;
-    //     next();
-    // } else {
+    if (req.session.user && false) {
+        console.log('verify successfully');
+        res.locals.user = req.session.user;
+        next();
+    } else {
         // check header or url parameters or post parameters for token
         var token = req.query.token || req.headers['x-access-token'] || req.headers['Authorization'] || req.headers['authorization'] || req.cookies[process.env.TOKEN_KEY];
         
@@ -36,7 +36,7 @@ exports.isAuthenticated = (req, res, next) => {
                 });
             }
         });
-    // }
+    }
 };
 
 exports.jwtCreateToken = (data) => {

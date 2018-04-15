@@ -389,6 +389,8 @@ input.mycropper-browse-file[type="file"] {
     border-radius: 50%;
     overflow: hidden;
     text-align: center;
+    width: 55px;
+    height: 55px;
 }
 .user-item .user-avatar .fa-user-o, .user-item .user-avatar .fa-users {
     font-size: 38px;

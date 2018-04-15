@@ -7,7 +7,11 @@ exports.getListApartment = function (req, res) {
     Apartment.find({building: req.params.buildingId})
         .exec(function (err, apartments) {
             if (err) {
-                return done(err);
+                return res.json({
+                    success: false,
+                    errorCode: '121',
+                    message: 'Lỗi không xác định'
+                })
             }
             
             return res.json({

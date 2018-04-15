@@ -464,31 +464,30 @@ exports.getAdmin = (req, res, next) => {
             User.findById(req.session.user._id).exec((err, user) => {
                 // console.log('user', user);
                 if (user.apartments) {
-                    Apartment.find({_id: {$in: user.apartments}}).exec((err, apartments) => {
-                        console.log('apartments', apartments);
+                    Apartment.find({_id: {$in: user.apartments}}).populate({
+                        path: 'building',
+                        model: 'ApartmentBuilding',
+                        populate: {
+                            path: 'manager',
+                            model: 'User'
+                        }
+                    }).exec((err, apartments) => {
                         if (apartments && apartments.length > 0) {
-
                             let apartment = apartments[0];
-                            ApartmentBuilding.findById(apartment.building)
-                            .populate({
-                                path: 'manager',
-                                model: 'User',
-                                select: {_id: 1, firstName: 1, lastName: 1, phoneNumber: 1, avatar: 1, avatarUrl: 1}
-                            }).exec((err, building) => {
-                                if (building) {
-                                    return res.json({
-                                        success: true,
-                                        errorCode: 0,
-                                        data: building.manager
-                                    })
-                                } else {
-                                    return res.json({
-                                        success: true,
-                                        errorCode: 0,
-                                        data: {}
-                                    })
-                                }
-                            })
+                            if (apartment) {
+                                console.log('apartment', apartment);
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    data: apartment.building ? building.manager : ''
+                                })
+                            } else {
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    data: {}
+                                })
+                            }
                         } else {
                             return res.json({
                                 success: true,

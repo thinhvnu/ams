@@ -462,6 +462,7 @@ exports.getAdmin = (req, res, next) => {
         // if (user.apartments && user.apartments[0]) {
             /* Return admin of building */
             User.findById(req.session.user._id).exec((err, user) => {
+                console.log('user', user);
                 if (user.apartments && user.apartments[0]) {
                     Apartment.findById(user.apartments[0]).exec((err, apartment) => {
                         if (apartment) {

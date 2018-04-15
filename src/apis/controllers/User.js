@@ -7,10 +7,8 @@ exports.postRegister = (req, res, next) => {
 	try {
 		req.checkBody('firstName', 'Vui lòng cung cấp họ tên').notEmpty();
 		req.checkBody('lastName', 'Vui lòng cung cấp họ tên').notEmpty();
-		// req.checkBody('userName', 'userName is required').notEmpty();
 		req.checkBody('phoneNumber', 'Vui lòng nhập số điện thoại').notEmpty();
 		req.checkBody('apartmentAddress', 'Vui lòng nhập địa chỉ').notEmpty();
-		// req.checkBody('email', 'Email is invalid').isEmail();
 		req.checkBody('password', 'Mật khẩu ít nhất 6 kí tự').len(6);
 		req.checkBody('confirmPassword', 'Mật khẩu không trùng khớp').equals(req.body.password);
 		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
@@ -235,6 +233,7 @@ exports.postUpdateInfo = (req, res, next) => {
 
 			let data = req.body;
 			if (user) {
+				return res.json(user);
 				user.firstName = data.firstName ? data.firstName : user.firstName;
 				user.lastName = data.lastName ? data.lastName : user.lastName;
 				user.email = data.email ? data.email : user.email;
@@ -245,7 +244,7 @@ exports.postUpdateInfo = (req, res, next) => {
 				user.apartmentAddress = data.apartmentAddress ? data.apartmentAddress : user.apartmentAddress;
 				user.address = data.address ? data.address : user.address;
 
-				user.save((err, user) => {
+				user.save((err, u) => {
 					if (err) {
 						return res.json({
 							success: false,
@@ -260,6 +259,14 @@ exports.postUpdateInfo = (req, res, next) => {
 						message: 'Update user info successfully'
 					});
 				})
+			} else {
+				if (err) {
+					return res.json({
+						success: false,
+						errorCode: 112,
+						message: 'Nguoi dung khong ton tai'
+					});
+				}
 			}
 		});
 	} catch (e) {

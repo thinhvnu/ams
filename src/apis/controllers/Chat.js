@@ -462,11 +462,12 @@ exports.getAdmin = (req, res, next) => {
         // if (user.apartments && user.apartments[0]) {
             /* Return admin of building */
             User.findById(req.session.user._id).exec((err, user) => {
-                console.log('user', user);
+                // console.log('user', user);
                 if (user.apartments) {
                     Apartment.find({_id: {$in: user.apartments}}).exec((err, apartments) => {
-                        
+                        console.log('apartments', apartments);
                         if (apartments && apartments.length > 0) {
+
                             let apartment = apartments[0];
                             ApartmentBuilding.findById(apartment.building)
                             .populate({

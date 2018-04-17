@@ -46,7 +46,7 @@ exports.getClients = (req, res, next) => {
                             ]
                         }).sort('-updatedAt').populate('sender').populate('partner')
                         .populate('group').exec((err, recents) => {
-                            let users = [], groups = [];
+                            let users = [], groups = [], groupIds = [];
 
                             for (let i=0; i<recents.length; i++) {
                                 if (recents[i].sender && recents[i].sender.id !== u.id) {
@@ -57,16 +57,24 @@ exports.getClients = (req, res, next) => {
                                 }
                                 if (recents[i].group) {
                                     groups.push(recents[i].group);
+                                    groupIds.push(recents[i].group._id);
                                 }
                             }
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                data: {
-                                    users: users,
-                                    groups: groups
-                                },
-                                message: 'Get list clients successfully'
+                            ChatGroup.find({
+                                building: u.building,
+                                _id: {
+                                    $ne: groupIds
+                                }
+                            }).sort('-createdAt').exec((err, grs) => {
+                                return res.json({
+                                    success: true,
+                                    errorCode: 0,
+                                    data: {
+                                        users: users,
+                                        groups: groups.concat(grs)
+                                    },
+                                    message: 'Get list clients successfully'
+                                })
                             })
                         })
                     }

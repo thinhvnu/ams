@@ -137,10 +137,19 @@ var ioEvents = function(io) {
             ChatGroup.findById(data.to.room).exec((err, group) => {
                 if (group) {
                     ChatRecent.findOne({
-                        sender: data.sender.room,
-                        group: data.to.room
+                        $or: [
+                            {
+                                sender: data.sender.room,
+                                group: data.to.room
+                            },
+                            {
+                                group: data.sender.room,
+                                sender: data.to.room
+                            }
+                        ]
                     }).exec((err, c) => {
                         if (c) {
+                            c.count = c.count + 1;
                             c.save();
                         } else {
                             let chatRecent = new ChatRecent();
@@ -151,10 +160,19 @@ var ioEvents = function(io) {
                     })
                 } else {
                     ChatRecent.findOne({
-                        sender: data.sender.room,
-                        partner: data.to.room
+                        $or: [
+                            {
+                                sender: data.sender.room,
+                                partner: data.to.room
+                            },
+                            {
+                                partner: data.sender.room,
+                                sender: data.to.room
+                            }
+                        ]
                     }).exec((err, c) => {
                         if (c) {
+                            c.count = c.count + 1;
                             c.save();
                         } else {
                             let chatRecent = new ChatRecent();

@@ -33,31 +33,41 @@ exports.getClients = (req, res, next) => {
                 });
             } else {
                 User.findById(user._id).exec((err, u) => {
-                    if (user) {
+                    if (u) {
                         ChatRecent.find({
                             $or: [
                                 {sender: u._id},
+                                {partner: u._id},
                                 {
                                     group: {
                                         $in: u.groups
                                     }
                                 }
                             ]
-                        }).sort('-createdAt').populate('sender').populate('partner')
+                        }).sort('-updatedAt').populate('sender').populate('partner')
                         .populate('group').exec((err, recents) => {
                             let users = [], groups = [];
 
-                            for (let i=0; i<recents; i++) {
-                                if (recents[i].sender && recents.sender.id !== u.id) {
+                            for (let i=0; i<recents.length; i++) {
+                                if (recents[i].sender && recents[i].sender.id !== u.id) {
                                     users.push(recents[i].sender);
                                 }
-                                if (recents[i].partner && recents.partner.id !== u.id) {
+                                if (recents[i].partner && recents[i].partner.id !== u.id) {
                                     users.push(recents[i].partner);
                                 }
                                 if (recents[i].group) {
                                     groups.push(recents[i].group);
                                 }
                             }
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                data: {
+                                    users: users,
+                                    groups: groups
+                                },
+                                message: 'Get list clients successfully'
+                            })
                         })
                     }
                 });

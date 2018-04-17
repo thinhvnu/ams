@@ -116,26 +116,35 @@ exports.postCreateRequest = (req, res, next) => {
 						User.findById(req.session.user._id)
 						.populate({
 							path: 'buildings',
-							model: 'ApartmentBuilding'
+							model: 'ApartmentBuilding',
+							populate: {
+								path: 'apartmentBuildingGroup',
+								model: 'ApartmentBuildingGroup'
+							}
 						}).exec((err, user) => {
 							if (user && user.buildings) {
-								console.log('user.buildings', user.buildings);
-								for (let i=0; i<user.buildings; i++) {
+								for (let i=0; i<user.buildings.length; i++) {
 									let newNoti = new Notification();
 									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
 									newNoti.recipient = user.buildings[i].manager;
+									newNoti.building = user.buildings[i]._id,
+									newNoti.buildingGroup = user.buildings[i].apartmentBuildingGroup._id;
 									newNoti.createdBy = req.session.user._id;
 									newNoti.type = 2;
+									newNoti.save();
 								}
 							}
 							User.find({role: 'ADMIN'}).exec((err, admins) => {
 								console.log('admins', admins);
-								for (let i=0; i<admins; i++) {
+								for (let i=0; i<admins.length; i++) {
 									let newNoti = new Notification();
 									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
 									newNoti.recipient = admins[i]._id;
+									newNoti.building = (user.buildings[0]) ? user.buildings[0]._id : null,
+									newNoti.buildingGroup = user.buildings[0] ? user.buildings[0].apartmentBuildingGroup._id : null;
 									newNoti.createdBy = req.session.user._id;
 									newNoti.type = 2;
+									newNoti.save();
 								}
 							})
 						});

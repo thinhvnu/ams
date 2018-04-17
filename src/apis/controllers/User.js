@@ -405,6 +405,8 @@ exports.deleteTokenFirebase = (req, res, next) => {
 
 exports.getLogout = (req, res, next) => {
 	req.session.destroy();
+	req.session.user = null;
+	res.locals.user = null;
 	res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false });
 	return res.json({
 		success: true,

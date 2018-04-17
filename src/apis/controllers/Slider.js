@@ -19,91 +19,45 @@ exports.getHomeSlider = function (req, res) {
 			});
 		} else {
 			User.findById(req.session.user._id)
-			.populate({
-				path: 'apartments',
-				model: 'Apartment'
-			}).exec((err, user) => {
+			.exec((err, user) => {
 				if (user) {
-					let building = null;
-					if (user.apartments && user.apartments.length > 0) {
-						building = user.apartments[0].building;
-					} else {
-						building = null;
-					}
-					if (building) {
-						Slider.find({
-							status: 1,
-							$or: [
-								{
-									building: building
-								},
-								{
-									building: null,
-									buildingGroup: null
-								}
-							]
-						}, {
-							'_id': 0,
-							'name': 1,
-							'link': 1,
-							'image': 1,
-							'thumbnail': 1,
-							'original': 1,
-							'originalAlt': 1,
-						}).exec(function (err, sliders) {
-							if (err) {
-								console.log('err', err)
-								return res.json({
-									success: false,
-									errorCode: '121',
-									message: 'Lỗi không xác định'
-								})
+					Slider.find({
+						status: 1,
+						$or: [
+							{building: null},
+							{
+								building: user.building,
+								buildingGroup: user.buildingGroup
 							}
-							
-							res.json({
-								success: true,
-								errorCode: 0,
-								data: sliders
-							});
-							/**
-							 * Set redis cache data
-							 */
-							client.set('home_slides', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
+						]
+					}, {
+						'_id': 0,
+						'name': 1,
+						'link': 1,
+						'image': 1,
+						'thumbnail': 1,
+						'original': 1,
+						'originalAlt': 1,
+					}).exec(function (err, sliders) {
+						if (err) {
+							console.log('err', err)
+							return res.json({
+								success: false,
+								errorCode: '121',
+								message: 'Lỗi không xác định'
+							})
+						}
+						
+						res.json({
+							success: true,
+							errorCode: 0,
+							data: sliders
 						});
-					} else {
-						Slider.find({
-							status: 1,
-							building: null,
-							buildingGroup: null
-						}, {
-							'_id': 0,
-							'name': 1,
-							'link': 1,
-							'image': 1,
-							'thumbnail': 1,
-							'original': 1,
-							'originalAlt': 1,
-						}).exec(function (err, sliders) {
-							if (err) {
-								console.log('err', err)
-								return res.json({
-									success: false,
-									errorCode: '121',
-									message: 'Lỗi không xác định'
-								})
-							}
-							
-							res.json({
-								success: true,
-								errorCode: 0,
-								data: sliders
-							});
-							/**
-							 * Set redis cache data
-							 */
-							client.set('home_slides', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
-						});
-					}
+						/**
+						 * Set redis cache data
+						 */
+						client.set('home_slides', JSON.stringify(sliders), 'EX', process.env.REDIS_CACHE_TIME);
+					});
 				} else {
 					Slider.find({
 						status: 1,

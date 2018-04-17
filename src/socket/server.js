@@ -1,5 +1,6 @@
 const User = require('./../models/User');
-const Room = require('./../models/Room');
+const ChatGroup = require('./../models/ChatGroup');
+const ChatRecent = require('./../models/ChatRecent');
 const Message = require('./../models/Message');
 const Post = require('./../models/Post');
 
@@ -110,11 +111,9 @@ var ioEvents = function(io) {
          * Event send message
          */
         socket.on('send_message', (data) => {
-            console.log('data', data.sender.room);
             /**
              * Send message to recipient
              */
-            
             io.to(data.to.room).emit('message', data);
 
             /**
@@ -126,16 +125,47 @@ var ioEvents = function(io) {
             newMessage.messageContent = data.messageContent;
             newMessage.status = 1;
 
-            newMessage.save((err, newMessage) => {
-                if (err) {
-                    console.log(err);
+            newMessage.save((err, newMessage) => {});
+            /**
+             * Send message to sender in order to confirm message send successfully
+             */
+            io.to(data.sender.room).emit('owner_message', data);
+
+            /**
+             * Save recent chat
+             */
+            ChatGroup.findById(data.to.room).exec((err, group) => {
+                if (group) {
+                    ChatRecent.findOne({
+                        sender: data.sender.room,
+                        group: data.to.room
+                    }).exec((err, c) => {
+                        if (c) {
+                            c.save();
+                        } else {
+                            let chatRecent = new ChatRecent();
+                            chatRecent.sender = data.sender.room;
+                            chatRecent.group = group._id;
+                            chatRecent.save();
+                        }
+                    })
                 } else {
-                    /**
-                     * Send message to sender in order to confirm message send successfully
-                     */
-                    io.to(data.sender.room).emit('owner_message', data);
+                    ChatRecent.findOne({
+                        sender: data.sender.room,
+                        partner: data.to.room
+                    }).exec((err, c) => {
+                        if (c) {
+                            c.save();
+                        } else {
+                            let chatRecent = new ChatRecent();
+                            chatRecent.sender = data.sender.room;
+                            chatRecent.partner = data.to.room;
+                            chatRecent.save();
+                        }
+                    })
                 }
-            });
+
+            })
         })
 
         /**

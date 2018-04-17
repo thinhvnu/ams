@@ -3,7 +3,6 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('./../../models/User');
-const Role = require('./../../models/Role');
 
 /**
  * Passport

@@ -11,6 +11,8 @@ const notificationSchema = new mongoose.Schema({
     apartments: { type: Array },
     buildings: { type: Array },
     buildingGroups: { type: Array },
+    recipient: {type: mongoose.Schema.Types.ObjectId, model: 'User'},
+    type: {type: Number}, // 1: Admin push to App, 2: user send to admin
     status: {type: Number},
     createdBy: {type: mongoose.Schema.Types.ObjectId},
     updatedBy: {type: mongoose.Schema.Types.ObjectId}

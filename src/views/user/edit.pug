@@ -84,7 +84,7 @@ block content
 						select.select-role.form-control(name='role', data-placeholder='Chọn quyền', style='width: 100%;display: block;')
 							option(value='') Chọn quyền
 							each role in roles
-								option(value=role._id, selected=(data && JSON.stringify(data.role) === JSON.stringify(role.id)) ? true : false) #{role.roleName}
+								option(value=role.value, selected=(data && JSON.stringify(data.role) === JSON.stringify(role.value)) ? true : false) #{role.display}
 						if errors && errors.role
 							.help-block #{errors.role.msg}
 					.col-lg-6(class=errors && errors.email && 'has-error')

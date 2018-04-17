@@ -54,6 +54,7 @@ exports.postCreate = function (req, res) {
 				newNotification.sendTo = [];
 				newNotification.sendTo.push(data.sendTo);
 			}
+			newNotification.type = 1;
 			newNotification.createdBy = req.session.user._id;
 			// save the user
 			newNotification.save(function (err, notification) {
@@ -76,39 +77,6 @@ exports.postCreate = function (req, res) {
 				})
 				.exec((err, apartments) => {
 					if (apartments) {
-						console.log('apartments', apartments);
-						/**
-						 * Set cron job send notification
-						 */
-						// const CronJob = require('cron').CronJob;
-						// const dt = new Date(),
-						// 	cronTime = (dt.getSeconds() + 2) + ' ' + dt.getMinutes() + ' ' + dt.getHours() + ' ' + dt.getDate() + ' ' + dt.getMonth() + ' ' + dt.getDay();
-						
-						// let job = new CronJob({
-						// 	cronTime: cronTime,
-						// 	onTick: function() {
-						// 		let fcmTokens = [];
-						// 		for(let i=0; i<apartments.length; i++) {
-						// 			if (apartments[i].users && apartments[i].users.length > 0) {
-						// 				for(let j=0; j<apartments[i].users.length; j++) {
-						// 					let user = apartments[i].users[j];
-						// 					if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
-						// 						for (let k=0; k<user.firebaseDeviceToken.length; k++) {
-						// 							let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
-						// 							fcmTokens.push(deviceInfo.token);
-						// 						}
-						// 					}
-						// 				}
-						// 			}
-						// 		}
-						// 		Helpers.sendNotification(fcmTokens, notification);
-						// 		// console.log('fcmTokens', fcmTokens);
-						// 	},
-						// 	start: false,
-						// 	timeZone: 'Asia/Ho_Chi_Minh'
-						// });
-						// job.start();
-						/*=== End cron ===*/
 						/**
 						 * Send notification
 						 */

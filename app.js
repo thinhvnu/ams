@@ -22,7 +22,6 @@ dotenv.config({path: '.env'});
 
 const dashboard = require('./src/routes/dashboard');
 const user = require('./src/routes/user');
-const role = require('./src/routes/role');
 const room = require('./src/routes/room');
 const slider = require('./src/routes/slider');
 const media = require('./src/routes/media');
@@ -105,7 +104,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', dashboard);
 app.use('/user', user);
-app.use('/role', role);
 app.use('/room', room);
 app.use('/slider', slider);
 app.use('/media', media);

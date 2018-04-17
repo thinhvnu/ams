@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 
   apartments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'}],
   buildings: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'}],
-  role: {type: mongoose.Schema.Types.ObjectId, ref: 'Role'},
+  role: {type: String},
   status: { type: Number }, // active, block, reported
   isOnline: { type: Boolean },
   groups: [{type: mongoose.Schema.Types.ObjectId, ref: 'ChatGroup'}]

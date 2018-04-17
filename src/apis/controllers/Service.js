@@ -1,6 +1,8 @@
+const User = require('./../../models/User');
 const Service = require('./../../models/Service');
 const ServiceRequest = require('./../../models/ServiceRequest');
 const ServiceCategory = require('./../../models/ServiceCategory');
+const Notification = require('./../../models/Notification');
 
 exports.getCategories = (req, res, next) => {
 	ServiceCategory.find({
@@ -74,7 +76,7 @@ exports.postCreateRequest = (req, res, next) => {
 			return res.json({
 				success: false,
 				errorCode: '011',
-				message: errors,
+				message: errors.mapped(),
 			});
 		} else {
 			Service.findById(req.body.serviceId, (err, service) => {
@@ -108,7 +110,37 @@ exports.postCreateRequest = (req, res, next) => {
 							data: req.body
 						})
 					} else {
-						return res.json({
+						/**
+						 * Push notification to admin and building manager
+						 */
+						User.findById(req.session.user._id)
+						.populate({
+							path: 'buildings',
+							model: 'ApartmentBuilding'
+						}).exec((err, user) => {
+							if (user && user.buildings) {
+								console.log('user.buildings', user.buildings);
+								for (let i=0; i<user.buildings; i++) {
+									let newNoti = new Notification();
+									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
+									newNoti.recipient = user.buildings[i].manager;
+									newNoti.createdBy = req.session.user._id;
+									newNoti.type = 2;
+								}
+							}
+							User.find({role: 'ADMIN'}).exec((err, admins) => {
+								console.log('admins', admins);
+								for (let i=0; i<admins; i++) {
+									let newNoti = new Notification();
+									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
+									newNoti.recipient = admins[i]._id;
+									newNoti.createdBy = req.session.user._id;
+									newNoti.type = 2;
+								}
+							})
+						});
+
+						res.json({
 							success: true,
 							errorCode: 0,
 							message: 'Gửi yêu cầu thành công'

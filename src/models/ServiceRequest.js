@@ -52,6 +52,13 @@ serviceRequestSchema.virtual('invoice_imgs_vitrual').get(function () {
     return '';
 });
 
+serviceRequestSchema.pre('save', function(next) {
+    ServiceRequest.findOne({}).sort('-createdAt').exec((err, sr) => {
+        this.code = (sr && sr.code) ? (sr.code + 1) : 1;
+        next();
+    })
+});
+
 const ServiceRequest = mongoose.model('ServiceRequest', serviceRequestSchema);
 
 module.exports = ServiceRequest;

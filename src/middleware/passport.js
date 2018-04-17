@@ -73,10 +73,6 @@ exports.jwtVerifyToken = (token, cb) => {
                 status: 1
             })
             .populate({
-                path: 'role',
-                model: 'Role'
-            })
-            .populate({
                 path: 'groups',
                 model: 'ChatGroup'
             })

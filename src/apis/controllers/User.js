@@ -1,5 +1,5 @@
+const roles = require('../../libs/roles');
 const User = require('../../models/User');
-const Role = require('../../models/Role');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -25,36 +25,40 @@ exports.postRegister = (req, res, next) => {
 					message: 'Validate errors'
 				})
 		  	} else {
-				Role.findOne({
-					status: true,
-					roleCode: 21
-				}, (err, role) => {
-					if (err) {
+				const user = new User();
+				user.firstName = req.body.firstName;
+				user.lastName = req.body.lastName;
+				user.userName = req.body.userName ? req.body.userName : req.body.phoneNumber;
+				user.email = req.body.email;
+				user.avatar = req.body.avatar;
+				user.phoneNumber = req.body.phoneNumber;
+				user.role = roles.obj.RESIDENT;
+				user.password = req.body.password;
+				if (req.body.building)
+					user.building = req.body.building;
+				user.birthDay = req.body.birthDay;
+				user.gender = req.body.gender;
+				user.apartmentAddress = req.body.apartmentAddress;
+				user.status = 0;
+			
+				User.findOne({ 
+					phoneNumber: req.body.phoneNumber
+				}, (err, existingUser) => {
+					if (err) { 
 						return res.json({
 							success: false,
 							errorCode: '013',
 							message: 'Có lỗi xảy ra' + JSON.stringify(err)
 						});
 					}
-					const user = new User();
-					user.firstName = req.body.firstName;
-					user.lastName = req.body.lastName;
-					user.userName = req.body.userName ? req.body.userName : req.body.phoneNumber;
-					user.email = req.body.email;
-					user.avatar = req.body.avatar;
-					user.phoneNumber = req.body.phoneNumber;
-					user.role = role ? role.id : '';
-					user.password = req.body.password;
-					if (req.body.building)
-						user.building = req.body.building;
-					user.birthDay = req.body.birthDay;
-					user.gender = req.body.gender;
-					user.apartmentAddress = req.body.apartmentAddress;
-					user.status = 0;
-				
-					User.findOne({ 
-						phoneNumber: req.body.phoneNumber
-					}, (err, existingUser) => {
+					if (existingUser) {
+						return res.json({
+							success: false,
+							errorCode: '012',
+							message: 'Người dùng đã tồn tại'
+						});
+					}
+					user.save((err) => {
 						if (err) { 
 							return res.json({
 								success: false,
@@ -62,29 +66,13 @@ exports.postRegister = (req, res, next) => {
 								message: 'Có lỗi xảy ra' + JSON.stringify(err)
 							});
 						}
-						if (existingUser) {
-							return res.json({
-								success: false,
-								errorCode: '012',
-								message: 'Người dùng đã tồn tại'
-							});
-						}
-						user.save((err) => {
-							if (err) { 
-								return res.json({
-									success: false,
-									errorCode: '013',
-									message: 'Có lỗi xảy ra' + JSON.stringify(err)
-								});
-							}
-							return res.json({
-								success: true,
-								errorCode: 0,
-								message: 'Đăng ký tài khoản thành công'
-							});
+						return res.json({
+							success: true,
+							errorCode: 0,
+							message: 'Đăng ký tài khoản thành công'
 						});
 					});
-				})
+				});
 		  	}
 		});
 	} catch (e) {

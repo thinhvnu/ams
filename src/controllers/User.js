@@ -3,7 +3,7 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const Role = require('../models/Role');
+const roles = require('../libs/roles');
 
 /**
  * Passport
@@ -122,15 +122,11 @@ exports.getCreate = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  Role.find({
-    status: 1
-  }, function(err, roles) {
-    res.render('user/create', {
-      current: ['user', 'create'],
-      title: 'Create Account',
-      roles: roles
-    });
-  })
+  res.render('user/create', {
+    current: ['user', 'create'],
+    title: 'Create Account',
+    roles: roles.list
+  });
 };
 
 /**
@@ -152,14 +148,12 @@ exports.postCreate = (req, res, next) => {
         var errors = errors.mapped();
 
         console.log('req.body', req.body)
-        Role.find({}, function (err, roles) {
-          res.render('user/create', {
-            title: 'Create Account',
-            roles: roles,
-            errors: errors,
-            data: req.body
-          });
-        })
+        res.render('user/create', {
+          title: 'Create Account',
+          roles: roles.list,
+          errors: errors,
+          data: req.body
+        });
       } else {
         const user = new User();
         user.firstName = req.body.firstName;
@@ -212,14 +206,10 @@ exports.getEdit = (req, res, next) => {
 
     User.findById(userId)
       .exec((err, user) => {
-        Role.find({
-          status: 1
-        }, (err, roles) => {
-          return res.render('user/edit', {
-            current: ['user', 'exit'],
-            data: user,
-            roles: roles
-          })
+        return res.render('user/edit', {
+          current: ['user', 'exit'],
+          data: user,
+          roles: roles.list
         })
       })
   } catch(e) {

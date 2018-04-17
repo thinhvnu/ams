@@ -24,7 +24,7 @@ exports.getHomeSlider = function (req, res) {
 					Slider.find({
 						status: 1,
 						$or: [
-							{building: null},
+							{building: null, buildingGroup: null},
 							{
 								building: user.building,
 								buildingGroup: user.buildingGroup

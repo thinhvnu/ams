@@ -403,12 +403,62 @@ exports.deleteTokenFirebase = (req, res, next) => {
 	}
 }
 
+exports.postChangePassword = (req, res, next) => {
+	try {
+		req.checkBody('oldPassword', 'Nhập mật khẩu cũ').notEmpty();
+		req.checkBody('newPassword', 'Nhập mật khẩu mới').notEmpty();
+		req.checkBody('confirmNewPassword', 'Mật khẩu không trùng khớp').equals(req.body.newPassword);
+
+		req.getValidationResult().then(function (errors) {
+			if (!errors.isEmpty()) {
+				return res.json({
+					success: false,
+					errorCode: '112',
+					message: 'Validate errors',
+					errors: JSON.stringify(errors.array())
+				})
+			} else {
+				User.findById(req.session.user).exec((err, user) => {
+					if (user) {
+						user.comparePassword(req.body.oldPassword, (err, isMatch) => {
+							if (!isMatch) {
+								return res.json({
+									success: 'false',
+									errorCode: '113',
+									message: 'Mật khẩu cũ không đúng'
+								})
+							} else {
+								user.password = req.body.newPassword;
+								user.save((err, result) => {
+									return res.json({
+										success: true,
+										errorCode: true,
+										message: 'Thay đổi mật khẩu thành công'
+									})
+								})
+							}
+						})
+					} else {
+						return res.json({
+							success: false,
+							errorCode: '121',
+							message: 'Người dùng không tồn tại'
+						})
+					}
+				})
+			}
+		});
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			message: 'Lỗi không xác định'
+		})
+	}
+}
+
 exports.getLogout = (req, res, next) => {
 	req.session.destroy();
-	// req.logout();
-	// req.session.user = null;
-	// res.locals.user = null;
-	// res.cookie(process.env.TOKEN_KEY, '', { httpOnly: false });
 	return res.json({
 		success: true,
 		errorCode: 0,

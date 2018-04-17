@@ -23,6 +23,8 @@ router.get('/search', userController.getSearch);
 /* DELETE firebase token logout*/
 router.get('/remove-token-firebase/:token_firebase',passport.isAuthenticated,userController.deleteTokenFirebase);
 
+router.post('/change-password', passport.isAuthenticated, userController.postChangePassword);
+
 router.get('/logout', passport.isAuthenticated, userController.getLogout);
 
 module.exports = router;

@@ -32,7 +32,7 @@ block scripts
 			});
 			avatarCropperEditor.init();
 			
-			$('.select-role').chosen({ allow_single_deselect: true, disable_search: false });
+			$('.select-role, .chosen-abg, .chosen-ab, .chosen-apartment').chosen({ allow_single_deselect: true, disable_search: false });
 			$('.chosen-status, .select-gender').chosen({ allow_single_deselect: true, disable_search: true });
 		});
 block content
@@ -61,7 +61,7 @@ block content
 							label.custom-file-upload(for='avatar-image', style='display: none;')
 								i.fa.fa-cloud-upload
 							input#avatar-image.mycropper-browse-file(type='file', name='avatar', disabled=true)
-							input#cropper-editor-input-icon-image(type='hidden', name='avatar', value=data.avatar)
+							input#cropper-editor-input-avatar-image(type='hidden', name='avatar', value=data.avatar)
 							#avatar-image-preview.image-preview
 								.image-preview-item
 									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.avatar)
@@ -115,6 +115,31 @@ block content
 						select.chosen-status.form-control(name='status', data-placeholder='Status', style='width: 100px;display: block;')
 							option(value=1, selected=(data && data.status === '1') ? true : false) Active
 							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
+				.form-group
+					.col-lg-4(class=errors && errors.apartmentBuildingGroup && 'has-error')
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư (*)
+						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuildingGroup
+							.help-block #{errors.apartmentBuildingGroup.msg}
+					.col-lg-4(class=errors && errors.apartmentBuilding && 'has-error')
+						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà (*)
+						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;', onchange='onSelectAb(this.value)')
+							option(value='') Chọn tòa nhà
+							//- each abg in abgs
+							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuilding
+							.help-block #{errors.apartmentBuilding.msg}
+					.col-lg-4(class=errors && errors.apartment && 'has-error')
+						label.control-label(for='apartment', style='display: block; text-align: left;') Căn hộ
+						select#choosen-apartment.form-control.chosen-apartment(name='apartment', data-placeholder='Căn hộ', style='width: 100%;')
+							option(value='') Chọn căn hộ
+							//- each abg in abgs
+							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartment
+							.help-block #{errors.apartment.msg}
 				hr
 				.form-group  
 					.col-lg-4

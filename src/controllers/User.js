@@ -2,8 +2,12 @@ const bluebird = require('bluebird');
 const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const roles = require('../libs/roles');
+const User = require('../models/User');
+const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
+const ApartmentBuilding = require('../models/ApartmentBuilding');
+
+var abgs = [], abs = [];
 
 /**
  * Passport
@@ -122,11 +126,14 @@ exports.getCreate = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  res.render('user/create', {
-    current: ['user', 'create'],
-    title: 'Create Account',
-    roles: roles.list
-  });
+  ApartmentBuildingGroup.find({status: 1}).exec((err, abgs) => {
+    res.render('user/create', {
+      current: ['user', 'create'],
+      title: 'Create Account',
+      roles: roles.list,
+      abgs: abgs
+    });
+  })
 };
 
 /**
@@ -135,24 +142,27 @@ exports.getCreate = (req, res) => {
  */
 exports.postCreate = (req, res, next) => {
   try {
-    req.checkBody('firstName', 'firstName is required').notEmpty();
-    req.checkBody('lastName', 'lastName is required').notEmpty();
-    req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty().exi;
-    req.checkBody('role', 'role is required').notEmpty();
-    req.checkBody('password', 'Password must be at least 4 characters long').len(4);
-    req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+    req.checkBody('firstName', 'Nhập họ tên').notEmpty();
+    req.checkBody('lastName', 'Nhập họ tên').notEmpty();
+    req.checkBody('phoneNumber', 'Nhập số điện thoại').notEmpty().exi;
+    req.checkBody('role', 'Chọn quyền').notEmpty();
+    req.checkBody('password', 'Mật khẩu ít nhất 6 kí tự').len(6);
+    req.checkBody('confirmPassword', 'Xác nhận mật khẩu không trùng khớp').equals(req.body.password);
+    req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
+    req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     req.getValidationResult().then(function (errors) {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
-
-        console.log('req.body', req.body)
-        res.render('user/create', {
-          title: 'Create Account',
-          roles: roles.list,
-          errors: errors,
-          data: req.body
+        ApartmentBuildingGroup.find({status: 1}).exec((err, abgs) => {
+          res.render('user/create', {
+            title: 'Create Account',
+            roles: roles.list,
+            errors: errors,
+            data: req.body,
+            abgs: abgs
+          });
         });
       } else {
         const user = new User();
@@ -163,6 +173,9 @@ exports.postCreate = (req, res, next) => {
         user.avatar = req.body.avatar;
         user.phoneNumber = req.body.phoneNumber;
         user.password = req.body.password;
+        user.apartment = req.body.apartment || null;
+        user.building = req.body.apartmentBuilding;
+        user.buildingGroup = req.body.apartmentBuildingGroup;
         user.gender = req.body.gender;
         user.role = req.body.role;
         user.status = req.body.status;
@@ -178,13 +191,6 @@ exports.postCreate = (req, res, next) => {
               console.log('error create new user', err);
               return next(err);
             }
-            // /**
-            //  * Using json web token gen token for client
-            //  */
-            // var token = passport.jwtCreateToken({
-            //   userId: user.id
-            // });
-            // res.cookie(process.env.TOKEN_KEY, token, { httpOnly: false});
             res.redirect('/user');
           });
         });
@@ -205,11 +211,18 @@ exports.getEdit = (req, res, next) => {
     let userId = req.params.userId;
 
     User.findById(userId)
+      .populate('apartment')
+      .populate('building')
       .exec((err, user) => {
-        return res.render('user/edit', {
-          current: ['user', 'exit'],
-          data: user,
-          roles: roles.list
+        ApartmentBuildingGroup.find({
+          status: 1
+        }).exec((err, abgs) => {
+          return res.render('user/edit', {
+            current: ['user', 'exit'],
+            data: user,
+            roles: roles.list,
+            abgs: abgs
+          })
         })
       })
   } catch(e) {
@@ -222,15 +235,18 @@ exports.getEdit = (req, res, next) => {
  * Get edit account
  */
 exports.postUpdate = (req, res, next) => {
-  req.checkBody('firstName', 'firstName is required').notEmpty();
-  req.checkBody('lastName', 'lastName is required').notEmpty();
-  req.checkBody('phoneNumber', 'phoneNumber is required').notEmpty();
-  req.checkBody('role', 'role is required').notEmpty();
+  req.checkBody('firstName', 'Nhập họ tên').notEmpty();
+  req.checkBody('lastName', 'Nhập họ tên').notEmpty();
+  req.checkBody('phoneNumber', 'Nhập số điện thoại').notEmpty();
+  req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
+  req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
+  req.checkBody('role', 'Chọn quyền').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   req.getValidationResult().then(function(errors) {
     if (!errors.isEmpty()) {
-      console.log('errors validate', errors);
+      let errs = errors.array();
+      req.flash('errors', errs[0].msg);
       return res.redirect('/user/edit/' + req.params.userId);
     }
     User.findById(req.params.userId, (err, user) => {
@@ -249,6 +265,9 @@ exports.postUpdate = (req, res, next) => {
         user.email = req.body.email;
         user.gender = req.body.gender;
         user.status = req.body.status;
+        user.apartment = req.body.apartment || null;
+        user.building = req.body.apartmentBuilding;
+        user.buildingGroup = req.body.apartmentBuildingGroup;
         // save the user
         user.save(function (err) {
           if (err) {

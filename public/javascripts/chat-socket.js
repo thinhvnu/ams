@@ -166,11 +166,13 @@ function createNewChatBox(user, isGroup = false) {
     account.style = 'position: relative;height: 44px;padding-left: 85px;padding-top: 3px;background: #fff;z-index: 1;border-bottom: 1px solid #eee;'
     chatBoxHeader.appendChild(account);
 
-    let accountName = document.createElement('div');
-    accountName.className = 'account-name';
-    accountName.style = 'height: 16px;line-height: 16px;color:#1874ba;font-weight:bold;';
-    accountName.textContent = user.email;
-    account.appendChild(accountName);
+    if (user.email) {
+        let accountName = document.createElement('div');
+        accountName.className = 'account-name';
+        accountName.style = 'height: 16px;line-height: 16px;color:#1874ba;font-weight:bold;';
+        accountName.textContent = user.email;
+        account.appendChild(accountName);
+    }
 
     if (user.phoneNumber) {
         let hotline = document.createElement('div');

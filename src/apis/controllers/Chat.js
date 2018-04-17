@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const User = require('./../../models/User');
 const ChatGroup = require('./../../models/ChatGroup');
+const ChatRecent = require('./../../models/ChatRecent');
 const Message = require('./../../models/Message');
 const Apartment = require('./../../models/Apartment');
 const ApartmentBuilding = require('./../../models/ApartmentBuilding');
@@ -31,109 +32,35 @@ exports.getClients = (req, res, next) => {
                     message: 'Get list clients successfully'
                 });
             } else {
-                User.findById(user._id).populate({
-                    path: 'groups',
-                    model: 'ChatGroup'
-                }).exec((err, u) => {
-                    Message.aggregate([
-                        // your where clause: note="test2" and notetwo = "meet2"
-                        {
-                            $match: { 
-                                $or: [
-                                    {'sender': mongoose.Types.ObjectId(user._id)},
-                                    {'recipient': mongoose.Types.ObjectId(user._id)}
-                                ]
-                            }
-                        },
-                        {
-                            $sort: {createdAt: -1}
-                        },
-                        // group by key, score to get distinct
-                        {"$group" : {_id : {sender:"$sender", recipient:"$recipient"}}}, 
-                    ]).exec((err, data) => {
-                        if (data && data.length > 0) {
-                            let ids = [];
-                            for (let i=0; i<data.length; i++) {
-                                ids.push(data[i]._id.sender);
-                                ids.push(data[i]._id.recipient);
-                            }
-                            User.find({
-                                _id: { 
-                                    $ne: user._id,
-                                    $in: ids
-                                }
-                            }).exec((err, users) => {
-                                let listUsers = users, count = 0;
-                                if (users.length > 0) {
-                                    for (let i=0; i<users.length; i++) {
-                                        Message.count({
-                                            sender: users[i]._id,
-                                            recipient: user._id,
-                                            isRead: false
-                                        }).exec((err, c) => {
-                                            listUsers[i] = {...{messUnread: c}, ...users[i].toObject(), ...{avatarUrl: users[i].avatarUrl}};
-                                            count ++;
-                                            if (count >= users.length) {
-                                                if (u && u.groups && u.groups.length) {
-                                                    let groups = [], jCount = 0;
-                                                    for (let j=0; j<u.groups.length; j++) {
-                                                        Message.count({
-                                                            sender: {
-                                                                $ne: user._id
-                                                            },
-                                                            recipient: u.groups[j]._id,
-                                                            isRead: false
-                                                        }).exec((err, c) => {
-                                                            groups[j] = {...{messUnread: c}, ...u.groups[j].toObject()}
-                                                            jCount ++;
-                                                            if (jCount >= u.groups.length) {
-                                                                return res.json({
-                                                                    success: true,
-                                                                    errorCode: 0,
-                                                                    data: {
-                                                                        users: listUsers,
-                                                                        groups: groups
-                                                                    },
-                                                                    message: 'Get list clients successfully'
-                                                                })
-                                                            }
-                                                        });
-                                                    }
-                                                } else {
-                                                    return res.json({
-                                                        success: true,
-                                                        errorCode: 0,
-                                                        data: {
-                                                            users: listUsers,
-                                                            groups: u.groups
-                                                        },
-                                                        message: 'Get list clients successfully'
-                                                    })
-                                                }
-                                            }
-                                        })
+                User.findById(user._id).exec((err, u) => {
+                    if (user) {
+                        ChatRecent.find({
+                            $or: [
+                                {sender: u._id},
+                                {
+                                    group: {
+                                        $in: u.groups
                                     }
-                                } else {
-                                    return res.json({
-                                        success: true,
-                                        errorCode: 0,
-                                        data: {
-                                            users: [],
-                                            groups: u.groups
-                                        },
-                                        message: 'Get list clients successfully'
-                                    })
                                 }
-                            });
-                        } else {
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                data: []
-                            })
-                        }
-                    })
-                })
+                            ]
+                        }).sort('-createdAt').populate('sender').populate('partner')
+                        .populate('group').exec((err, recents) => {
+                            let users = [], groups = [];
+
+                            for (let i=0; i<recents; i++) {
+                                if (recents[i].sender && recents.sender.id !== u.id) {
+                                    users.push(recents[i].sender);
+                                }
+                                if (recents[i].partner && recents.partner.id !== u.id) {
+                                    users.push(recents[i].partner);
+                                }
+                                if (recents[i].group) {
+                                    groups.push(recents[i].group);
+                                }
+                            }
+                        })
+                    }
+                });
             }
         });
     } catch (e) {

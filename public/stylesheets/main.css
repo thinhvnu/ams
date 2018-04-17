@@ -80,6 +80,18 @@
     border-bottom: 5px solid #fff;
     display: block;
 }
+.n-unread-noti {
+    position: absolute;
+    height: 18px;
+    line-height: 18px;
+    bottom: 10px;
+    right: 0px;
+    background: #fa3e3e;
+    color: #ffffff;
+    font-size: 14px;
+    border-radius: 15px;
+    padding: 0 5px;
+}
 #main-content {
     background: #eeeeee;
 }

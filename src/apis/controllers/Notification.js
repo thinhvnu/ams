@@ -1,3 +1,4 @@
+const Notification = require('../../models/Notification');
 const NotificationLog = require('../../models/NotificationLog');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
@@ -67,6 +68,31 @@ exports.getList = (req, res, next) => {
         })
     }
 };
+
+exports.getListByRole = (req, res, next) => {
+    try {
+        Notification.find({
+            recipient: req.session.user._id
+        }).populate({
+            path: 'sender',
+            model: 'User'
+        }).exec((err, notifications) => {
+            return res.json({
+                success: true,
+                errorCode: 0,
+                data: notifications,
+                message: 'Get list notification successfully'
+            })
+        });
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            data: [],
+            message: 'Server exception'
+        })
+    }
+}
 
 exports.updateSeenStatus = (req, res, next) => {
    try {

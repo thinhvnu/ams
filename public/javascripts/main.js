@@ -694,3 +694,40 @@ $(document).on('click', 'input', function() {
   $(this).parent().removeClass('has-error');
   $(this).nextAll('.help-block').remove();
 });
+$(document).ready(function() {
+  /**
+   * Get list notification
+   */
+  let url = '/api/notification/list-by-role';
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+      if (dataRes.success) {
+        let data = dataRes.data;
+        let countNotiUnread = document.getElementById('n-unread-noti');
+
+        if (data && data.length > 0) {
+          countNotiUnread.textContent = data.length;
+          countNotiUnread.style = 'display: block';
+
+          let notificationList = document.getElementById('header-notification-list');
+          notificationList.innerHTML = '';
+          for (let i=0; i<data.length; i++) {
+            let notiItem = document.createElement('li');
+            let link = document.createElement('a');
+            link.textContent = data[i].title;
+            link.href = '#';
+
+            notiItem.appendChild(link);
+            notificationList.appendChild(notiItem);
+          }
+        } else {
+          countNotiUnread.style = 'display: none';
+        }
+      }
+    }
+  };
+  xhttp.open('GET', url, true);
+  xhttp.send();
+})

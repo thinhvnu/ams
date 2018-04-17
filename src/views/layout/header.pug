@@ -30,6 +30,7 @@
         .dropdown(style='height: 100%;display:inline-table;vertical-align: top;')
             .notification.dropdown-toggle(data-toggle="dropdown")
                 i.fa.fa-bell-o
-            ul.dropdown-menu(style='float: right; right: 0;left: auto;')
-                li
-                    a(href='#') Chưa có thông báo nào
+                span#n-unread-noti.n-unread-noti(style='display: none;')
+            ul#header-notification-list.dropdown-menu(style='float: right; right: 0;left: auto;')
+                //- li
+                //-     a(href='#') Chưa có thông báo nào

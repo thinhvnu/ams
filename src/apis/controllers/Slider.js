@@ -26,6 +26,10 @@ exports.getHomeSlider = function (req, res) {
 						$or: [
 							{building: null, buildingGroup: null},
 							{
+								building: null,
+								buildingGroup: user.buildingGroup
+							},
+							{
 								building: user.building,
 								buildingGroup: user.buildingGroup
 							}

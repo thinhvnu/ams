@@ -79,10 +79,10 @@ var ss = session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET, // realtime chat system
-  // store: new MongoStore({
-  //   url: process.env.DB_ADDRESS,
-  //   autoReconnect: true,
-  // })
+  store: new MongoStore({
+    url: process.env.DB_ADDRESS,
+    autoReconnect: true,
+  })
 });
 app.use(ss);
 io.use(sharedsession(ss, {

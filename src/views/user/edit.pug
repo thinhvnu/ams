@@ -60,7 +60,7 @@ block content
 						if data && data.avatar
 							#avatar-image-image-preview.image-preview
 								.image-preview-item
-									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.avatar, onclick='deleteImage("' + data.avatar + '", "avatar-image")')
+									span.btn.btn-danger.btn-xs.remove-image(id='delete-' + data.image, onclick='deleteImage("' + data.avatar + '", "avatar-image")')
 										i.fa.fa-trash
 									img(src=data.avatarUrl)
 							input#cropper-editor-input-avatar-image(type='hidden', name='avatar', value=data.avatar)
@@ -69,7 +69,7 @@ block content
 								i.fa.fa-cloud-upload
 						else
 							input#avatar-image.mycropper-browse-file(type='file', name='avatar')
-							label.custom-file-upload(for='slider-image')
+							label.custom-file-upload(for='avatar-image')
 								i.fa.fa-cloud-upload
 						if errors && errors.avatar
 							.help-block #{errors.avatar.msg}

@@ -50,7 +50,7 @@ function createInboxMessageItem(data) {
 
     let messageItemContent = document.createElement('div');
     messageItemContent.className = 'mess-item-content';
-    messageItemContent.style = 'max-width: calc(100% - 38px); vertical-align: top;display: inline-block;background: #ffffff;color: #333333;padding: 5px 10px;margin-bottom: 5px;border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;';
+    messageItemContent.style = 'max-width: calc(100% - 38px); overflow: hidden; text-overflow: ellipsis;vertical-align: top;display: inline-block;background: #ffffff;color: #333333;padding: 5px 10px;margin-bottom: 5px;border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;';
     messageItemContent.textContent = data.messageContent;
 
     messageItem.appendChild(avatar);
@@ -301,7 +301,7 @@ function createNewChatBox(user, isGroup = false) {
     mainFooterContainer.appendChild(btnSend);
 
     let footerTools = document.createElement('div');
-    footerTools.style = 'position:absolute;bottom: 5px;width: 100%;';
+    footerTools.style = 'position:absolute;bottom: 5px;width: 100%;display: none;';
     footerTools.className = 'footer-tools';
     chatBoxFooter.appendChild(footerTools);
 

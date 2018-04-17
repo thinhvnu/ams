@@ -55,6 +55,9 @@ exports.accessToken = (req, res, next) => {
 							})
             }
             if (isMatch) {
+              req.session.destroy();
+              req.session.user = user;
+              res.locals.user = user;
               /**
                * Using json web token gen token for client
                */

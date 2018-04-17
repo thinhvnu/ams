@@ -148,6 +148,7 @@ function createNewChatBox(user, isGroup = false) {
         let avtImg = document.createElement('img');
         avtImg.className='img img-responsive img-circle';
         avtImg.src = user.avatarUrl;
+        avtImg.style = 'width: 54px;height: 54px;';
         avatar.appendChild(avtImg);
     } else {
         let iconAvtDefault = document.createElement('i');

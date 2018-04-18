@@ -49,42 +49,41 @@ exports.getApartmentCost = (req, res, next) => {
 
     User.findById(user._id)
         .populate({
-            path: 'apartments',
+            path: 'apartment',
             model: 'Apartment'
         })
         .exec((err, u) => {
             if (u) {
                 let costData = [], count=0;
-                for(let i=0; i<u.apartments.length; i++) {
-                    Cost.find({
-                        apartment: u.apartments[i]._id,
-                        year: req.query.year
-                    })
-                    .populate({
-                        path: 'costType',
-                        model: 'CostType'
-                    }).exec((err, costs) => {
-                        let c = [[], [], [], [], [], [], [], [], [], [], [], []];
-
+                Cost.find({
+                    apartment: u.apartment ? u.apartment._id : null,
+                    year: req.query.year
+                })
+                .populate({
+                    path: 'costType',
+                    model: 'CostType'
+                }).exec((err, costs) => {
+                    let c = [[], [], [], [], [], [], [], [], [], [], [], []];
+                    console.log("costs",costs)
+                    if(costs && Array.isArray(costs)){
                         for (let j=0; j<costs.length; j++) {
                             if (costs[j].month >= 1 && costs[j].month <= 12) {
                                 c[costs[j].month - 1].push(costs[j]);
                             }
                         }
-                        costData[i] = {
-                            apartment: u.apartments[i],
+                    }
+                        costData[0] = {
+                            apartment: u.apartment,
                             costs: c
                         }
-                        if (count === u.apartments.length - 1) {
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                data: costData
-                            })
-                        }
-                        count ++;
-                    });
-                }
+                        return res.json({
+                            success: true,
+                            errorCode: 0,
+                            data: costData
+                        })
+                
+                });
+                
             } else {
                 return res.json({
                     success: false,

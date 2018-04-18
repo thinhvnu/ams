@@ -43,7 +43,7 @@ block content
 							td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
 							td #{nt.createdAt.toLocaleString('vi-VN')}
 		.col-lg-3.col-md-3.chat-container
-			h4(style='margin: 0') Chat với người dùng
+			h4(style='margin: 0') Chat với cư dân
 			hr
 			each u in users
 				.user-item(id='user-' + u._id, onclick='createNewChatBox(' + JSON.stringify(u) + ')')

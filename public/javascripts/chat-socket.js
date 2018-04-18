@@ -344,11 +344,10 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://backend.thinhnv.net');
+const socket = io('http://localhost:6888');
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
-        console.log('data', data);
         socket.identification = data;
     });
 
@@ -356,6 +355,8 @@ socket.on('connect', () => {
      * Event receive message from server
      */
     socket.on('message', (data) => {
+        let messageSound = new Audio('/sounds/message.mp3');
+        messageSound.play();
         console.log('data message', data);
         if (data.sender.id === socket.identification.id) {
             return;

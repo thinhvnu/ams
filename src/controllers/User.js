@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const roles = require('../libs/roles');
 const User = require('../models/User');
+const Apartment = require('../models/Apartment');
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const ApartmentBuilding = require('../models/ApartmentBuilding');
 
@@ -257,29 +258,83 @@ exports.postUpdate = (req, res, next) => {
       }
   
       if (user) {
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.avatar = req.body.avatar;
-        user.phoneNumber = req.body.phoneNumber;
-        user.role = req.body.role;
-        user.email = req.body.email;
-        user.gender = req.body.gender;
-        user.status = req.body.status;
-        user.apartment = req.body.apartment || null;
-        user.building = req.body.apartmentBuilding;
-        user.buildingGroup = req.body.apartmentBuildingGroup;
-        // save the user
-        user.save(function (err) {
-          if (err) {
-            console.log('err', err);
-            req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
-            return res.redirect('/user/edit/' + req.params.userId);
+        Apartment.findById(user.apartment).exec((err, apartment) => {
+          if (apartment && apartment.users) {
+            apartment.users.pull(user._id);
+            apartment.save();
+            user.firstName = req.body.firstName;
+            user.lastName = req.body.lastName;
+            user.avatar = req.body.avatar;
+            user.phoneNumber = req.body.phoneNumber;
+            user.role = req.body.role;
+            user.email = req.body.email;
+            user.gender = req.body.gender;
+            user.status = req.body.status;
+            user.apartment = req.body.apartment || null;
+            user.building = req.body.apartmentBuilding;
+            user.buildingGroup = req.body.apartmentBuildingGroup;
+            // save the user
+            user.save(function (err, u) {
+              if (err) {
+                console.log('err', err);
+                req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
+                return res.redirect('/user/edit/' + req.params.userId);
+              }
+
+              Apartment.findById(u.apartment).exec((err, a) => {
+                if (a) {
+                  if (!a.users) {
+                    a.users = [];
+                  }
+                  a.users.pull(u._id);
+                  a.users.push(u._id);
+                  a.save((err) => {
+                    req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
+                    // Insert child to category
+                    return res.redirect('/user');
+                  })
+                } else {
+                  req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
+                  // Insert child to category
+                  return res.redirect('/user');
+                }
+              })
+            });
+          } else {
+            user.firstName = req.body.firstName;
+            user.lastName = req.body.lastName;
+            user.avatar = req.body.avatar;
+            user.phoneNumber = req.body.phoneNumber;
+            user.role = req.body.role;
+            user.email = req.body.email;
+            user.gender = req.body.gender;
+            user.status = req.body.status;
+            user.apartment = req.body.apartment || null;
+            user.building = req.body.apartmentBuilding;
+            user.buildingGroup = req.body.apartmentBuildingGroup;
+            // save the user
+            user.save(function (err, u) {
+              if (err) {
+                console.log('err', err);
+                req.flash('errors', 'Đã xảy ra lỗi trong quá trình cập nhật. Vui lòng thử lại')
+                return res.redirect('/user/edit/' + req.params.userId);
+              }
+      
+              Apartment.findById(u.apartment).exec((err, a) => {
+                if (!a.users) {
+                  a.users = [];
+                }
+                a.users.pull(u._id);
+                a.users.push(u._id);
+                a.save((err) => {
+                  req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
+                  // Insert child to category
+                  return res.redirect('/user');
+                })
+              })
+            });
           }
-  
-          req.flash('success', 'Cập nhật thành công ' + user.firstName + ' ' + user.lastName);
-          // Insert child to category
-          return res.redirect('/user');
-        });
+        })
       } else {
         req.flash('errors', 'Không tìm thấy dữ liệu')
         return res.redirect('/user');

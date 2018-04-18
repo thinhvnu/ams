@@ -37,7 +37,7 @@ block content
 						if errors && errors.apartmentBuildingGroup
 							.help-block #{errors.apartmentBuildingGroup.msg}
 					.col-lg-6(class=errors && errors.apartmentBuilding && 'has-error')
-						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà
+						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà(*)
 						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;')
 							option(value='') Chọn tòa nhà
 							//- each abg in abgs
@@ -46,9 +46,9 @@ block content
 							.help-block #{errors.apartmentBuilding.msg}
 				.form-group
 					.col-lg-6(class=errors && errors.manager && 'has-error')
-						label.control-label(for='manager', style='display: block; text-align: left;') Chủ căn hộ
+						label.control-label(for='manager', style='display: block; text-align: left;') Người thuê căn hộ
 						select.form-control.chosen-manager(name='manager', data-placeholder='Quản lý', style='width: 100%;')
-							option(value='') Chủ căn hộ
+							option(value='') Người thuê căn hộ
 							each user in users
 								option(value=user._id, selected=(data && JSON.stringify(data.manager) === JSON.stringify(user.id)) ? true : false) #{user.firstName + ' ' + user.lastName}
 						if errors && errors.manager

@@ -24,7 +24,7 @@ block content
 						th Tên căn hộ
 						th Tòa nhà
 						th Khu chung cư
-						th Chủ hộ
+						th Người thuê
 						th Người tạo
 						th.text-center Trạng thái
 						th.text-center.no-sort Hành động
@@ -35,8 +35,8 @@ block content
 							td #{dt.apartmentName}
 							td #{dt.building ? dt.building.buildingName : ''}
 							td #{dt.building ? dt.building.apartmentBuildingGroup.abgName : ''}
-							td #{dt.manager && dt.manager.userName}
-							td #{dt.createdBy.userName}
+							td #{dt.manager && (dt.manager.firstName + ' ' + dt.manager.lastName)}
+							td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 							td.text-center #{dt.status ? 'Active' : 'Inactive'}
 							td(align='center')
 								a(href='/apartment/view/' + dt._id).u-action.btn.btn-default

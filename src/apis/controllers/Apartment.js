@@ -95,17 +95,22 @@ exports.postAddNewUser = function (req, res) {
 };
 
 exports.postAddExistUser = function (req, res) {
-  Apartment.findById(req.body.apartmentId, (err, apartment) => {
+  Apartment.findById(req.body.apartmentId)
+  .populate('building').exec( (err, apartment) => {
     let apartmentUser = JSON.parse(req.body.apartmentUser);
 
     for (let i=0; i<apartmentUser.length; i++) {
+      if (!apartment.users) {
+        apartment.users = [];
+      }
       apartment.users.pull(apartmentUser[i]);
       apartment.users.push(apartmentUser[i]);
 
       User.findById(apartmentUser[i], (err, user) => {
         if (user) {
-          user.apartments.pull(apartment._id);
-          user.apartments.push(apartment._id);
+          user.apartment = apartment._id;
+          user.building = apartment.building._id;
+          user.buildingGroup = apartment.building.apartmentBuildingGroup;
           user.save();
         }
       })

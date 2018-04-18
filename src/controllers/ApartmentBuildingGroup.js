@@ -261,13 +261,11 @@ exports.getView = (req, res, next) => {
 			ApartmentBuildingGroup.findById(req.params.abgId)
 				.populate({
 					path: 'manager',
-					model: 'User',
-					select: {'userName': 1}
+					model: 'User'
 				})
 				.populate({
 					path: 'createdBy',
-					model: 'User',
-					select: {'userName': 1}
+					model: 'User'
 				})
 				.populate({
 					path: 'apartmentBuildings',

@@ -32,7 +32,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-user-o
-										.content Quản lý: #{data.manager.userName}
+										.content Quản lý: #{data.manager.firstName + ' ' + data.manager.lastName}
 
 							.row
 								.col-md-6.col-lg-6
@@ -45,7 +45,7 @@ block content
 									.item-detail
 										.icon
 											i.fa.fa-plus-circle
-										.content Người tạo: #{data.createdBy.userName}
+										.content Người tạo: #{data.createdBy.firstName + ' ' + data.createdBy.lastName}
 					.apartment-buildings
 						header.detail-header
 							.icon
@@ -73,7 +73,7 @@ block content
 																	if errors && errors.buildingName
 																		.help-block #{errors.buildingName.msg}
 																.col-lg-6(class=errors && errors.floor && 'has-error')
-																		label.control-label(for='floor', style='display: block; text-align: left;') Số tầng (*)
+																		label.control-label(for='floor', style='display: block; text-align: left;') Số tầng
 																		input.form-control.number-floor(name='floor', data-placeholder='Số tầng', style='width: 100%;')
 																		if errors && errors.floor
 																			.help-block #{errors.floor.msg}
@@ -126,7 +126,7 @@ block content
 													.item-detail
 														.icon
 															i.fa.fa-user-o
-														.content Quản lý: #{dt.manager.userName}
+														.content Quản lý: #{dt.manager.firstName + ' ' + dt.manager.lastName}
 												.col-md-6.col-lg-6
 													.item-detail
 														.icon

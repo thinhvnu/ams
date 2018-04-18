@@ -8,10 +8,7 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
 // Get all apartment building
 exports.getIndex = function (req, res, next) {
 	Apartment.find({})
-		.populate('manager', {
-			'_id': 1,
-			'userName': 1
-		})
+		.populate('manager')
 		.populate({
 			path: 'building',
 			model: 'ApartmentBuilding',
@@ -25,12 +22,7 @@ exports.getIndex = function (req, res, next) {
 				select: { 'abgName': 1 }
 			}
 		})
-		.populate('createdBy', {
-			'_id': 0,
-			'userName': 1,
-			'firstName': 1,
-			'lastName': 1
-		})
+		.populate('createdBy')
 		.exec(function (err, apartments) {
 			if (err) {
 				console.log('err', err)
@@ -85,6 +77,10 @@ exports.postCreate = (req, res, next) => {
 			apartment.building = req.body.apartmentBuilding;
 			apartment.area = req.body.area;
 			apartment.manager = req.body.manager || null;
+			if (req.body.manager) {
+				apartment.users.pull(req.body.manager);
+				apartment.users.push(req.body.manager);
+			}
 			apartment.status = req.body.status;
 			apartment.createdBy = req.session.user._id;
 			// apartmentBuilding.updatedBy = req.session.user._id;
@@ -98,14 +94,28 @@ exports.postCreate = (req, res, next) => {
 				 * Save to apartment building group
 				 */
 				ApartmentBuilding.findById(a.building, (err, ab) => {
-					console.log('ab', ab);
 					if (ab) {
 						ab.apartments.push(a._id);
 						ab.save();
+						User.findById(req.body.manager).exec((err, u) => {
+							if (u) {
+								u.apartment = a._id;
+								u.building = ab._id;
+								u.buildingGroup = ab.apartmentBuildingGroup;
+								u.save((err) => {
+									req.flash('success', 'Đã thêm căn hộ ' + a.apartmentName);
+									return res.redirect('/apartment');
+								})
+							} else {
+								req.flash('success', 'Đã thêm căn hộ ' + a.apartmentName);
+								return res.redirect('/apartment');
+							}
+						})
+					} else {
+						req.flash('success', 'Đã thêm căn hộ ' + a.apartmentName);
+						return res.redirect('/apartment');
 					}
-				})
-				req.flash('success', 'Đã thêm căn hộ ' + a.apartmentName);
-				return res.redirect('/apartment');
+				});
 			});
 		}
 	});
@@ -280,28 +290,29 @@ exports.getView = (req, res, next) => {
 }
 
 exports.getDelete = (req, res, nex) => {
-	Apartment.findOne({ _id: req.params.apartmentId }, (err, apartment) => {
-	  if (err || !apartment) {
-		req.flash('errors', 'Xóa căn hộ không thành công');
-		return res.redirect('/apartment');
-	  } else {
-		ApartmentBuilding.findById(apartment.building, (err, ab) => {
-			console.log('ab', ab);
-			if (ab) {
-				ab.apartments.push(apartment._id);
-				ab.save((err, result) => {
-					apartment.remove((err, r) => {
-						req.flash('success', 'Xóa căn hộ thành công');
-						return res.redirect('/apartment');
-					})
-				});
-			} else {
-				apartment.remove((err, r) => {
-					req.flash('success', 'Xóa căn hộ thành công');
-					return res.redirect('/apartment');
-				});
-			}
-		})
-	  }
+	Apartment.findOne({ _id: req.params.apartmentId }).exec((err, apartment) => {
+		if (err || !apartment) {
+		  req.flash('errors', 'Xóa căn hộ không thành công');
+		  return res.redirect('/apartment');
+		} else {
+		  	User.updateMany({apartment: apartment._id}, {apartment: null}).exec((err) => {
+				ApartmentBuilding.findById(apartment.building, (err, ab) => {
+					if (ab) {
+						  ab.apartments.pull(apartment._id);
+						  ab.save((err, result) => {
+								apartment.remove((err, r) => {
+								req.flash('success', 'Xóa căn hộ thành công');
+								return res.redirect('/apartment');
+							  })
+							});
+						} else {
+							apartment.remove((err, r) => {
+							req.flash('success', 'Xóa căn hộ thành công');
+							return res.redirect('/apartment');
+						});
+					}
+				})
+			})
+		}
 	})
 }

@@ -76,7 +76,7 @@ exports.postAddNewBuilding = (req, res, next) => {
     try {
         req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
         req.checkBody('abgId', 'Chọn khu chung cư').notEmpty();
-        req.checkBody('floor', 'Số tầng của tòa nhà').notEmpty();
+        // req.checkBody('floor', 'Số tầng của tòa nhà').notEmpty();
         req.checkBody('manager', 'Chọn quản lý').notEmpty();
         
         req.getValidationResult().then(function (errors) {

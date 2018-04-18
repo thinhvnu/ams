@@ -61,22 +61,107 @@ exports.getClients = (req, res, next) => {
                                     groupIds.push(recents[i].group._id);
                                 }
                             }
-                            ChatGroup.find({
-                                building: u.building,
-                                _id: {
-                                    $ne: groupIds
-                                }
-                            }).sort('-createdAt').exec((err, grs) => {
-                                return res.json({
-                                    success: true,
-                                    errorCode: 0,
-                                    data: {
-                                        users: users,
-                                        groups: grs ? groups.concat(grs) : groups
-                                    },
-                                    message: 'Get list clients successfully'
-                                })
-                            })
+                            console.log('user', groupIds);
+                            switch(u.role) {
+                                case 'ADMIN':
+                                    ChatGroup.find({
+                                        _id: {
+                                            $nin: groupIds
+                                        }
+                                    }).sort('-createdAt').exec((err, grs) => {
+                                        return res.json({
+                                            success: true,
+                                            errorCode: 0,
+                                            data: {
+                                                users: users,
+                                                groups: grs ? groups.concat(grs) : groups
+                                            },
+                                            message: 'Get list clients successfully'
+                                        })
+                                    })
+                                    break;
+                                case 'BUILDING_GROUP_MANAGER':
+                                    ApartmentBuildingGroup.findOne({manager: u._id}).exec((err, abg) => {
+                                        if (abg) {
+                                            ChatGroup.find({
+                                                buildingGroup: abg._id,
+                                                _id: {
+                                                    $nin: groupIds
+                                                }
+                                            }).sort('-createdAt').exec((err, grs) => {
+                                                return res.json({
+                                                    success: true,
+                                                    errorCode: 0,
+                                                    data: {
+                                                        users: users,
+                                                        groups: grs ? groups.concat(grs) : groups
+                                                    },
+                                                    message: 'Get list clients successfully'
+                                                })
+                                            })
+                                        } else {
+                                            return res.json({
+                                                success: true,
+                                                errorCode: 0,
+                                                data: {
+                                                    users: users,
+                                                    groups: []
+                                                },
+                                                message: 'Get list clients successfully'
+                                            })
+                                        }
+                                    })
+                                    break;
+                                case 'BUILDING_MANAGER':
+                                    ApartmentBuilding.findOne({manager: u._id}).exec((err, ab) => {
+                                        if (ab) {
+                                            ChatGroup.find({
+                                                building: ab._id,
+                                                _id: {
+                                                    $nin: groupIds
+                                                }
+                                            }).sort('-createdAt').exec((err, grs) => {
+                                                return res.json({
+                                                    success: true,
+                                                    errorCode: 0,
+                                                    data: {
+                                                        users: users,
+                                                        groups: grs ? groups.concat(grs) : groups
+                                                    },
+                                                    message: 'Get list clients successfully'
+                                                })
+                                            })
+                                        } else {
+                                            return res.json({
+                                                success: true,
+                                                errorCode: 0,
+                                                data: {
+                                                    users: users,
+                                                    groups: []
+                                                },
+                                                message: 'Get list clients successfully'
+                                            })
+                                        }
+                                    })
+                                    break;
+                                default:
+                                    ChatGroup.find({
+                                        building: u.building,
+                                        _id: {
+                                            $nin: groupIds
+                                        }
+                                    }).sort('-createdAt').exec((err, grs) => {
+                                        return res.json({
+                                            success: true,
+                                            errorCode: 0,
+                                            data: {
+                                                users: users,
+                                                groups: grs ? groups.concat(grs) : groups
+                                            },
+                                            message: 'Get list clients successfully'
+                                        })
+                                    })
+                            }
                         })
                     }
                 });
@@ -265,7 +350,7 @@ exports.postCreateGroup = (req, res, next) => {
                 newGroup.members.push(userAdmin._id);
             }
             newGroup.save((err, ng) => {
-                return res.json(1);
+                // return res.json(1);
                 if (err) {
                     console.log('err', err);
                     return res.json({
@@ -279,26 +364,18 @@ exports.postCreateGroup = (req, res, next) => {
                         let groupMembers = [];
                         groupMembers.push(building.manager);
                         groupMembers.push(building.apartmentBuildingGroup.manager);
-                    } else {
-                        ng.remove();
-                        req.flash('errors', 'Tạo nhóm thất bại');
-                        return res.redirect('/');
-                    }
-                });
-                User.findById(req.session.user._id).exec((err, user) => {
-                    if (user) {
-                        /* Join user create group */
-                        if (!user.groups) {
-                            user.groups = [];
-                        }
-                        user.groups.pull(ng._id);
-                        user.groups.push(ng._id);
-                        user.save((err, u) => {
+                        groupMembers.push(req.session.user._id);
+
+                        ng.members.pull(building.manager);
+                        ng.members.push(building.manager);
+                        ng.members.pull(building.apartmentBuildingGroup.manager);
+                        ng.members.push(building.apartmentBuildingGroup.manager);
+                        ng.save((err) => {
                             if (userAdmin) {
                                 userAdmin.groups.pull(ng._id);
                                 userAdmin.groups.push(ng._id);
                                 userAdmin.save((err, result) => {
-                                    return res.json({
+                                    res.json({
                                         success: true,
                                         errorCode: 0,
                                         group: newGroup,
@@ -306,16 +383,66 @@ exports.postCreateGroup = (req, res, next) => {
                                     })
                                 })
                             } else {
-                                return res.json({
+                                res.json({
                                     success: true,
                                     errorCode: 0,
                                     group: newGroup,
                                     message: 'Tạo nhóm thành công'
                                 })
                             }
+                        });
+
+                        User.find({
+                            _id: {
+                                $in: groupMembers
+                            }
+                        }).exec((err, users) => {
+                            for (let i=0; i<users.length; i++) {
+                                if (!users[i].groups) {
+                                    users[i].groups = [];
+                                }
+                                users[i].groups.pull(ng._id);
+                                users[i].groups.push(ng._id);
+                                users[i].save();
+                            }
                         })
+                    } else {
+                        ng.remove();
+                        req.flash('errors', 'Tạo nhóm thất bại');
+                        return res.redirect('/');
                     }
-                })
+                });
+                // User.findById(req.session.user._id).exec((err, user) => {
+                //     if (user) {
+                //         /* Join user create group */
+                //         if (!user.groups) {
+                //             user.groups = [];
+                //         }
+                //         user.groups.pull(ng._id);
+                //         user.groups.push(ng._id);
+                //         user.save((err, u) => {
+                //             if (userAdmin) {
+                //                 userAdmin.groups.pull(ng._id);
+                //                 userAdmin.groups.push(ng._id);
+                //                 userAdmin.save((err, result) => {
+                //                     return res.json({
+                //                         success: true,
+                //                         errorCode: 0,
+                //                         group: newGroup,
+                //                         message: 'Tạo nhóm thành công'
+                //                     })
+                //                 })
+                //             } else {
+                //                 return res.json({
+                //                     success: true,
+                //                     errorCode: 0,
+                //                     group: newGroup,
+                //                     message: 'Tạo nhóm thành công'
+                //                 })
+                //             }
+                //         })
+                //     }
+                // })
             });
         });
     })

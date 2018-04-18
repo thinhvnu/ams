@@ -728,6 +728,43 @@ function genChatUserItem(user) {
   return userItem;
 }
 
+function genChatGroupItem(group) {
+  let userItem = document.createElement('div');
+  userItem.className = 'user-item';
+  userItem.id = 'user-' + group._id;
+  userItem.onclick = function() {
+    createNewChatBox(group);
+  }
+
+  let userAvatar = document.createElement('div');
+  userAvatar.className = 'user-avatar';
+  userItem.appendChild(userAvatar);
+  if (group.avatar) {
+    let avatarImg = document.createElement('img');
+    avatarImg.className = 'img img-responsive';
+    avatarImg.src = group.avatarUrl;
+    userAvatar.appendChild(avatarImg);
+  } else {
+    let avatarImg = document.createElement('i');
+    avatarImg.className = 'fa fa-user-o';
+    userAvatar.appendChild(avatarImg);
+  }
+
+  let userInfo = document.createElement('div');
+  userInfo.className = 'user-info';
+  userInfo.innerHTML = '<div class="info-center"><div class="user-name">' + group.groupName + '</div></div>';
+  userItem.appendChild(userInfo);
+
+  // if (user.isOnline) {
+  //   let onLineStatus = document.createElement('div');
+  //   onLineStatus.className = 'online-status';
+  //   onLineStatus.innerHTML = '<div class="icon-online"></div>';
+  //   userItem.appendChild(onLineStatus);
+  // }
+
+  return userItem;
+}
+
 function getChatContacts() {
   /**
    * Get chat contacts
@@ -746,6 +783,12 @@ function getChatContacts() {
           for (let i=0; i<data.users.length; i++) {
             let userItem = genChatUserItem(data.users[i]);
             chatUser.appendChild(userItem);
+          }
+        }
+        if (data.groups) {
+          for (let i=0; i<data.groups.length; i++) {
+            let groupItem = genChatGroupItem(data.groups[i]);
+            chatGroup.appendChild(groupItem);
           }
         }
       }

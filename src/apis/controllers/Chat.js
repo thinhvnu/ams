@@ -7,6 +7,7 @@ const ChatRecent = require('./../../models/ChatRecent');
 const Message = require('./../../models/Message');
 const Apartment = require('./../../models/Apartment');
 const ApartmentBuilding = require('./../../models/ApartmentBuilding');
+const ApartmentBuildingGroup = require('./../../models/ApartmentBuildingGroup');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -71,7 +72,7 @@ exports.getClients = (req, res, next) => {
                                     errorCode: 0,
                                     data: {
                                         users: users,
-                                        groups: groups.concat(grs)
+                                        groups: grs ? groups.concat(grs) : groups
                                     },
                                     message: 'Get list clients successfully'
                                 })
@@ -252,7 +253,7 @@ exports.postCreateGroup = (req, res, next) => {
                 message: 'Tên nhóm chat không được để trống'
             })
         }
-        User.findById(req.body.buildingId).exec((err, userAdmin) => {
+        User.findOne({role: 'ADMIN'}).exec((err, userAdmin) => {
             let newGroup = new ChatGroup();
             newGroup.groupName = req.body.groupName;
             newGroup.building = req.body.buildingId;
@@ -264,6 +265,7 @@ exports.postCreateGroup = (req, res, next) => {
                 newGroup.members.push(userAdmin._id);
             }
             newGroup.save((err, ng) => {
+                return res.json(1);
                 if (err) {
                     console.log('err', err);
                     return res.json({
@@ -272,9 +274,17 @@ exports.postCreateGroup = (req, res, next) => {
                         message: 'Có lỗi trong quá trình xử lý'
                     });
                 }
-                // ApartmentBuilding.findById(buildingId).exec((err, building) => {
-
-                // });
+                ApartmentBuilding.findById(ng.building).populate('apartmentBuildingGroup').exec((err, building) => {
+                    if (building) {
+                        let groupMembers = [];
+                        groupMembers.push(building.manager);
+                        groupMembers.push(building.apartmentBuildingGroup.manager);
+                    } else {
+                        ng.remove();
+                        req.flash('errors', 'Tạo nhóm thất bại');
+                        return res.redirect('/');
+                    }
+                });
                 User.findById(req.session.user._id).exec((err, user) => {
                     if (user) {
                         /* Join user create group */

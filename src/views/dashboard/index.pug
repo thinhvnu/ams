@@ -105,14 +105,14 @@ block content
 									button.btn.btn-default(type='button', data-dismiss='modal') Hủy
 			hr
 			#chat-group
-				each g in user.groups
-					.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
-						.user-avatar
-							if g.avatar
-								img.img-responsive(src=g.avatarUrl)
-							else 
-								i.fa.fa-users
-						.user-info
-							.info-center
-								.user-name #{g.groupName}
+				//- each g in user.groups
+				//- 	.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
+				//- 		.user-avatar
+				//- 			if g.avatar
+				//- 				img.img-responsive(src=g.avatarUrl)
+				//- 			else 
+				//- 				i.fa.fa-users
+				//- 		.user-info
+				//- 			.info-center
+				//- 				.user-name #{g.groupName}
 								//- .phoneNumber #{u.phoneNumber}

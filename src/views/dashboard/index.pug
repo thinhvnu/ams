@@ -45,20 +45,21 @@ block content
 		.col-lg-3.col-md-3.chat-container
 			h4(style='margin: 0') Chat với cư dân
 			hr
-			each u in users
-				.user-item(id='user-' + u._id, onclick='createNewChatBox(' + JSON.stringify(u) + ')')
-					.user-avatar
-						if u.avatar
-							img.img-responsive(src=u.avatarUrl)
-						else 
-							i.fa.fa-user-o
-					.user-info
-						.info-center
-							.user-name #{u.firstName + ' ' + u.lastName}
-							//- .phoneNumber #{u.phoneNumber}
-					if u.isOnline
-						.online-status
-							.icon-online
+			#chat-user
+				//- each u in users
+				//- 	.user-item(id='user-' + u._id, onclick='createNewChatBox(' + JSON.stringify(u) + ')')
+				//- 		.user-avatar
+				//- 			if u.avatar
+				//- 				img.img-responsive(src=u.avatarUrl)
+				//- 			else 
+				//- 				i.fa.fa-user-o
+				//- 		.user-info
+				//- 			.info-center
+				//- 				.user-name #{u.firstName + ' ' + u.lastName}
+				//- 				//- .phoneNumber #{u.phoneNumber}
+				//- 		if u.isOnline
+				//- 			.online-status
+				//- 				.icon-online
 			hr
 			h4(style='margin: 0') 
 				|Chat nhóm
@@ -103,14 +104,15 @@ block content
 									button.btn.btn-success.pull-left(type='submit', onClick='createNewGroup()') Đồng ý
 									button.btn.btn-default(type='button', data-dismiss='modal') Hủy
 			hr
-			each g in user.groups
-				.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
-					.user-avatar
-						if g.avatar
-							img.img-responsive(src=g.avatarUrl)
-						else 
-							i.fa.fa-users
-					.user-info
-						.info-center
-							.user-name #{g.groupName}
-							//- .phoneNumber #{u.phoneNumber}
+			#chat-group
+				each g in user.groups
+					.user-item(id='user-' + g._id, onclick='createNewChatBox(' + JSON.stringify(g) + ', true)')
+						.user-avatar
+							if g.avatar
+								img.img-responsive(src=g.avatarUrl)
+							else 
+								i.fa.fa-users
+						.user-info
+							.info-center
+								.user-name #{g.groupName}
+								//- .phoneNumber #{u.phoneNumber}

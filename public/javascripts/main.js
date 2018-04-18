@@ -690,6 +690,71 @@ function toggleSelect() {
   f.classList.toggle('hidden');
 }
 
+
+function genChatUserItem(user) {
+  let userItem = document.createElement('div');
+  userItem.className = 'user-item';
+  userItem.id = 'user-' + user._id;
+  userItem.onclick = function() {
+    createNewChatBox(user);
+  }
+
+  let userAvatar = document.createElement('div');
+  userAvatar.className = 'user-avatar';
+  userItem.appendChild(userAvatar);
+  if (user.avatar) {
+    let avatarImg = document.createElement('img');
+    avatarImg.className = 'img img-responsive';
+    avatarImg.src = user.avatarUrl;
+    userAvatar.appendChild(avatarImg);
+  } else {
+    let avatarImg = document.createElement('i');
+    avatarImg.className = 'fa fa-user-o';
+    userAvatar.appendChild(avatarImg);
+  }
+
+  let userInfo = document.createElement('div');
+  userInfo.className = 'user-info';
+  userInfo.innerHTML = '<div class="info-center"><div class="user-name">' + user.firstName + ' ' + user.lastName + '</div></div>';
+  userItem.appendChild(userInfo);
+
+  if (user.isOnline) {
+    let onLineStatus = document.createElement('div');
+    onLineStatus.className = 'online-status';
+    onLineStatus.innerHTML = '<div class="icon-online"></div>';
+    userItem.appendChild(onLineStatus);
+  }
+
+  return userItem;
+}
+
+function getChatContacts() {
+  /**
+   * Get chat contacts
+   */
+  let url = '/api/chat/clients';
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+      if (dataRes.success) {
+        let data = dataRes.data;
+        let chatUser = document.getElementById('chat-user');
+        let chatGroup = document.getElementById('chat-group');
+
+        if (data.users) {
+          for (let i=0; i<data.users.length; i++) {
+            let userItem = genChatUserItem(data.users[i]);
+            chatUser.appendChild(userItem);
+          }
+        }
+      }
+    }
+  };
+  xhttp.open('GET', url, true);
+  xhttp.send();
+}
+
 $(document).on('click', 'input', function() {
   $(this).parent().removeClass('has-error');
   $(this).nextAll('.help-block').remove();
@@ -730,4 +795,9 @@ $(document).ready(function() {
   };
   xhttp.open('GET', url, true);
   xhttp.send();
+
+  /**
+   * Get chat contact
+   */
+  getChatContacts();
 })

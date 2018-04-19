@@ -823,14 +823,14 @@ $(document).ready(function() {
           notificationList.innerHTML = '';
           for (let i=0; i<data.length; i++) {
             let notiItem = document.createElement('li');
-            notiItem.style = 'background: ##edf2fa;border-bottom: 1px solid #ccc;';
+            notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
             let link = document.createElement('a');
             // link.textContent = data[i].title;
             link.href = '#';
             link.innerHTML = '<span>' + data[i].title + '</span>';
 
             if (data[i].objId && data[i].objId.service ) {
-              link.innerHTML += '<br/><i>' + data[i].objId.service.serviceName + '</i>';
+              link.innerHTML += '<br/><b><i>' + data[i].objId.service.serviceName + '</i></b>';
             }
 
             notiItem.appendChild(link);

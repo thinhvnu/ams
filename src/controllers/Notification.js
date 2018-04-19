@@ -116,11 +116,8 @@ exports.postCreate = function (req, res) {
 					}
 				})
 
-				res.json({
-					success: true,
-					errorCode: 0,
-					message: 'Send notification success fully'
-				})
+				req.flash('success', 'Gửi thông báo thành công');
+				res.redirect('/');
 			});
 		});
 	} catch (e) {

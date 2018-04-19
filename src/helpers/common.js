@@ -10,7 +10,7 @@ exports.sendAndroidNotification = (tokens = [], noticeData = {}) => {
         registration_ids: tokens,
         notification: {
             title: noticeData.title,
-            body: noticeData.content,
+            body: noticeData.description,
             sound: 'default'
         },
         data: {},
@@ -47,7 +47,7 @@ exports.sendIosNotification = (tokens = [], noticeData = {}) => {
         registration_ids: tokens,
         notification: {
             title: noticeData.title,
-            body: noticeData.content,
+            body: noticeData.description,
             sound: 'default'
         },
         data: {},

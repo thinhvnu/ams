@@ -67,98 +67,104 @@ exports.getIndex = function (req, res) {
 };
 
 exports.postCreateRequest = (req, res, next) => {
-	req.checkBody('fullName', 'Vui lòng nhập họ tên đầy đủ').notEmpty();
-	req.checkBody('phoneNumber', 'Vui lòng nhập số điện thoại').notEmpty();
-	req.checkBody('serviceId', 'Mã dịch vụ không được để trống').notEmpty();
+	try {
+		req.checkBody('fullName', 'Vui lòng nhập họ tên đầy đủ').notEmpty();
+		req.checkBody('phoneNumber', 'Vui lòng nhập số điện thoại').notEmpty();
+		req.checkBody('serviceId', 'Mã dịch vụ không được để trống').notEmpty();
 
-	var errors = req.getValidationResult().then(function (errors) {
-		if (!errors.isEmpty()) {
-			return res.json({
-				success: false,
-				errorCode: '011',
-				message: errors.mapped(),
-			});
-		} else {
-			Service.findById(req.body.serviceId, (err, service) => {
-				if (!service) {
-					return res.json({
-						success: false,
-						errorCode: '0111',
-						message: 'Dịch vụ không tồn tại'
-					});
-				}
-				let data = req.body;
-				let newServiceRequest = new ServiceRequest();
-
-				newServiceRequest.fullName = data.fullName;
-				newServiceRequest.phoneNumber = data.phoneNumber;
-				newServiceRequest.address = data.address;
-				newServiceRequest.images = data.images;
-				newServiceRequest.description = data.description;
-				newServiceRequest.orderAt = data.orderAt;
-				newServiceRequest.status = 1;
-				newServiceRequest.done = false;
-				newServiceRequest.invoice_imgs = "";
-				newServiceRequest.service = service._id;
-				newServiceRequest.createdBy = req.session.user._id;
-				newServiceRequest.save(function (err, newServiceRequest) {
-					if (err) {
+		var errors = req.getValidationResult().then(function (errors) {
+			if (!errors.isEmpty()) {
+				return res.json({
+					success: false,
+					errorCode: '011',
+					message: errors.mapped(),
+				});
+			} else {
+				Service.findById(req.body.serviceId, (err, service) => {
+					if (!service) {
 						return res.json({
 							success: false,
-							errorCode: '010',
-							message: errors,
-							data: req.body
-						})
-					} else {
-						/**
-						 * Push notification to admin and building manager
-						 */
-						User.findById(req.session.user._id)
-						.populate({
-							path: 'buildings',
-							model: 'ApartmentBuilding',
-							populate: {
-								path: 'apartmentBuildingGroup',
-								model: 'ApartmentBuildingGroup'
-							}
-						}).exec((err, user) => {
-							if (user && user.buildings) {
-								for (let i=0; i<user.buildings.length; i++) {
-									let newNoti = new Notification();
-									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
-									newNoti.recipient = user.buildings[i].manager;
-									newNoti.building = user.buildings[i]._id,
-									newNoti.buildingGroup = user.buildings[i].apartmentBuildingGroup._id;
-									newNoti.createdBy = req.session.user._id;
-									newNoti.type = 2;
-									newNoti.save();
-								}
-							}
-							User.find({role: 'ADMIN'}).exec((err, admins) => {
-								console.log('admins', admins);
-								for (let i=0; i<admins.length; i++) {
-									let newNoti = new Notification();
-									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
-									newNoti.recipient = admins[i]._id;
-									newNoti.building = (user.buildings[0]) ? user.buildings[0]._id : null,
-									newNoti.buildingGroup = user.buildings[0] ? user.buildings[0].apartmentBuildingGroup._id : null;
-									newNoti.createdBy = req.session.user._id;
-									newNoti.type = 2;
-									newNoti.save();
-								}
-							})
-						});
-
-						res.json({
-							success: true,
-							errorCode: 0,
-							message: 'Gửi yêu cầu thành công'
+							errorCode: '0111',
+							message: 'Dịch vụ không tồn tại'
 						});
 					}
+					let data = req.body;
+					let newServiceRequest = new ServiceRequest();
+
+					newServiceRequest.fullName = data.fullName;
+					newServiceRequest.phoneNumber = data.phoneNumber;
+					newServiceRequest.address = data.address;
+					newServiceRequest.images = data.images;
+					newServiceRequest.description = data.description;
+					newServiceRequest.orderAt = data.orderAt;
+					newServiceRequest.status = 1;
+					newServiceRequest.done = false;
+					newServiceRequest.invoice_imgs = "";
+					newServiceRequest.service = service._id;
+					newServiceRequest.createdBy = req.session.user._id;
+					newServiceRequest.save(function (err, newServiceRequest) {
+						if (err) {
+							return res.json({
+								success: false,
+								errorCode: '010',
+								message: errors,
+								data: req.body
+							})
+						} else {
+							/**
+							 * Push notification to admin and building manager
+							 */
+							User.findById(req.session.user._id)
+							.populate({
+								path: 'buildings',
+								model: 'ApartmentBuilding',
+								populate: {
+									path: 'apartmentBuildingGroup',
+									model: 'ApartmentBuildingGroup'
+								}
+							}).exec((err, user) => {
+								if (user && user.building) {
+									let newNoti = new Notification();
+									newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
+									newNoti.recipient = user.building.manager;
+									newNoti.building = user.building._id,
+									newNoti.buildingGroup = user.building.apartmentBuildingGroup._id;
+									newNoti.createdBy = req.session.user._id;
+									newNoti.type = 2;
+									newNoti.save();
+								}
+								User.find({role: 'ADMIN'}).exec((err, admins) => {
+									console.log('admins', admins);
+									for (let i=0; i<admins.length; i++) {
+										let newNoti = new Notification();
+										newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,
+										newNoti.recipient = admins[i]._id;
+										newNoti.building = (user.building) ? user.building._id : null,
+										newNoti.buildingGroup = user.building ? user.building.apartmentBuildingGroup._id : null;
+										newNoti.createdBy = req.session.user._id;
+										newNoti.type = 2;
+										newNoti.save();
+									}
+								})
+							});
+
+							res.json({
+								success: true,
+								errorCode: 0,
+								message: 'Gửi yêu cầu thành công'
+							});
+						}
+					})
 				})
-			})
-		}
-	});
+			}
+		});
+	} catch (e) {
+		return res.json({
+			success: false,
+			errorCode: '111',
+			message: 'Server error'
+		})
+	}
 }
 
 exports.getDeleteRequest = (req, res, next) => {

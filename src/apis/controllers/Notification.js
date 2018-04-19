@@ -17,7 +17,9 @@ exports.getList = (req, res, next) => {
             }
         }
 
-        NotificationLog.find({})
+        NotificationLog.find({
+            isFirst: true
+        })
             .sort('-createdAt')
             .skip(page * pageSize)
             .limit(pageSize)
@@ -35,22 +37,19 @@ exports.getList = (req, res, next) => {
                     })
                 }
 
-                let data = [], currentId = null;
+                let data = [];
 
                 for (let i = 0; i < notifications.length; i++) {
-                    if (notifications[i].notification.id !== currentId) {
-                        data.push(
-                            {
-                                id:notifications[i].id,
-                                status:notifications[i].status,
-                                title: notifications[i].notification.title,
-                                description: notifications[i].notification.description,
-                                content: notifications[i].notification.content,
-                                createdAt: notifications[i].createdAt
-                            }
-                        )
-                        currentId = notifications[i].notification.id;
-                    }
+                    data.push(
+                        {
+                            id:notifications[i].id,
+                            status:notifications[i].status,
+                            title: notifications[i].notification.title,
+                            description: notifications[i].notification.description,
+                            content: notifications[i].notification.content,
+                            createdAt: notifications[i].createdAt
+                        }
+                    )
                 }
 
                 return res.json({

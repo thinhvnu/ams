@@ -103,6 +103,9 @@ exports.postCreate = function (req, res) {
 											newNotificationLog.apartment = apartments[i]._id;
 											newNotificationLog.building = apartments[i].building;
 											newNotificationLog.buildingGroup = apartments[i].buildingGroup;
+											if (k === 0) {
+												newNotificationLog.isFirst = true;
+											}
 											newNotificationLog.status = 1;
 											newNotificationLog.save();
 										}

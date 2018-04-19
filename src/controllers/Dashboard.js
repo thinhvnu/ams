@@ -8,7 +8,9 @@ exports.getIndex = (req, res, next) => {
         /**
          * Get last 10 notification
          */
-        NotificationLog.find({})
+        NotificationLog.find({
+            isFirst: true
+        })
         .populate({
             path: 'notification',
             model: 'Notification'

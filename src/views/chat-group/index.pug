@@ -1,0 +1,38 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			$('#chatgroup-list').DataTable();
+		});
+block content
+	.row
+		.col-lg-12
+			.user-actions
+				a.btn.btn-success(href='/chat-group/create') Tạo mới
+			hr
+			table#chatgroup-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Tên nhóm
+						th Tòa nhà
+						th Chung cư
+						th.text-center
+							em.fa.fa-cog
+				tbody
+					each dt, i in data
+						tr
+							td.hidden-xs #{i+1}
+							td #{dt.groupName}
+							td #{dt.building.buildingName}
+							td #{dt.buildingGroup.abgName}
+							td(align='center')
+								a.btn.btn-default
+									em.fa.fa-pencil
+								a.btn.btn-danger
+									em.fa.fa-trash

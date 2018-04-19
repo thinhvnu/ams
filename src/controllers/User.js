@@ -13,7 +13,7 @@ var abgs = [], abs = [];
 /**
  * Passport
  */
-const passport = require('./../middleware/passport');
+const passport = require('./../middleware/apiPassport');
 
 /**
  * GET /

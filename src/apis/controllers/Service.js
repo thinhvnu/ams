@@ -116,7 +116,7 @@ exports.postCreateRequest = (req, res, next) => {
 							 */
 							User.findById(req.session.user._id)
 							.populate({
-								path: 'buildings',
+								path: 'building',
 								model: 'ApartmentBuilding',
 								populate: {
 									path: 'apartmentBuildingGroup',
@@ -129,7 +129,7 @@ exports.postCreateRequest = (req, res, next) => {
 									newNoti.recipient = user.building.manager;
 									newNoti.building = user.building._id,
 									newNoti.buildingGroup = user.building.apartmentBuildingGroup._id;
-									newNoti.createdBy = req.session.user._id;
+									newNoti.createdBy = user._id;
 									newNoti.type = 2;
 									newNoti.objId = newServiceRequest._id;
 									newNoti.save();
@@ -142,7 +142,7 @@ exports.postCreateRequest = (req, res, next) => {
 										newNoti.recipient = admins[i]._id;
 										newNoti.building = (user.building) ? user.building._id : null,
 										newNoti.buildingGroup = user.building ? user.building.apartmentBuildingGroup._id : null;
-										newNoti.createdBy = req.session.user._id;
+										newNoti.createdBy = user._id;
 										newNoti.type = 2;
 										newNoti.objId = newServiceRequest._id;
 										newNoti.save();

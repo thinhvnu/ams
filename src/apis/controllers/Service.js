@@ -134,7 +134,12 @@ exports.postCreateRequest = (req, res, next) => {
 									newNoti.objId = newServiceRequest._id;
 									newNoti.save();
 								}
-								User.find({role: 'ADMIN'}).exec((err, admins) => {
+								User.find({
+									role: 'ADMIN',
+									_id: {
+										$ne: (user && user.building) ? user.building.manager : null
+									}
+								}).exec((err, admins) => {
 									console.log('admins', admins);
 									for (let i=0; i<admins.length; i++) {
 										let newNoti = new Notification();

@@ -18,18 +18,20 @@ exports.getIndex = (req, res, next) => {
             model: 'User',
             select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
         })
-        .populate({
-            path: 'apartment',
-            model: 'Apartment'
-        })
-        .populate({
-            path: 'building',
-            model: 'ApartmentBuilding'
-        })
-        .populate({
-            path: 'buildingGroup',
-            model: 'ApartmentBuildingGroup'
-        })
+        .limit(10)
+        .distinct( 'notification' )
+        // .populate({
+        //     path: 'apartment',
+        //     model: 'Apartment'
+        // })
+        // .populate({
+        //     path: 'building',
+        //     model: 'ApartmentBuilding'
+        // })
+        // .populate({
+        //     path: 'buildingGroup',
+        //     model: 'ApartmentBuildingGroup'
+        // })
         .exec((err, nLogs) => {
             User.find({
                 _id: {

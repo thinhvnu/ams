@@ -80,7 +80,7 @@ exports.postCreate = function (req, res) {
 						/**
 						 * Send notification
 						 */
-						let fcmTokens = [];
+						let androidFcmTokens = [], iosFcmTokens = [];
 						for(let i=0; i<apartments.length; i++) {
 							if (apartments[i].users && apartments[i].users.length > 0) {
 								for(let j=0; j<apartments[i].users.length; j++) {
@@ -88,8 +88,11 @@ exports.postCreate = function (req, res) {
 									if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
 										for (let k=0; k<user.firebaseDeviceToken.length; k++) {
 											let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
-											fcmTokens.push(deviceInfo.token);
-
+											if (deviceInfo.os === 'android') {
+												androidFcmTokens.push(deviceInfo.token);
+											} else {
+												iosFcmTokens.push(deviceInfo.token);
+											}
 											/**
 											 * save log
 											 */
@@ -107,7 +110,8 @@ exports.postCreate = function (req, res) {
 								}
 							}
 						}
-						Helpers.sendNotification(fcmTokens, notification);
+						Helpers.sendAndroidNotification(androidFcmTokens, notification);
+						Helpers.sendIosNotification(iosFcmTokens, notification);
 						/*=== END ===*/
 					}
 				})

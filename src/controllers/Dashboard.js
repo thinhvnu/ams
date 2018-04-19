@@ -44,6 +44,7 @@ exports.getIndex = (req, res, next) => {
         //     model: 'ApartmentBuildingGroup'
         // })
         .exec((err, nLogs) => {
+            console.log('nlogs', nLogs);
             User.find({
                 _id: {
                     $ne: req.session.user._id

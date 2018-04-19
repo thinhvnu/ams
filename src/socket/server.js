@@ -243,13 +243,13 @@ var ioEvents = function(io) {
          * Event create new service request
          */
         socket.on('new_service_request', data => {
-            if (data) {
-                Notification.find({_objId: data._id}).exec((err, notifications) => {
-                    for(let i=0; i<notifications.length; i++) {
-                        io.to(notifications[i].recipient).emit('noti_new_service_request', notifications[i]);
-                    }
-                });
-            }
+            // if (data) {
+            //     Notification.find({_objId: data._id}).exec((err, notifications) => {
+            //         for(let i=0; i<notifications.length; i++) {
+            //             io.to(notifications[i].recipient).emit('noti_new_service_request', notifications[i]);
+            //         }
+            //     });
+            // }
         })
 
         /**

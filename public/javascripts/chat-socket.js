@@ -407,4 +407,12 @@ socket.on('connect', () => {
             }
         }
     });
+
+    /**
+     * Event new service request
+     */
+    socket.on('noti_new_service_request', (noti) => {
+        let messageSound = new Audio('/sounds/notification.mp3');
+        messageSound.play();
+    })
 });

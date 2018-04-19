@@ -823,6 +823,7 @@ $(document).ready(function() {
           notificationList.innerHTML = '';
           for (let i=0; i<data.length; i++) {
             let notiItem = document.createElement('li');
+            notiItem.style = 'background: ##edf2fa;border-bottom: 1px solid #ccc;';
             let link = document.createElement('a');
             // link.textContent = data[i].title;
             link.href = '#';

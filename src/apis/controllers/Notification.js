@@ -44,6 +44,7 @@ exports.getList = (req, res, next) => {
                                 id:notifications[i].id,
                                 status:notifications[i].status,
                                 title: notifications[i].notification.title,
+                                description: notifications[i].notification.description,
                                 content: notifications[i].notification.content,
                                 createdAt: notifications[i].createdAt
                             }

@@ -11,7 +11,7 @@ const notificationLogSchema = new mongoose.Schema({
     apartment: { type: mongoose.Schema.Types.ObjectId },
     building: { type: mongoose.Schema.Types.ObjectId },
     buildingGroup: { type: mongoose.Schema.Types.ObjectId },
-    isFirst: {type: boolean, default: false},
+    isFirst: {type: Boolean, default: false},
     status: { type: Number } // 1: sent, 2: seen
 }, {timestamps: true, usePushEach: true});
 

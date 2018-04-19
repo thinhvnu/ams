@@ -421,30 +421,35 @@ socket.on('connect', () => {
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if(xhttp.readyState == 4 && xhttp.status == 200) {
-                let dataRes = JSON.parse(this.response);
-                if (dataRes.success) {
-                    let data = dataRes.data;
-                    let countNotiUnread = document.getElementById('n-unread-noti');
+            let dataRes = JSON.parse(this.response);
+            if (dataRes.success) {
+                let data = dataRes.data;
+                let countNotiUnread = document.getElementById('n-unread-noti');
 
-                    if (data && data.length > 0) {
-                        countNotiUnread.textContent = data.length;
-                        countNotiUnread.style = 'display: block';
+                if (data && data.length > 0) {
+                countNotiUnread.textContent = data.length;
+                countNotiUnread.style = 'display: block';
 
-                        let notificationList = document.getElementById('header-notification-list');
-                        notificationList.innerHTML = '';
-                        for (let i=0; i<data.length; i++) {
-                            let notiItem = document.createElement('li');
-                            let link = document.createElement('a');
-                            link.textContent = data[i].title;
-                            link.href = '#';
+                let notificationList = document.getElementById('header-notification-list');
+                notificationList.innerHTML = '';
+                for (let i=0; i<data.length; i++) {
+                    let notiItem = document.createElement('li');
+                    let link = document.createElement('a');
+                    // link.textContent = data[i].title;
+                    link.href = '#';
+                    link.innerHTML = '<span>' + data[i].title + '</span>';
 
-                            notiItem.appendChild(link);
-                            notificationList.appendChild(notiItem);
-                        }
-                    } else {
-                        countNotiUnread.style = 'display: none';
+                    if (data[i].objId && data[i].objId.service ) {
+                    link.innerHTML += '<br/><i>' + data[i].objId.service.serviceName + '</i>';
                     }
+
+                    notiItem.appendChild(link);
+                    notificationList.appendChild(notiItem);
                 }
+                } else {
+                countNotiUnread.style = 'display: none';
+                }
+            }
             }
         };
         xhttp.open('GET', url, true);

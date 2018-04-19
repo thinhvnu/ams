@@ -72,11 +72,19 @@ exports.getList = (req, res, next) => {
 exports.getListByRole = (req, res, next) => {
     try {
         Notification.find({
+            type: 2,
             recipient: req.session.user._id
         }).populate({
             path: 'sender',
             model: 'User'
-        }).exec((err, notifications) => {
+        }).populate({
+            path: 'objId',
+            model: 'ServiceRequest',
+            populate: {
+                path: 'service',
+                model: 'Service'
+            }
+        }).sort('-createdAt').exec((err, notifications) => {
             return res.json({
                 success: true,
                 errorCode: 0,

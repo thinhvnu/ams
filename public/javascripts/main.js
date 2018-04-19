@@ -779,13 +779,13 @@ function getChatContacts() {
         let chatUser = document.getElementById('chat-user');
         let chatGroup = document.getElementById('chat-group');
 
-        if (data.users) {
+        if (data.users && chatUser) {
           for (let i=0; i<data.users.length; i++) {
             let userItem = genChatUserItem(data.users[i]);
             chatUser.appendChild(userItem);
           }
         }
-        if (data.groups) {
+        if (data.groups && chatGroup) {
           for (let i=0; i<data.groups.length; i++) {
             let groupItem = genChatGroupItem(data.groups[i]);
             chatGroup.appendChild(groupItem);
@@ -824,8 +824,13 @@ $(document).ready(function() {
           for (let i=0; i<data.length; i++) {
             let notiItem = document.createElement('li');
             let link = document.createElement('a');
-            link.textContent = data[i].title;
+            // link.textContent = data[i].title;
             link.href = '#';
+            link.innerHTML = '<span>' + data[i].title + '</span>';
+
+            if (data[i].objId && data[i].objId.service ) {
+              link.innerHTML += '<br/><i>' + data[i].objId.service.serviceName + '</i>';
+            }
 
             notiItem.appendChild(link);
             notificationList.appendChild(notiItem);

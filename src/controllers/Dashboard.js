@@ -9,29 +9,17 @@ exports.getIndex = (req, res, next) => {
          * Get last 10 notification
          */
         NotificationLog.find({})
-        .aggregate(
-            [
-              { $sort: { createdAt: -1 } },
-              {
-                $group:
-                  {
-                    _id: "$notification",
-                    firstSalesDate: { $first: "$createdAt" }
-                  }
-              }
-            ]
-        )
-        // .populate({
-        //     path: 'notification',
-        //     model: 'Notification'
-        // })
-        // .populate({
-        //     path: 'sendTo',
-        //     model: 'User',
-        //     select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
-        // })
-        // .limit(10)
-        // .distinct( 'notification' )
+        .populate({
+            path: 'notification',
+            model: 'Notification'
+        })
+        .populate({
+            path: 'sendTo',
+            model: 'User',
+            select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
+        })
+        .sort('-createdAt')
+        .limit(10)
         // .populate({
         //     path: 'apartment',
         //     model: 'Apartment'
@@ -45,7 +33,6 @@ exports.getIndex = (req, res, next) => {
         //     model: 'ApartmentBuildingGroup'
         // })
         .exec((err, nLogs) => {
-            console.log('nlogs', nLogs);
             User.find({
                 _id: {
                     $ne: req.session.user._id

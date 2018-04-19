@@ -9,7 +9,18 @@ exports.getIndex = (req, res, next) => {
          * Get last 10 notification
          */
         NotificationLog.find({})
-        .populate({
+        .aggregate(
+            [
+              { $sort: { createdAt: -1 } },
+              {
+                $group:
+                  {
+                    _id: "$notification",
+                    firstSalesDate: { $first: "$createdAt" }
+                  }
+              }
+            ]
+        ).populate({
             path: 'notification',
             model: 'Notification'
         })
@@ -18,8 +29,8 @@ exports.getIndex = (req, res, next) => {
             model: 'User',
             select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
         })
-        .limit(10)
-        .distinct( 'notification' )
+        // .limit(10)
+        // .distinct( 'notification' )
         // .populate({
         //     path: 'apartment',
         //     model: 'Apartment'

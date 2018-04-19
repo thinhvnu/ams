@@ -153,6 +153,7 @@ exports.postCreateRequest = (req, res, next) => {
 							res.json({
 								success: true,
 								errorCode: 0,
+								data: newServiceRequest,
 								message: 'Gửi yêu cầu thành công'
 							});
 						}

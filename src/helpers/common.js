@@ -50,8 +50,9 @@ exports.sendIosNotification = (tokens = [], noticeData = {}) => {
             body: noticeData.description,
             sound: 'default'
         },
-        data: {},
-        priority: 'high'
+        content_available: true
+        // data: {},
+        // priority: 'high'
     }
 
     try {

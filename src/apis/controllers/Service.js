@@ -131,6 +131,7 @@ exports.postCreateRequest = (req, res, next) => {
 									newNoti.buildingGroup = user.building.apartmentBuildingGroup._id;
 									newNoti.createdBy = req.session.user._id;
 									newNoti.type = 2;
+									newNoti.objId = newServiceRequest._id;
 									newNoti.save();
 								}
 								User.find({role: 'ADMIN'}).exec((err, admins) => {
@@ -143,6 +144,7 @@ exports.postCreateRequest = (req, res, next) => {
 										newNoti.buildingGroup = user.building ? user.building.apartmentBuildingGroup._id : null;
 										newNoti.createdBy = req.session.user._id;
 										newNoti.type = 2;
+										newNoti.objId = newServiceRequest._id;
 										newNoti.save();
 									}
 								})

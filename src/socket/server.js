@@ -1,6 +1,7 @@
 const User = require('./../models/User');
 const ChatGroup = require('./../models/ChatGroup');
 const ChatRecent = require('./../models/ChatRecent');
+const Notification = require('./../models/Notification');
 const Message = require('./../models/Message');
 const Post = require('./../models/Post');
 
@@ -50,7 +51,7 @@ var ioEvents = function(io) {
                     };
                     setTimeout(function(){
                         socket.emit('join_chat_successfully', dataIdentification);
-                    }, 800);
+                    }, 1500);
                     socket.identification = dataIdentification;
     
                     /**
@@ -236,6 +237,19 @@ var ioEvents = function(io) {
                 // }
                 io.sockets.emit('comment', post.comments);
             });
+        })
+
+        /**
+         * Event create new service request
+         */
+        socket.on('new_service_request', data => {
+            if (data) {
+                Notification.find({_objId: data._id}).exec((err, notifications) => {
+                    for(let i=0; i<notifications.length; i++) {
+                        io.to(notifications[i].recipient).emit('noti_new_service_request', notifications[i]);
+                    }
+                });
+            }
         })
 
         /**

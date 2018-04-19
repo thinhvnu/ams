@@ -21,27 +21,27 @@ block content
 			table#notification-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
-						th.hidden-xs STT
-						th Thông báo
-						th Người nhận
-						//- th Thiết bị
-						//- th Căn hộ
-						//- th Tòa nhà
-						//- th Chung cư
-						th.text-center Trạng thái
-						th Ngày gửi
+						//- th.hidden-xs STT
+						//- th Thông báo
+						//- th Người nhận
+						//- //- th Thiết bị
+						//- //- th Căn hộ
+						//- //- th Tòa nhà
+						//- //- th Chung cư
+						//- th.text-center Trạng thái
+						//- th Ngày gửi
 				tbody
 					each nt, i in notifications
 						tr
-							td.hidden-xs #{i+1}
-							td #{nt.notification.title}
-							td #{nt.sendTo ? (nt.sendTo.firstName + ' ' + nt.sendTo.lastName) : ''}
-							//- td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
-							//- td #{nt.apartment.apartmentName}
-							//- td #{nt.building.buildingName}
-							//- td #{nt.buildingGroup ? nt.buildingGroup.abgName : ''}
-							td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
-							td #{nt.createdAt.toLocaleString('vi-VN')}
+							//- td.hidden-xs #{i+1}
+							//- td #{nt.notification.title}
+							//- td #{nt.sendTo ? (nt.sendTo.firstName + ' ' + nt.sendTo.lastName) : ''}
+							//- //- td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
+							//- //- td #{nt.apartment.apartmentName}
+							//- //- td #{nt.building.buildingName}
+							//- //- td #{nt.buildingGroup ? nt.buildingGroup.abgName : ''}
+							//- td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
+							//- td #{nt.createdAt.toLocaleString('vi-VN')}
 		.col-lg-3.col-md-3.chat-container
 			h4(style='margin: 0') Chat với cư dân
 			hr

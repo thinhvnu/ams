@@ -20,15 +20,16 @@ exports.getIndex = (req, res, next) => {
                   }
               }
             ]
-        ).populate({
-            path: 'notification',
-            model: 'Notification'
-        })
-        .populate({
-            path: 'sendTo',
-            model: 'User',
-            select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
-        })
+        )
+        // .populate({
+        //     path: 'notification',
+        //     model: 'Notification'
+        // })
+        // .populate({
+        //     path: 'sendTo',
+        //     model: 'User',
+        //     select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
+        // })
         // .limit(10)
         // .distinct( 'notification' )
         // .populate({

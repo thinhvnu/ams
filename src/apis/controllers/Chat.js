@@ -543,47 +543,27 @@ exports.getAdmin = (req, res, next) => {
     try {
         // if (user.apartments && user.apartments[0]) {
             /* Return admin of building */
-            User.findById(req.session.user._id).exec((err, user) => {
-                console.log('user', user);
-                if (user.apartments && user.apartments.length > 0) {
-                    Apartment.find({_id: {$in: user.apartments}}).populate({
-                        path: 'building',
-                        model: 'ApartmentBuilding',
-                        populate: {
-                            path: 'manager',
-                            model: 'User'
-                        }
-                    }).exec((err, apartments) => {
-                        if (apartments && apartments.length > 0) {
-                            let apartment = apartments[0];
-                            if (apartment) {
-                                console.log('apartment', apartment);
-                                return res.json({
-                                    success: true,
-                                    errorCode: 0,
-                                    data: apartment.building ? apartment.building.manager : ''
-                                })
-                            } else {
-                                return res.json({
-                                    success: true,
-                                    errorCode: 0,
-                                    data: {}
-                                })
-                            }
-                        } else {
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                data: {}
-                            })
-                        }
-                    });
+            User.findById(req.session.user._id)
+            .populate({
+                path: 'building',
+                model: 'ApartmentBuilding',
+                populate: {
+                    path: 'manager',
+                    model: 'User'
+                }
+            }).exec((err, user) => {
+                if (user && user.building) {
+                    return res.json({
+                        success: true,
+                        errorCode: 0,
+                        data: user.building.manager
+                    })
                 } else {
                     return res.json({
                         success: true,
                         errorCode: 0,
                         data: {}
-                    })
+                    });
                 }
             })
         // }

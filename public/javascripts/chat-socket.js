@@ -427,29 +427,31 @@ socket.on('connect', () => {
                 let countNotiUnread = document.getElementById('n-unread-noti');
 
                 if (data && data.length > 0) {
-                countNotiUnread.textContent = data.length;
-                countNotiUnread.style = 'display: block';
+                    let count = 0;
+                    countNotiUnread.style = 'display: block';
 
-                let notificationList = document.getElementById('header-notification-list');
-                notificationList.innerHTML = '';
-                for (let i=0; i<data.length; i++) {
-                    let notiItem = document.createElement('li');
-                    if (data[i].status > 0)
-                        notiItem.style = 'background: #ffffff;border-bottom: 1px solid #ccc;';
-                    else
-                        notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
-                    let link = document.createElement('a');
-                    // link.textContent = data[i].title;
-                    link.href = '/notification/view/' + data[i]._id;
-                    link.innerHTML = '<span>' + data[i].title + '</span>';
+                    let notificationList = document.getElementById('header-notification-list');
+                    notificationList.innerHTML = '';
+                    for (let i=0; i<data.length; i++) {
+                        count ++;
+                        let notiItem = document.createElement('li');
+                        if (data[i].status > 0)
+                            notiItem.style = 'background: #ffffff;border-bottom: 1px solid #ccc;';
+                        else
+                            notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
+                        let link = document.createElement('a');
+                        // link.textContent = data[i].title;
+                        link.href = '/notification/view/' + data[i]._id;
+                        link.innerHTML = '<span>' + data[i].title + '</span>';
 
-                    if (data[i].objId && data[i].objId.service ) {
-                    link.innerHTML += '<br/><b><i>' + data[i].objId.service.serviceName + '</i></b>';
+                        if (data[i].objId && data[i].objId.service ) {
+                        link.innerHTML += '<br/><b><i>' + data[i].objId.service.serviceName + '</i></b>';
+                        }
+
+                        notiItem.appendChild(link);
+                        notificationList.appendChild(notiItem);
                     }
-
-                    notiItem.appendChild(link);
-                    notificationList.appendChild(notiItem);
-                }
+                    countNotiUnread.textContent = count;
                 } else {
                 countNotiUnread.style = 'display: none';
                 }

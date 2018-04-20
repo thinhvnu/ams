@@ -29,9 +29,9 @@ block content
 							td.hidden-xs #{i+1}
 							td #{dt.content}
 							td
-                                if dt.image
-                                    img(src=dt.imageUrl, style='width: 120px;height: 100px')
-                                else
-                                    | Không có
+								if dt.image
+									img(src=dt.imageUrl, style='width: 120px;height: 100px')
+								else
+									| Không có
 							td #{dt.createdAt.firstName + ' ' + dt.createdAt.lastName}
 							td #{dt.createdAt.toLocaleString('vi-VN')}

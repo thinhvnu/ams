@@ -37,6 +37,7 @@ block content
 						if data.images
 							- var imgs = data.imageUrl.split(',');
 							each i in imgs
-								img(src=i, style='width: 120px; height: 100px;')
+								if i
+									img(src=i, style='width: 120px; height: 100px;margin: 0 5px;')
 						else
 							| Không có

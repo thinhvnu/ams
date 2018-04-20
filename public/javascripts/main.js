@@ -824,9 +824,9 @@ $(document).ready(function() {
           for (let i=0; i<data.length; i++) {
             count ++;
             let notiItem = document.createElement('li');
-            if (data[i].status > 0)
+            if (data[i].status === 1) {
               notiItem.style = 'background: #ffffff;border-bottom: 1px solid #ccc;';
-            else {
+            } else {
               count ++;
               notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
             }

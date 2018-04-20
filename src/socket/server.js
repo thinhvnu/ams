@@ -81,7 +81,7 @@ var ioEvents = function(io) {
                  * Join customer care room in order to reply customer's messages
                  */
                 for(let i=0; i<uRooms.length; i++) {
-                    console.log('uroom', uRooms[i]);
+                    console.log('uroom', uRooms[i].id);
                     socket.join(uRooms[i].id);
                 }
                 /**

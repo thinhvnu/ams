@@ -22,6 +22,7 @@ block content
 						th Tên nhóm
 						th Tòa nhà
 						th Chung cư
+						th Thành viên
 						th.text-center
 							em.fa.fa-cog
 				tbody
@@ -29,8 +30,9 @@ block content
 						tr
 							td.hidden-xs #{i+1}
 							td #{dt.groupName}
-							td #{dt.building.buildingName}
-							td #{dt.buildingGroup.abgName}
+							td #{dt.building ? dt.building.buildingName : ''}
+							td #{dt.buildingGroup ? dt.buildingGroup.abgName : ''}
+							td Thành viên
 							td(align='center')
 								a.btn.btn-default
 									em.fa.fa-pencil

@@ -253,8 +253,8 @@ function createNewChatBox(user, isGroup = false) {
                 let dataSend = {
                     sender: socket.identification,
                     to: {
-                        _id: user.id || user._id || user.room,
-                        room: user.id || user._id || user.room,
+                        _id: user.room || user.id || user._id,
+                        room: user.room || user.id || user._id,
                         userName: isGroup ? user.groupName : user.userName,
                         isGroup: isGroup
                     },
@@ -286,8 +286,8 @@ function createNewChatBox(user, isGroup = false) {
             let dataSend = {
                 sender: socket.identification,
                 to: {
-                    _id: user.id || user._id || user.room,
-                    room: user.id || user._id || user.room,
+                    _id: user.room || user.id || user._id,
+                    room: user.room || user.id || user._id,
                     userName: isGroup ? user.groupName : user.userName,
                     isGroup: isGroup
                 },

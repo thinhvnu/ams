@@ -1,0 +1,37 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			$('#feedback-list').DataTable();
+		});
+block content
+	.row
+		.col-lg-12
+			.user-actions
+				h4 Báo cáo sai phạm
+			hr
+			table#feedback-list.table.table-responsive.display(cellspacing='0', width='100%')
+				thead
+					tr
+						th.hidden-xs STT
+						th Nội dung
+						th Ảnh
+						th Người báo cáo
+						th Thời gian
+				tbody
+					each dt, i in data
+						tr
+							td.hidden-xs #{i+1}
+							td #{dt.content}
+							td
+                                if dt.image
+                                    img(src=dt.imageUrl, style='width: 120px;height: 100px')
+                                else
+                                    | Không có
+							td #{dt.createdAt.firstName + ' ' + dt.createdAt.lastName}
+							td #{dt.createdAt.toLocaleString('vi-VN')}

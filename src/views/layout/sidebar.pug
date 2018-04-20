@@ -35,6 +35,14 @@
     a(href="/utility")
         i.icon.fa.fa-cogs
         span.link-title Tiện ích
+.menu-item(class=(current && current[0]=='chat-group') && 'active')
+    a(href="/chat-group")
+        i.icon.fa.fa-users
+        span.link-title Nhóm chat
+.menu-item(class=(current && current[0]=='feedback') && 'active')
+    a(href="/feedback")
+        i.icon.fa.fa-comments
+        span.link-title Báo cáo sai phạm
 .menu-item(class=(current && current[0]=='cost') && 'active')
     a(href="/cost")
         i.icon.fa.fa-usd

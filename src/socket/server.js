@@ -117,17 +117,19 @@ var ioEvents = function(io) {
          * Event send message
          */
         socket.on('send_message', (data) => {
+            let roomId = data.to.room || data.to._id || data.to.id;
+            let senderId = data.sender.room || data.sender._id || data.sender.id;
             /**
              * Send message to recipient
              */
-            io.to(data.to.room).emit('message', data);
+            io.to(roomId).emit('message', data);
 
             /**
              * Save message to database
              */
             let newMessage = new Message();
-            newMessage.sender = data.sender.room;
-            newMessage.recipient = data.to.room;
+            newMessage.sender = senderId;
+            newMessage.recipient = roomId;
             newMessage.messageContent = data.messageContent;
             newMessage.status = 1;
 
@@ -135,13 +137,11 @@ var ioEvents = function(io) {
             /**
              * Send message to sender in order to confirm message send successfully
              */
-            io.to(data.sender.room).emit('owner_message', data);
+            io.to(senderId).emit('owner_message', data);
 
             /**
              * Save recent chat
              */
-            let roomId = data.to.room || data.to._id || data.to.id;
-            let senderId = data.sender.room || data.sender._id || data.sender.id;
             ChatGroup.findById(roomId).exec((err, group) => {
                 if (group) {
                     ChatRecent.findOne({

@@ -256,6 +256,10 @@ function createNewChatBox(user, isGroup = false) {
                         _id: user.room || user.id || user._id,
                         room: user.room || user.id || user._id,
                         userName: isGroup ? user.groupName : user.userName,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        phoneNumber: user.phoneNumber,
+                        groupName: user.groupName,
                         isGroup: isGroup
                     },
                     messageContent: messVal
@@ -289,6 +293,10 @@ function createNewChatBox(user, isGroup = false) {
                     _id: user.room || user.id || user._id,
                     room: user.room || user.id || user._id,
                     userName: isGroup ? user.groupName : user.userName,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    phoneNumber: user.phoneNumber,
+                    groupName: user.groupName,
                     isGroup: isGroup
                 },
                 messageContent: messVal

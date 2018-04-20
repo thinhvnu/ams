@@ -822,7 +822,6 @@ $(document).ready(function() {
           let notificationList = document.getElementById('header-notification-list');
           notificationList.innerHTML = '';
           for (let i=0; i<data.length; i++) {
-            count ++;
             let notiItem = document.createElement('li');
             if (data[i].status === 1) {
               notiItem.style = 'background: #ffffff;border-bottom: 1px solid #ccc;';

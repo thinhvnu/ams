@@ -140,17 +140,15 @@ var ioEvents = function(io) {
             /**
              * Save recent chat
              */
-            ChatGroup.findById(data.to.room).exec((err, group) => {
+            let roomId = data.to.room || data.to._id || data.to.id;
+            let senderId = data.sender.room || data.sender._id || data.sender.id;
+            ChatGroup.findById(roomId).exec((err, group) => {
                 if (group) {
                     ChatRecent.findOne({
                         $or: [
                             {
-                                sender: data.sender.room,
-                                group: data.to.room
-                            },
-                            {
-                                group: data.sender.room,
-                                sender: data.to.room
+                                sender: senderId,
+                                group: roomId
                             }
                         ]
                     }).exec((err, c) => {
@@ -159,7 +157,7 @@ var ioEvents = function(io) {
                             c.save();
                         } else {
                             let chatRecent = new ChatRecent();
-                            chatRecent.sender = data.sender.room;
+                            chatRecent.sender = senderId;
                             chatRecent.group = group._id;
                             chatRecent.save();
                         }
@@ -168,12 +166,12 @@ var ioEvents = function(io) {
                     ChatRecent.findOne({
                         $or: [
                             {
-                                sender: data.sender.room,
-                                partner: data.to.room
+                                sender: senderId,
+                                partner: roomId
                             },
                             {
-                                partner: data.sender.room,
-                                sender: data.to.room
+                                sender: roomId,
+                                partner: senderId
                             }
                         ]
                     }).exec((err, c) => {
@@ -182,8 +180,8 @@ var ioEvents = function(io) {
                             c.save();
                         } else {
                             let chatRecent = new ChatRecent();
-                            chatRecent.sender = data.sender.room;
-                            chatRecent.partner = data.to.room;
+                            chatRecent.sender = senderId;
+                            chatRecent.partner = roomId;
                             chatRecent.save();
                         }
                     })

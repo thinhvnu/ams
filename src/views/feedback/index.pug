@@ -33,5 +33,5 @@ block content
 									img(src=dt.imageUrl, style='width: 120px;height: 100px')
 								else
 									| Không có
-							td #{dt.createdAt.firstName + ' ' + dt.createdAt.lastName}
+							td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 							td #{dt.createdAt.toLocaleString('vi-VN')}

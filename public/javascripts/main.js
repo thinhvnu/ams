@@ -841,6 +841,7 @@ $(document).ready(function() {
 
             notiItem.appendChild(link);
             notificationList.appendChild(notiItem);
+            console.log('count', count);
           }
           countNotiUnread.textContent = count;
         } else {

@@ -37,8 +37,8 @@ block content
 							td #{dt.apartmentBuildingGroup.abgName}
 							td #{dt.floor}
 							td #{dt.area}
-							td #{dt.manager.userName}
-							td #{dt.createdBy.userName}
+							td #{dt.manager.firstName + ' ' + dt.manager.lastName}
+							td #{dt.createdBy.firstName + ' ' + dt.createdBy.lastName}
 							td.text-center #{dt.status ? 'Public' : 'Draft'}
 							td(align='center')
 								a(href='/apartment-building/view/' + dt._id).u-action.btn.btn-default

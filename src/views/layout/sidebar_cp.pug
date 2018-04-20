@@ -6,7 +6,7 @@
       a.user-link(href='')
         img.media-object.img-thumbnail.user-img(alt='User Picture', src='/images/default-user.png')
       .media-body
-        h5.media-heading #{user ? user.userName : 'User Anonymous'}
+        h5.media-heading #{user ? user.firstName + ' ' + user.lastName : 'User Anonymous'}
         ul.list-unstyled.user-info
           li.ellipsis
             a(href='#') #{user ? user.email : 'Administrator'}

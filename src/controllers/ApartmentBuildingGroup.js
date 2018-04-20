@@ -19,7 +19,10 @@ exports.getIndex = function (req, res, next) {
 				data: JSON.parse(abgs)
 			});
 		} else {
-			ApartmentBuildingGroup.find({})
+			let user = req.session.user;
+			ApartmentBuildingGroup.find({
+				manager: (user.role === 'ADMIN') ? {$ne: null} : user._id
+			})
 				.populate('manager', {
 					'_id': 0,
 					'userName': 1,

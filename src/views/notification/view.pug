@@ -12,13 +12,13 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			header
+			header.text-center
 				.content-header Yêu cầu dịch vụ
 			#div-1.body.collapse.in(aria-expanded='true', style='')
-			table.table.table-responsive
+			table.table.table-responsive(style='background: #eee;margin-top:15px;')
 				tr
 					th Mã đơn hàng
-					td #{data.code}
+					td #{'#' + data.code}
 				tr
 					th Người đặt hàng
 					td #{data.fullName}

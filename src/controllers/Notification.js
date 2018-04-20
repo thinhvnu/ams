@@ -138,8 +138,11 @@ exports.getView = (req, res, next) => {
 				path: 'service',
 				model: 'Service'
 			}).exec((err, sr) => {
+				if (!sr) {
+					req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
+				}
 				res.render('notification/view', {
-					data: sr || {}
+					data: sr || null
 				})
 			})
 		});

@@ -10,34 +10,35 @@ block scripts
 			//- $('.').chosen({ allow_single_deselect: true, disable_search: true });
 		});
 block content
-	.row
-		.col-lg-12
-			header.text-center
-				.content-header Yêu cầu dịch vụ
-			#div-1.body.collapse.in(aria-expanded='true', style='')
-			table.table.table-responsive(style='background: #eee;margin-top:15px;')
-				tr
-					th Mã đơn hàng
-					td #{'#' + data.code}
-				tr
-					th Người đặt hàng
-					td #{data.fullName}
-				tr
-					th Số điện thoại
-					td #{data.phoneNumber}
-				tr
-					th Dịch vụ
-					td #{data.service ? data.service.serviceName : ''}
-				tr
-					th Thời gian đặt lịch
-					td #{data.orderAt ? data.orderAt.toLocaleString('vi-VN') : (data.createdAt ? data.createdAt.toLocaleString('vi-VN') : '')}
-				tr
-					th Ảnh
-					td
-						if data.images
-							- var imgs = data.imageUrl.split(',');
-							each i in imgs
-								if i
-									img(src=i, style='width: 120px; height: 100px;margin: 0 5px;')
-						else
-							| Không có
+	if data
+		.row
+			.col-lg-12
+				header.text-center
+					.content-header Yêu cầu dịch vụ
+				#div-1.body.collapse.in(aria-expanded='true', style='')
+				table.table.table-responsive(style='background: #eee;margin-top:15px;')
+					tr
+						th Mã đơn hàng
+						td #{'#' + data.code}
+					tr
+						th Người đặt hàng
+						td #{data.fullName}
+					tr
+						th Số điện thoại
+						td #{data.phoneNumber}
+					tr
+						th Dịch vụ
+						td #{data.service ? data.service.serviceName : ''}
+					tr
+						th Thời gian đặt lịch
+						td #{data.orderAt ? data.orderAt.toLocaleString('vi-VN') : (data.createdAt ? data.createdAt.toLocaleString('vi-VN') : '')}
+					tr
+						th Ảnh
+						td
+							if data.images
+								- var imgs = data.imageUrl.split(',');
+								each i in imgs
+									if i
+										img(src=i, style='width: 120px; height: 100px;margin: 0 5px;')
+							else
+								| Không có

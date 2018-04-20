@@ -103,7 +103,7 @@ exports.getInfo = function (req, res) {
 			} else {
 				User.find({_id: currentUser._id})
 				.select({
-					'_id': 0,
+					'_id': 1,
 					'firstName': 1,
 					'lastName': 1,
 					'userName': 1,

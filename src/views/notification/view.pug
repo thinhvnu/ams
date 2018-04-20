@@ -35,6 +35,8 @@ block content
 					th Ảnh
 					td
 						if data.images
-							img(src=data.imageUrl.split(',')[0])	
+							- var imgs = data.imageUrl.split(',');
+							each i in imgs
+								img(src=i)
 						else
 							| Không có

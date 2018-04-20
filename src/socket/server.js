@@ -33,8 +33,8 @@ var ioEvents = function(io) {
                      * Join customer care room in order to reply customer's messages
                      */
                     for(let i=0; i<uRooms.length; i++) {
-                        console.log('room', uRooms[i]._id);
-                        socket.join(uRooms[i]._id);
+                        console.log('room', uRooms[i].id);
+                        socket.join(uRooms[i].id);
                     }
                     /**
                      * Notification join chat success

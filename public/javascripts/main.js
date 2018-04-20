@@ -733,7 +733,7 @@ function genChatGroupItem(group) {
   userItem.className = 'user-item';
   userItem.id = 'user-' + group._id;
   userItem.onclick = function() {
-    createNewChatBox(group);
+    createNewChatBox(group, true);
   }
 
   let userAvatar = document.createElement('div');

@@ -133,7 +133,8 @@ exports.getView = (req, res, next) => {
 	Notification.findById(req.params.notiId).exec((err, notification) => {
 		notification.status = 1;
 		notification.save((err) => {
-			ServiceRequest.findById(notification.objId).exec((err, sr) => {
+			ServiceRequest
+			.populate('service').findById(notification.objId).exec((err, sr) => {
 				res.render('notification/view', {
 					data: sr || {}
 				})

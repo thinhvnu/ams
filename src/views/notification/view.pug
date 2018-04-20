@@ -14,9 +14,31 @@ block content
 		.col-lg-12
 			header
 				.content-header Yêu cầu dịch vụ
-			hr
 			#div-1.body.collapse.in(aria-expanded='true', style='')
 			table.table.table-responsive
 				tr
 					th Mã đơn hàng
 					td #{data.code}
+				tr
+					th Người đặt hàng
+					td #{data.fullName}
+				tr
+					th Số điện thoại
+					td #{data.phoneNumber}
+				tr
+					th Dịch vụ
+					td #{data.service ? data.service.serviceName : ''}
+				tr
+					th Thời gian đặt lịch
+					td #{data.orderAt.toLocaleString('vi-VN')}
+				tr
+					th Ảnh
+					td
+						if data.images
+							each image in data.imageUrl.split(',').length
+								if image
+									img(src=image)
+								
+							
+						else
+							| Không có

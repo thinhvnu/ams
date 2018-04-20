@@ -114,7 +114,7 @@ function createNewChatBox(user, isGroup = false) {
     let boxTitle = document.createElement('div');
     boxTitle.className = 'box-title';
     boxTitle.style = 'height: 28px; line-height: 28px; font-size: 12px; text-transform: uppercase;'; 
-    boxTitle.textContent = user.isGroup ? (user.groupName || user.userName) : (user.firstName + ' ' + user.lastName);
+    boxTitle.textContent = user.isGroup ? (user.groupName || user.userName) : (user.groupName || (user.firstName + ' ' + user.lastName));
     boxHeaderInfo.appendChild(boxTitle);
 
     let headerToolbar = document.createElement('div');

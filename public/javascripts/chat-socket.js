@@ -452,9 +452,12 @@ socket.on('connect', () => {
                         notiItem.appendChild(link);
                         notificationList.appendChild(notiItem);
                     }
-                    countNotiUnread.textContent = count;
+                    if (count > 0)
+                        countNotiUnread.textContent = count;
+                    else
+                        countNotiUnread.style = 'display: none';
                 } else {
-                countNotiUnread.style = 'display: none';
+                    countNotiUnread.style = 'display: none';
                 }
             }
             }

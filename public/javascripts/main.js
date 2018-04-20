@@ -842,7 +842,10 @@ $(document).ready(function() {
             notificationList.appendChild(notiItem);
             console.log('count', count);
           }
-          countNotiUnread.textContent = count;
+          if (count > 0)
+              countNotiUnread.textContent = count;
+          else
+              countNotiUnread.style = 'display: none';
         } else {
           countNotiUnread.style = 'display: none';
         }

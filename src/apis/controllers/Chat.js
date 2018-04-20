@@ -37,9 +37,10 @@ exports.getClients = (req, res, next) => {
                     if (u) {
                         ChatRecent.find({
                             $or: [
-                                {sender: u._id},
-                                {partner: u._id},
+                                { sender: u._id },
+                                { partner: u._id },
                                 {
+                                    sender: u._id,
                                     group: {
                                         $in: u.groups
                                     }
@@ -50,10 +51,10 @@ exports.getClients = (req, res, next) => {
                             let users = [], groups = [], groupIds = [];
 
                             for (let i=0; i<recents.length; i++) {
-                                if (recents[i].sender && recents[i].sender.id !== u.id) {
+                                if (!recents[i].group && recents[i].sender && recents[i].sender.id !== u.id) {
                                     users.push(recents[i].sender);
                                 }
-                                if (recents[i].partner && recents[i].partner.id !== u.id) {
+                                if (!recents[i].group && recents[i].partner && recents[i].partner.id !== u.id) {
                                     users.push(recents[i].partner);
                                 }
                                 if (recents[i].group) {

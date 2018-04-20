@@ -131,21 +131,28 @@ exports.postCreate = function (req, res) {
 
 exports.getView = (req, res, next) => {
 	Notification.findById(req.params.notiId).exec((err, notification) => {
-		notification.status = 1;
-		notification.save((err) => {
-			ServiceRequest.findById(notification.objId)
-			.populate({
-				path: 'service',
-				model: 'Service'
-			}).exec((err, sr) => {
-				if (!sr) {
-					req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
-				}
-				res.render('notification/view', {
-					data: sr || null
+		if (notification) {
+			notification.status = 1;
+			notification.save((err) => {
+				ServiceRequest.findById(notification.objId)
+				.populate({
+					path: 'service',
+					model: 'Service'
+				}).exec((err, sr) => {
+					if (!sr) {
+						req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
+					}
+					res.render('notification/view', {
+						data: sr || null
+					})
 				})
+			});
+		} else {
+			req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
+			res.render('notification/view', {
+				data: sr || null
 			})
-		});
+		}
 	})
 }
 

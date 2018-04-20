@@ -1,0 +1,22 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			//- $('.').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Yêu cầu dịch vụ
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			table.table.table-responsive
+				tr
+					th Mã đơn hàng
+					td #{data.code}

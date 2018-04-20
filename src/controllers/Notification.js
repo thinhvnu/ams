@@ -1,6 +1,7 @@
 const Notification = require('./../models/Notification');
 const Apartment = require('./../models/Apartment');
 const NotificationLog = require('./../models/NotificationLog');
+const ServiceRequest = require('./../models/ServiceRequest');
 
 /**
  * Helpers function
@@ -127,6 +128,19 @@ exports.postCreate = function (req, res) {
 		console.log('e', e);
 	}
 };
+
+exports.getView = (req, res, next) => {
+	Notification.findById(req.params.notiId).exec((err, notification) => {
+		notification.status = 1;
+		notification.save((err) => {
+			ServiceRequest.findById(notification.objId).exec((err, sr) => {
+				res.render('notification/view', {
+					data: sr || {}
+				})
+			})
+		});
+	})
+}
 
 // exports.postSend = (req, res, next) => {
 // 	console.log('req.body', req.body);

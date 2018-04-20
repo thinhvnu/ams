@@ -5,5 +5,6 @@ var NotificationController = require('../controllers/Notification');
 router.get('/', NotificationController.getIndex);
 router.get('/create', NotificationController.getCreate);
 router.post('/create', NotificationController.postCreate);
+router.get('/view/:notiId', NotificationController.getView);
 
 module.exports = router;

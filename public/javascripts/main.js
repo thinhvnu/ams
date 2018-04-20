@@ -826,7 +826,7 @@ $(document).ready(function() {
             notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
             let link = document.createElement('a');
             // link.textContent = data[i].title;
-            link.href = '#';
+            link.href = '/notification/view/' + data[i]._id;
             link.innerHTML = '<span>' + data[i].title + '</span>';
 
             if (data[i].objId && data[i].objId.service ) {

@@ -491,8 +491,9 @@ exports.getMessages = (req, res, next) => {
 exports.getUpdateReadMessage = (req, res, next) => {
     try {
         if (req.query.isGroup) {
-            console.log('ttt', req.session.user._id);
-            Message.updateMany({
+            console.log('ttt', req.session.user._id, req.params.roomId);
+            Message.find({
+                isRead: false,
                 recipient: req.params.roomId,
                 sender: {
                     $ne: (req.session.user._id || req.session.user.id)
@@ -513,6 +514,28 @@ exports.getUpdateReadMessage = (req, res, next) => {
                     })
                 }
             })
+            // Message.updateMany({
+            //     isRead: false,
+            //     recipient: req.params.roomId,
+            //     sender: {
+            //         $ne: (req.session.user._id || req.session.user.id)
+            //     }
+            // }, {isRead: true}, (err, result) => {
+            //     console.log('result', result);
+            //     if (err) {
+            //         return res.json({
+            //             success: false,
+            //             errorCode: '112',
+            //             message: 'An error happend'
+            //         })
+            //     } else {
+            //         return res.json({
+            //             success: true,
+            //             errorCode: 0,
+            //             message: 'Updated successfully'
+            //         })
+            //     }
+            // })
         } else {
             Message.updateMany({'sender': req.params.roomId, 'recipient': req.session.user._id}, {isRead: true}, (err, result) => {
                 if (err) {

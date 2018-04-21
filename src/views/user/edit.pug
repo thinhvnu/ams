@@ -117,7 +117,7 @@ block content
 							option(value=0, selected=(data && data.status === 0) ? true : false) Inactive
 				.form-group
 					.col-lg-4(class=errors && errors.apartmentBuildingGroup && 'has-error')
-						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư (*)
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư, Quận (*)
 						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
 							option(value='') Chọn khu chung cư
 							each abg in abgs
@@ -144,6 +144,13 @@ block content
 							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
 						if errors && errors.apartment
 							.help-block #{errors.apartment.msg}
+				.form-group
+					.col-lg-12(class=errors && errors.apartmentAddress && 'has-error')
+						label.control-label(for='apartmentAddress') Địa chỉ
+						input#apartmentAddress.form-control(type='text', name='apartmentAddress', placeholder='Địa chỉ', value=data ? data.apartmentAddress : '')
+						if errors && errors.apartmentAddress
+							.help-block #{errors.apartmentAddress.msg}
+
 				hr
 				.form-group  
 					.col-lg-4

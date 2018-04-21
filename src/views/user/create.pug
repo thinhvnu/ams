@@ -117,7 +117,7 @@ block content
 							option(value=0, selected=(data && data.status === '0') ? true : false) Inactive
 				.form-group
 					.col-lg-4(class=errors && errors.apartmentBuildingGroup && 'has-error')
-						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư (*)
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư, Quận (*)
 						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
 							option(value='') Chọn khu chung cư
 							each abg in abgs

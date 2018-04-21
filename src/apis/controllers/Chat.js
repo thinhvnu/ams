@@ -495,7 +495,7 @@ exports.getUpdateReadMessage = (req, res, next) => {
             Message.updateMany({
                 recipient: req.params.roomId,
                 sender: {
-                    $ne: req.session.user._id
+                    $ne: (req.session.user._id || req.session.user.id)
                 }
             }, {isRead: true}, (err, result) => {
                 console.log('result', result);

@@ -349,10 +349,11 @@ exports.getClients = (req, res, next) => {
                                         }
 
                                         for (let i=0; i<gs.length; i++) {
+                                            console.log('u', u);
                                             Message.count({
                                                 recipient: gs[i].id,
                                                 sender: {
-                                                    $ne: u.id
+                                                    $ne: u._id
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
@@ -496,7 +497,7 @@ exports.getUpdateReadMessage = (req, res, next) => {
                 isRead: false,
                 recipient: req.params.roomId,
                 sender: {
-                    $ne: (req.session.user._id || req.session.user.id)
+                    $ne: req.session.user._id
                 }
             }, {isRead: true}, (err, result) => {
                 console.log('result', result);

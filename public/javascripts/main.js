@@ -744,7 +744,7 @@ function genChatGroupItem(group) {
   userItem.id = 'user-' + group._id;
   userItem.onclick = function() {
     createNewChatBox(group, true);
-    updateReadMessageStatus(group._id);
+    updateReadMessageStatus(group._id, true);
   }
 
   let userAvatar = document.createElement('div');
@@ -819,11 +819,14 @@ function getChatContacts() {
   xhttp.send();
 }
 
-function updateReadMessageStatus(roomId) {
+function updateReadMessageStatus(roomId, isGroup = false) {
   /**
    * Get chat contacts
    */
   let url = '/api/chat/update-read-message/' + roomId;
+  if (isGroup) {
+    url += '?isGroup=true';
+  }
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if(xhttp.readyState == 4 && xhttp.status == 200) {

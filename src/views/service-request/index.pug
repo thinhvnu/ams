@@ -20,7 +20,7 @@ block content
 			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
-						th.hidden-xs STT
+						th.hidden-xs Mã đơn hàng
 						th Tên đầy đủ
 						th Điện thoại
 						th Địa chỉ
@@ -28,11 +28,12 @@ block content
 						th Hóa đơn
 						th Dịch vụ
 						th Ghi chú
+						th Thời gian đặt lịch
 						th Trạng thái
 				tbody
 					each dt, i in data
 						tr
-							td.hidden-xs #{i + 1}
+							td.hidden-xs #{'#' + dt.code}
 							td #{dt.fullName}
 							td #{dt.phoneNumber}
 							td #{dt.address ? dt.address : ''}
@@ -48,6 +49,7 @@ block content
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}
 							td #{dt.description}
+							td #{dt.orderAt ? dt.orderAt.toLocaleString('vi-VN') : (dt.createdAt ? dt.createdAt.toLocaleString('vi-VN') : '')}
 							if dt.done
 								td(style='color: #38a22c;') Đã thanh toán
 							else 

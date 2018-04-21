@@ -9,7 +9,9 @@ block scripts
 		$(function() {
 		$('.chosen-select').chosen();
 		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#slider-list').DataTable();
+		$('#slider-list').DataTable({
+			"ordering": false
+		});
 		});
 block content
 	.row

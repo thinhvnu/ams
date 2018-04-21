@@ -2,7 +2,9 @@ const Service = require('../models/Service');
 const ServiceRequest = require('../models/ServiceRequest');
 
 exports.getIndex = function (req, res) {
-	ServiceRequest.find({}).sort('code').populate('service').exec(function (err, serviceRequests) {
+	ServiceRequest.find({}).sort({
+		createdAt: -1
+	}).populate('service').exec(function (err, serviceRequests) {
 		if (err) {
 			return res.render('service-request/index', {
 				title: 'Tất cả yêu cầu dịch vụ',

@@ -62,7 +62,7 @@ exports.getClients = (req, res, next) => {
                                     groupIds.push(recents[i].group._id);
                                 }
                             }
-                            console.log('user', groupIds);
+                            
                             switch(u.role) {
                                 case 'ADMIN':
                                     ChatGroup.find({
@@ -70,15 +70,55 @@ exports.getClients = (req, res, next) => {
                                             $nin: groupIds
                                         }
                                     }).sort('-createdAt').exec((err, grs) => {
-                                        return res.json({
-                                            success: true,
-                                            errorCode: 0,
-                                            data: {
-                                                users: users,
-                                                groups: grs ? groups.concat(grs) : groups
-                                            },
-                                            message: 'Get list clients successfully'
-                                        })
+                                        let count = 0;
+                                        let gs = grs ? groups.concat(grs) : groups;
+                                        for (let i=0; i<users.length; i++) {
+                                            Message.count({
+                                                sender: users[i].id,
+                                                recipient: u.id,
+                                                isRead: false
+                                            }).exec((err, c) => {
+                                                users[i].messUnread = c;
+                                                count++;
+
+                                                if (count >= (users.length + gs.length)) {
+                                                    return res.json({
+                                                        success: true,
+                                                        errorCode: 0,
+                                                        data: {
+                                                            users: users,
+                                                            groups: gs
+                                                        },
+                                                        message: 'Get list clients successfully'
+                                                    })
+                                                }
+                                            });
+                                        }
+
+                                        for (let i=0; i<gs.length; i++) {
+                                            Message.count({
+                                                recipient: gs[i].id,
+                                                sender: {
+                                                    $ne: u.id
+                                                },
+                                                isRead: false
+                                            }).exec((err, gMessUnread) => {
+                                                gs[i].messUnread = gMessUnread;
+                                                count++;
+
+                                                if (count >= (users.length + gs.length)) {
+                                                    return res.json({
+                                                        success: true,
+                                                        errorCode: 0,
+                                                        data: {
+                                                            users: users,
+                                                            groups: gs
+                                                        },
+                                                        message: 'Get list clients successfully'
+                                                    })
+                                                }
+                                            });
+                                        }
                                     })
                                     break;
                                 case 'BUILDING_GROUP_MANAGER':
@@ -90,26 +130,91 @@ exports.getClients = (req, res, next) => {
                                                     $nin: groupIds
                                                 }
                                             }).sort('-createdAt').exec((err, grs) => {
-                                                return res.json({
-                                                    success: true,
-                                                    errorCode: 0,
-                                                    data: {
-                                                        users: users,
-                                                        groups: grs ? groups.concat(grs) : groups
-                                                    },
-                                                    message: 'Get list clients successfully'
-                                                })
+                                                let count = 0;
+                                                let gs = grs ? groups.concat(grs) : groups;
+
+                                                for (let i=0; i<users.length; i++) {
+                                                    Message.count({
+                                                        sender: users[i].id,
+                                                        recipient: u.id,
+                                                        isRead: false
+                                                    }).exec((err, c) => {
+                                                        users[i].messUnread = c;
+                                                        count++;
+        
+                                                        if (count >= (users.length + gs.length)) {
+                                                            return res.json({
+                                                                success: true,
+                                                                errorCode: 0,
+                                                                data: {
+                                                                    users: users,
+                                                                    groups: gs
+                                                                },
+                                                                message: 'Get list clients successfully'
+                                                            })
+                                                        }
+                                                    });
+                                                }
+        
+                                                for (let i=0; i<gs.length; i++) {
+                                                    Message.count({
+                                                        recipient: gs[i].id,
+                                                        sender: {
+                                                            $ne: u.id
+                                                        },
+                                                        isRead: false
+                                                    }).exec((err, gMessUnread) => {
+                                                        gs[i].messUnread = gMessUnread;
+                                                        count++;
+        
+                                                        if (count >= (users.length + gs.length)) {
+                                                            return res.json({
+                                                                success: true,
+                                                                errorCode: 0,
+                                                                data: {
+                                                                    users: users,
+                                                                    groups: gs
+                                                                },
+                                                                message: 'Get list clients successfully'
+                                                            })
+                                                        }
+                                                    });
+                                                }
+                                                // return res.json({
+                                                //     success: true,
+                                                //     errorCode: 0,
+                                                //     data: {
+                                                //         users: users,
+                                                //         groups: grs ? groups.concat(grs) : groups
+                                                //     },
+                                                //     message: 'Get list clients successfully'
+                                                // })
                                             })
                                         } else {
-                                            return res.json({
-                                                success: true,
-                                                errorCode: 0,
-                                                data: {
-                                                    users: users,
-                                                    groups: []
-                                                },
-                                                message: 'Get list clients successfully'
-                                            })
+                                            let count = 0;
+                                            
+                                            for (let i=0; i<users.length; i++) {
+                                                Message.count({
+                                                    sender: users[i].id,
+                                                    recipient: u.id,
+                                                    isRead: false
+                                                }).exec((err, c) => {
+                                                    users[i].messUnread = c;
+                                                    count++;
+    
+                                                    if (count >= (users.length)) {
+                                                        return res.json({
+                                                            success: true,
+                                                            errorCode: 0,
+                                                            data: {
+                                                                users: users,
+                                                                groups: []
+                                                            },
+                                                            message: 'Get list clients successfully'
+                                                        })
+                                                    }
+                                                });
+                                            }
                                         }
                                     })
                                     break;
@@ -122,26 +227,82 @@ exports.getClients = (req, res, next) => {
                                                     $nin: groupIds
                                                 }
                                             }).sort('-createdAt').exec((err, grs) => {
-                                                return res.json({
-                                                    success: true,
-                                                    errorCode: 0,
-                                                    data: {
-                                                        users: users,
-                                                        groups: grs ? groups.concat(grs) : groups
-                                                    },
-                                                    message: 'Get list clients successfully'
-                                                })
+                                                let count = 0;
+                                                let gs = grs ? groups.concat(grs) : groups;
+
+                                                for (let i=0; i<users.length; i++) {
+                                                    Message.count({
+                                                        sender: users[i].id,
+                                                        recipient: u.id,
+                                                        isRead: false
+                                                    }).exec((err, c) => {
+                                                        users[i].messUnread = c;
+                                                        count++;
+        
+                                                        if (count >= (users.length + gs.length)) {
+                                                            return res.json({
+                                                                success: true,
+                                                                errorCode: 0,
+                                                                data: {
+                                                                    users: users,
+                                                                    groups: gs
+                                                                },
+                                                                message: 'Get list clients successfully'
+                                                            })
+                                                        }
+                                                    });
+                                                }
+        
+                                                for (let i=0; i<gs.length; i++) {
+                                                    Message.count({
+                                                        recipient: gs[i].id,
+                                                        sender: {
+                                                            $ne: u.id
+                                                        },
+                                                        isRead: false
+                                                    }).exec((err, gMessUnread) => {
+                                                        gs[i].messUnread = gMessUnread;
+                                                        count++;
+        
+                                                        if (count >= (users.length + gs.length)) {
+                                                            return res.json({
+                                                                success: true,
+                                                                errorCode: 0,
+                                                                data: {
+                                                                    users: users,
+                                                                    groups: gs
+                                                                },
+                                                                message: 'Get list clients successfully'
+                                                            })
+                                                        }
+                                                    });
+                                                }
                                             })
                                         } else {
-                                            return res.json({
-                                                success: true,
-                                                errorCode: 0,
-                                                data: {
-                                                    users: users,
-                                                    groups: []
-                                                },
-                                                message: 'Get list clients successfully'
-                                            })
+                                            let count = 0;
+                                            
+                                            for (let i=0; i<users.length; i++) {
+                                                Message.count({
+                                                    sender: users[i].id,
+                                                    recipient: u.id,
+                                                    isRead: false
+                                                }).exec((err, c) => {
+                                                    users[i].messUnread = c;
+                                                    count++;
+    
+                                                    if (count >= (users.length)) {
+                                                        return res.json({
+                                                            success: true,
+                                                            errorCode: 0,
+                                                            data: {
+                                                                users: users,
+                                                                groups: []
+                                                            },
+                                                            message: 'Get list clients successfully'
+                                                        })
+                                                    }
+                                                });
+                                            }
                                         }
                                     })
                                     break;
@@ -152,16 +313,58 @@ exports.getClients = (req, res, next) => {
                                             $nin: groupIds
                                         }
                                     }).sort('-createdAt').exec((err, grs) => {
-                                        return res.json({
-                                            success: true,
-                                            errorCode: 0,
-                                            data: {
-                                                users: users,
-                                                groups: grs ? groups.concat(grs) : groups
-                                            },
-                                            message: 'Get list clients successfully'
-                                        })
-                                    })
+                                        let count = 0;
+                                        let gs = grs ? groups.concat(grs) : groups;
+
+                                        for (let i=0; i<users.length; i++) {
+                                            Message.count({
+                                                sender: users[i].id,
+                                                recipient: u.id,
+                                                isRead: false
+                                            }).exec((err, c) => {
+                                                users[i].messUnread = c;
+                                                count++;
+
+                                                if (count >= (users.length + gs.length)) {
+                                                    return res.json({
+                                                        success: true,
+                                                        errorCode: 0,
+                                                        data: {
+                                                            users: users,
+                                                            groups: gs
+                                                        },
+                                                        message: 'Get list clients successfully'
+                                                    })
+                                                }
+                                            });
+                                        }
+
+                                        for (let i=0; i<gs.length; i++) {
+                                            Message.count({
+                                                recipient: gs[i].id,
+                                                sender: {
+                                                    $ne: u.id
+                                                },
+                                                isRead: false
+                                            }).exec((err, gMessUnread) => {
+                                                gs[i].messUnread = gMessUnread;
+                                                count++;
+
+                                                if (count >= (users.length + gs.length)) {
+                                                    return res.json({
+                                                        success: true,
+                                                        errorCode: 0,
+                                                        data: {
+                                                            users: users,
+                                                            groups: gs
+                                                        },
+                                                        message: 'Get list clients successfully'
+                                                    })
+                                                }
+                                            });
+                                        }
+                                    });
+                                    break;
                             }
                         })
                     }

@@ -4,7 +4,7 @@ const ServiceCategory = require('../models/ServiceCategory');
 exports.getIndex = function (req, res) {
 	Service.find({}).sort({
 		orderDisplay: 1
-	}).exec(function (err, services) {
+	}).populate('category').exec(function (err, services) {
 		if (err) {
 			console.log('err', err)
 			return res.json({
@@ -86,6 +86,67 @@ exports.postCreate = function (req, res) {
 					return res.redirect('/service');
 				}
 			})
+		}
+	});
+};
+
+exports.getEdit = function (req, res) {
+	ServiceCategory.find({
+		status: 1
+	}).exec((err, categories) => {
+		Service.findById(req.params.serviceId).exec((err, service) => {
+			res.render('service/edit', {
+				title: 'Sửa dịch vụ mới',
+				current: ['service', 'edit'],
+				categories: categories,
+				data: service
+			});
+		})
+	})
+};
+
+exports.postUpdate = function (req, res) {
+	/*
+	* Validate create category
+	*/ 
+	req.checkBody('serviceName', 'Tên dịch vụ không được để trống').notEmpty();
+	req.checkBody('icon', 'Icon dịch vụ không được để trống').notEmpty();
+	req.checkBody('category', 'Danh mục dịch vụ không được để trống').notEmpty();
+	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
+	
+	var errors = req.getValidationResult().then(function(errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.array();
+			req.flash('errors', errors[0].msg);
+			return res.redirect('/service/edit/' + req.params.serviceId);
+		} else {
+			var data = req.body;
+			
+			Service.findById(req.params.serviceId).exec((err, service) => {
+				if (service) {
+					service.serviceName = data.serviceName;
+					service.icon = data.icon;
+					service.image = data.image;
+					service.content = data.content;
+					service.price = data.price;
+					service.status = data.status;
+					service.category = data.category;
+					service.updatedBy = req.session.user._id;
+					
+					service.save(function (err, service) {
+						if (err) {
+							console.log('err', err);
+						} else {
+							// Save tags
+							req.flash('success', 'Đã sửa dịch vụ thành công: ' + service.serviceName);
+							return res.redirect('/service');
+						}
+					})
+				} else {
+					req.flash('errors', 'Không tìm thấy dữ liệu');
+					return res.redirect('/service');
+				}
+			});
 		}
 	});
 };

@@ -96,6 +96,7 @@ block content
 								th Tên dịch vụ
 								th Icon
 								th Ảnh
+								th Danh mục
 								//- th Giá (VNĐ)
 								th.text-center Trạng thái
 								th.text-center.no-sort
@@ -110,6 +111,7 @@ block content
 									td
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.image, style='width: 128px;')
 									//- td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}
+									td #{dt.category ? dt.category.name : ''}
 									td.text-center #{dt.status ? 'Public' : 'Draft'}
 									td(align='center', style='width:150px;')
 										a(href='/service/edit/' + dt._id).u-action.btn.btn-success

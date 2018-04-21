@@ -365,7 +365,13 @@ socket.on('connect', () => {
     socket.on('message', (data) => {
         let messageSound = new Audio('/sounds/message.mp3');
         messageSound.play();
-        console.log('data message', data);
+       
+        /**
+         * reload contact
+         */
+        getChatContacts();
+
+        
         if (data.sender.id === socket.identification.id) {
             return;
         }

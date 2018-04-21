@@ -321,16 +321,21 @@ exports.postUpdate = (req, res, next) => {
               }
       
               Apartment.findById(u.apartment).exec((err, a) => {
-                if (!a.users) {
-                  a.users = [];
-                }
-                a.users.pull(u._id);
-                a.users.push(u._id);
-                a.save((err) => {
-                  req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
-                  // Insert child to category
+                if (a) {
+                  if (!a.users) {
+                    a.users = [];
+                  }
+                  a.users.pull(u._id);
+                  a.users.push(u._id);
+                  a.save((err) => {
+                    req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
+                    // Insert child to category
+                    return res.redirect('/user');
+                  })
+                } else {
+                  req.flash('errors', 'Không tìm thấy dữ liệu')
                   return res.redirect('/user');
-                })
+                }
               })
             });
           }

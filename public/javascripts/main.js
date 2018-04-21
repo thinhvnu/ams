@@ -697,20 +697,30 @@ function genChatUserItem(user) {
   userItem.id = 'user-' + user._id;
   userItem.onclick = function() {
     createNewChatBox(user);
+    updateReadMessageStatus(user._id);
   }
 
   let userAvatar = document.createElement('div');
   userAvatar.className = 'user-avatar';
   userItem.appendChild(userAvatar);
+
+  let avatarImg = '';
   if (user.avatar) {
-    let avatarImg = document.createElement('img');
+    avatarImg = document.createElement('img');
     avatarImg.className = 'img img-responsive';
     avatarImg.src = user.avatarUrl;
     userAvatar.appendChild(avatarImg);
   } else {
-    let avatarImg = document.createElement('i');
+    avatarImg = document.createElement('i');
     avatarImg.className = 'fa fa-user-o';
     userAvatar.appendChild(avatarImg);
+  }
+
+  if (user.messUnread && user.messUnread > 0) {
+    let messUnread = document.createElement('span');
+    messUnread.className = 'mess-unread';
+    messUnread.textContent = user.messUnread;
+    userAvatar.appendChild(messUnread);
   }
 
   let userInfo = document.createElement('div');
@@ -734,20 +744,29 @@ function genChatGroupItem(group) {
   userItem.id = 'user-' + group._id;
   userItem.onclick = function() {
     createNewChatBox(group, true);
+    updateReadMessageStatus(group._id);
   }
 
   let userAvatar = document.createElement('div');
   userAvatar.className = 'user-avatar';
   userItem.appendChild(userAvatar);
+  let avatarImg = '';
   if (group.avatar) {
-    let avatarImg = document.createElement('img');
+    avatarImg = document.createElement('img');
     avatarImg.className = 'img img-responsive';
     avatarImg.src = group.avatarUrl;
     userAvatar.appendChild(avatarImg);
   } else {
-    let avatarImg = document.createElement('i');
+    avatarImg = document.createElement('i');
     avatarImg.className = 'fa fa-user-o';
     userAvatar.appendChild(avatarImg);
+  }
+
+  if (group.messUnread && group.messUnread > 0) {
+    let messUnread = document.createElement('span');
+    messUnread.className = 'mess-unread';
+    messUnread.textContent = group.messUnread;
+    userAvatar.appendChild(messUnread);
   }
 
   let userInfo = document.createElement('div');
@@ -780,17 +799,38 @@ function getChatContacts() {
         let chatGroup = document.getElementById('chat-group');
 
         if (data.users && chatUser) {
+          chatUser.innerHTML = '';
           for (let i=0; i<data.users.length; i++) {
             let userItem = genChatUserItem(data.users[i]);
             chatUser.appendChild(userItem);
           }
         }
         if (data.groups && chatGroup) {
+          chatGroup.innerHTML = '';
           for (let i=0; i<data.groups.length; i++) {
             let groupItem = genChatGroupItem(data.groups[i]);
             chatGroup.appendChild(groupItem);
           }
         }
+      }
+    }
+  };
+  xhttp.open('GET', url, true);
+  xhttp.send();
+}
+
+function updateReadMessageStatus(roomId) {
+  /**
+   * Get chat contacts
+   */
+  let url = '/api/chat/update-read-message/' + roomId;
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+      let dataRes = JSON.parse(this.response);
+      console.log('dataRes', dataRes);
+      if (dataRes.success) {
+        getChatContacts();
       }
     }
   };

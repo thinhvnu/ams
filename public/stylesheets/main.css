@@ -388,13 +388,26 @@ input.mycropper-browse-file[type="file"] {
     vertical-align: top;
 }
 .user-item .user-avatar {
+    position: relative;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    overflow: hidden;
+    /* overflow: hidden; */
     text-align: center;
     display: inline-table;
     vertical-align: middle;
+}
+.user-item .user-avatar .mess-unread {
+    position: absolute;
+    height: 18px;
+    line-height: 18px;
+    top: 0px;
+    right: 0px;
+    background: #fa3e3e;
+    color: #ffffff;
+    font-size: 14px;
+    border-radius: 15px;
+    padding: 0 5px;
 }
 .user-item .user-avatar img {
     padding: 5px;

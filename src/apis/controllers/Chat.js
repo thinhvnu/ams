@@ -52,13 +52,13 @@ exports.getClients = (req, res, next) => {
 
                             for (let i=0; i<recents.length; i++) {
                                 if (!recents[i].group && recents[i].sender && recents[i].sender.id !== u.id) {
-                                    users.push(recents[i].sender);
+                                    users.push(recents[i].sender.toObject());
                                 }
                                 if (!recents[i].group && recents[i].partner && recents[i].partner.id !== u.id) {
-                                    users.push(recents[i].partner);
+                                    users.push(recents[i].partner.toObject());
                                 }
                                 if (recents[i].group) {
-                                    groups.push(recents[i].group);
+                                    groups.push(recents[i].group.toObject());
                                     groupIds.push(recents[i].group._id);
                                 }
                             }
@@ -78,9 +78,7 @@ exports.getClients = (req, res, next) => {
                                                 recipient: u.id,
                                                 isRead: false
                                             }).exec((err, c) => {
-                                                console.log('c', c);
                                                 Object.assign(users[i], {messUnread: c});
-                                                console.log('users[i]', users[i]);
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {
@@ -105,7 +103,7 @@ exports.getClients = (req, res, next) => {
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
-                                                console.log('gUnread', gMessUnread);
+                                                // console.log('gUnread', gMessUnread);
                                                 // gs[i].messUnread = gMessUnread;
                                                 Object.assign(gs[i], {messUnread: gMessUnread});
                                                 count++;

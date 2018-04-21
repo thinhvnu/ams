@@ -54,7 +54,7 @@ block content
 							if data.invoice_imgs
 								- var invoice_imgs = data.invoice_imgs_vitrual.split(',');
 								each invoice_img in invoice_imgs
-									if i
+									if invoice_img
 										img(src=invoice_img, style='width: 120px; height: 100px;margin: 0 5px;')
 							else
 								| Không có

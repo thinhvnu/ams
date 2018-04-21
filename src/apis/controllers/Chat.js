@@ -80,6 +80,7 @@ exports.getClients = (req, res, next) => {
                                             }).exec((err, c) => {
                                                 console.log('c', c);
                                                 Object.assign(users[i], {messUnread: c});
+                                                console.log('users[i]', users[i]);
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {

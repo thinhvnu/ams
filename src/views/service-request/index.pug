@@ -24,7 +24,8 @@ block content
 						th Tên đầy đủ
 						th Điện thoại
 						th Địa chỉ
-						th Ảnh 
+						th Ảnh
+						th Hóa đơn
 						th Dịch vụ
 						th Ghi chú
 						th Trạng thái
@@ -38,6 +39,11 @@ block content
 							td
 								if dt.imageUrl
 									img.img-responsive(src=((dt.imageUrl) ? dt.imageUrl.split(',')[0] : ''), style='width: 128px;height: 100px;')
+								else 
+									| Không có
+							td
+								if dt.invoice_imgs
+									img.img-responsive(src=((dt.invoice_imgs_vitrual) ? dt.invoice_imgs_vitrual.split(',')[0] : ''), style='width: 128px;height: 100px;')
 								else 
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}

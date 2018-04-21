@@ -286,16 +286,7 @@ exports.getSearch = (req, res, next) => {
 					}
 				},
 			]
-		})
-			.select({
-				_id: 1,
-				firstName: 1,
-				lastName: 1,
-				userName: 1,
-				email: 1,
-				address: 1
-			})
-			.exec((err, users) => {
+		}).exec((err, users) => {
 				if (err) {
 					return res.json({
 						success: false,

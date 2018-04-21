@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
 userSchema.set('toJSON', {
   virtuals: true
 });
+userSchema.set('toObject', {
+  virtuals: true
+});
 
 /**
  * Password hash middleware.

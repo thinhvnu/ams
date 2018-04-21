@@ -16,5 +16,7 @@ router.get('/list-by-role', passport.isAuthenticated, notificationController.get
 /*GET câp nhật trạng thái đã xem của thông báo*/
 router.get("/updateStatus/:noti_id",passport.isAuthenticated,notificationController.updateSeenStatus);
 
+router.get("/view/:notiId", passport.isAuthenticated, notificationController.getView);
+
 
 module.exports = router;

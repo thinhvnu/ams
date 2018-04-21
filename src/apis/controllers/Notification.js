@@ -160,3 +160,21 @@ exports.updateSeenStatus = (req, res, next) => {
         })
     }
 }
+
+exports.getView = (req, res, next) => {
+    try {
+        Notification.findById(req.params.notiId).exec((err, notification) => {
+            return res.json({
+                success: true,
+                errorCode: 0,
+                data: notification
+            })
+        })
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: '111',
+            message: 'Server exception'
+        })
+    }
+}

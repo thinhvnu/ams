@@ -78,6 +78,7 @@ exports.getClients = (req, res, next) => {
                                                 recipient: u.id,
                                                 isRead: false
                                             }).exec((err, c) => {
+                                                console.log('c', c);
                                                 users[i].messUnread = c;
                                                 count++;
 
@@ -103,6 +104,7 @@ exports.getClients = (req, res, next) => {
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
+                                                console.log('gUnread', gMessUnread);
                                                 gs[i].messUnread = gMessUnread;
                                                 count++;
 

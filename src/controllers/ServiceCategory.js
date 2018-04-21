@@ -25,7 +25,7 @@ exports.getIndex = function (req, res) {
 exports.getCreate = function (req, res) {
 	res.render('service-category/create', {
         title: 'Thêm danh mục dịch vụ mới',
-        current: ['service', 'create']
+        current: ['service-category', 'create']
     });
 };
 
@@ -60,6 +60,61 @@ exports.postCreate = function (req, res) {
 				} else {
 					// Save tags
 					req.flash('success', 'Đã thêm danh mục dịch vụ thành công: ' + newServiceCategory.name);
+					return res.redirect('/service-category');
+				}
+			})
+		}
+	});
+};
+
+exports.getEdit = function (req, res) {
+	ServiceCategory.findById(req.params.categoryId).exec((err, category) => {
+		if (category) {
+			res.render('service-category/edit', {
+				title: 'Sửa danh mục dịch vụ mới',
+				current: ['service-category', 'edit'],
+				data: category
+			});
+		} else {
+			req.flash('errors', 'Không tìm thấy danh mục dịch vụ');
+			return res.redirect('/service');
+		}
+	})
+};
+
+exports.postUpdate = function (req, res) {
+	/*
+	* Validate create category
+	*/ 
+	req.checkBody('name', 'Tên danh mục không được để trống').notEmpty();
+	req.checkBody('icon', 'Icon danh mục không được để trống').notEmpty();
+	
+	var errors = req.getValidationResult().then(function(errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.array();
+			console.log('errors', errors);
+			req.flash('errors', errors[0].msg);
+			return res.redirect('/service-category/edit/' + req.params.categoryId);
+		} else {
+			var data = req.body;
+			ServiceCategory.findById(req.params.categoryId).exec((err, category) => {
+				if (category) {
+					category.name = data.name;
+					category.icon = data.icon;
+					category.status = data.status;
+					category.updatedBy = req.session.user._id;
+					
+					category.save(function (err, category) {
+						if (err) {
+							console.log('err', err);
+						} else {
+							// Save tags
+							req.flash('success', 'Đã cập nhật danh mục dịch vụ thành công: ' + category.name);
+							return res.redirect('/service-category');
+						}
+					})
+				} else {
+					req.flash('errors', 'Không tìm thấy dữ liệu');
 					return res.redirect('/service-category');
 				}
 			})

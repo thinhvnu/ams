@@ -57,6 +57,8 @@ serviceRequestSchema.pre('save', function(next) {
         if (!this.code) {
             this.code = (sr && sr.code) ? (sr.code + 1) : 1;
             next();
+        } else {
+            next();
         }
     })
 });

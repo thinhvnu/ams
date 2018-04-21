@@ -349,20 +349,21 @@ exports.getClients = (req, res, next) => {
                                         }
 
                                         for (let i=0; i<gs.length; i++) {
-                                            console.log('u', u);
+                                            // console.log('u', u);
                                             Message.count({
-                                                recipient: gs[i].id,
+                                                recipient: gs[i]._id,
                                                 sender: {
                                                     $ne: u._id
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
                                                 // gs[i].messUnread = gMessUnread;
+                                                console.log('gMessUnread', gMessUnread);
                                                 Object.assign(gs[i], {messUnread: gMessUnread});
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {
-                                                    console.log('groups', gs);
+                                                    // console.log('groups', gs);
                                                     return res.json({
                                                         success: true,
                                                         errorCode: 0,

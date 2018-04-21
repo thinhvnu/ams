@@ -491,9 +491,11 @@ exports.getMessages = (req, res, next) => {
 exports.getUpdateReadMessage = (req, res, next) => {
     try {
         if (req.query.isGroup) {
+            console.log('ttt');
             Message.updateMany({'recipient': req.params.roomId, 'sender': {
                 $ne: req.session.user._id
             }}, {isRead: true}, (err, result) => {
+                console.log('result', result);
                 if (err) {
                     return res.json({
                         success: false,

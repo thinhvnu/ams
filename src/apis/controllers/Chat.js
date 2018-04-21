@@ -79,7 +79,7 @@ exports.getClients = (req, res, next) => {
                                                 isRead: false
                                             }).exec((err, c) => {
                                                 console.log('c', c);
-                                                users[i].messUnread = c;
+                                                Object.assign(users[i], {messUnread: c});
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {
@@ -105,7 +105,8 @@ exports.getClients = (req, res, next) => {
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
                                                 console.log('gUnread', gMessUnread);
-                                                gs[i].messUnread = gMessUnread;
+                                                // gs[i].messUnread = gMessUnread;
+                                                Object.assign(gs[i], {messUnread: gMessUnread});
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {
@@ -141,7 +142,8 @@ exports.getClients = (req, res, next) => {
                                                         recipient: u.id,
                                                         isRead: false
                                                     }).exec((err, c) => {
-                                                        users[i].messUnread = c;
+                                                        // users[i].messUnread = c;
+                                                        Object.assign(users[i], {messUnread: c});
                                                         count++;
         
                                                         if (count >= (users.length + gs.length)) {
@@ -166,7 +168,8 @@ exports.getClients = (req, res, next) => {
                                                         },
                                                         isRead: false
                                                     }).exec((err, gMessUnread) => {
-                                                        gs[i].messUnread = gMessUnread;
+                                                        // gs[i].messUnread = gMessUnread;
+                                                        Object.assign(gs[i], {messUnread: gMessUnread});
                                                         count++;
         
                                                         if (count >= (users.length + gs.length)) {
@@ -201,7 +204,8 @@ exports.getClients = (req, res, next) => {
                                                     recipient: u.id,
                                                     isRead: false
                                                 }).exec((err, c) => {
-                                                    users[i].messUnread = c;
+                                                    // users[i].messUnread = c;
+                                                    Object.assign(users[i], {messUnread: c});
                                                     count++;
     
                                                     if (count >= (users.length)) {
@@ -238,7 +242,8 @@ exports.getClients = (req, res, next) => {
                                                         recipient: u.id,
                                                         isRead: false
                                                     }).exec((err, c) => {
-                                                        users[i].messUnread = c;
+                                                        // users[i].messUnread = c;
+                                                        Object.assign(users[i], {messUnread: c});
                                                         count++;
         
                                                         if (count >= (users.length + gs.length)) {
@@ -263,7 +268,8 @@ exports.getClients = (req, res, next) => {
                                                         },
                                                         isRead: false
                                                     }).exec((err, gMessUnread) => {
-                                                        gs[i].messUnread = gMessUnread;
+                                                        // gs[i].messUnread = gMessUnread;
+                                                        Object.assign(gs[i], {messUnread: gMessUnread});
                                                         count++;
         
                                                         if (count >= (users.length + gs.length)) {
@@ -289,7 +295,8 @@ exports.getClients = (req, res, next) => {
                                                     recipient: u.id,
                                                     isRead: false
                                                 }).exec((err, c) => {
-                                                    users[i].messUnread = c;
+                                                    // users[i].messUnread = c;
+                                                    Object.assign(users[i], {messUnread: c});
                                                     count++;
     
                                                     if (count >= (users.length)) {
@@ -324,7 +331,8 @@ exports.getClients = (req, res, next) => {
                                                 recipient: u.id,
                                                 isRead: false
                                             }).exec((err, c) => {
-                                                users[i].messUnread = c;
+                                                // users[i].messUnread = c;
+                                                Object.assign(users[i], {messUnread: c});
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {
@@ -349,7 +357,8 @@ exports.getClients = (req, res, next) => {
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
-                                                gs[i].messUnread = gMessUnread;
+                                                // gs[i].messUnread = gMessUnread;
+                                                Object.assign(gs[i], {messUnread: gMessUnread});
                                                 count++;
 
                                                 if (count >= (users.length + gs.length)) {

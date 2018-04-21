@@ -97,9 +97,9 @@ exports.getClients = (req, res, next) => {
 
                                         for (let i=0; i<gs.length; i++) {
                                             Message.count({
-                                                recipient: gs[i].id,
+                                                recipient: gs[i]._id,
                                                 sender: {
-                                                    $ne: u.id
+                                                    $ne: u._id
                                                 },
                                                 isRead: false
                                             }).exec((err, gMessUnread) => {
@@ -492,9 +492,12 @@ exports.getUpdateReadMessage = (req, res, next) => {
     try {
         if (req.query.isGroup) {
             console.log('ttt');
-            Message.updateMany({'recipient': req.params.roomId, 'sender': {
-                $ne: req.session.user._id
-            }}, {isRead: true}, (err, result) => {
+            Message.updateMany({
+                recipient: req.params.roomId,
+                sender: {
+                    $ne: req.session.user._id
+                }
+            }, {isRead: true}, (err, result) => {
                 console.log('result', result);
                 if (err) {
                     return res.json({

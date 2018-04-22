@@ -239,9 +239,11 @@ exports.postUpdate = (req, res, next) => {
   req.checkBody('firstName', 'Nhập họ tên').notEmpty();
   req.checkBody('lastName', 'Nhập họ tên').notEmpty();
   req.checkBody('phoneNumber', 'Nhập số điện thoại').notEmpty();
-  req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
-  req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
   req.checkBody('role', 'Chọn quyền').notEmpty();
+  if (req.body.role != 'ADMIN') {
+    req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
+    req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
+  }
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   req.getValidationResult().then(function(errors) {

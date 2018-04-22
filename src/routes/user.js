@@ -13,12 +13,12 @@ router.get('/', passport.isAuthenticated, userController.getIndex);
 router.get('/create', userController.getCreate);
 router.post('/create', userController.postCreate);
 
-router.get('/edit/:userId', userController.getEdit);
-router.post('/update/:userId', userController.postUpdate);
+router.get('/edit/:userId', passport.isAuthenticated, userController.getEdit);
+router.post('/update/:userId', passport.isAuthenticated, userController.postUpdate);
 
 router.get('/login', userController.getLogin);
 router.post('/login', userController.postLogin);
 
-router.get('/logout', userController.logout)
+router.get('/logout', passport.isAuthenticated, userController.logout)
 
 module.exports = router;

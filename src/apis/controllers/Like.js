@@ -25,7 +25,7 @@ exports.postCreateNew = (req, res, next) => {
                     })
                 }else if(result){
                     console.log("result",result);
-                    result.action = data.postId;
+                    result.action = data.action;
                     
                     result.save(function (err, like) {
                         if (err || !like) {
@@ -36,11 +36,33 @@ exports.postCreateNew = (req, res, next) => {
                                 data: req.body
                             })
                         } else {
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                message: 'like-unlike successfully'
-                            });
+
+                            Post.findById(data.postId, (err, post) => {
+                                // console.log("postId",data.postId);
+                                // console.log("post--------------",post);
+        
+                                if (err || !post) {
+                                    return res.json({
+                                        success: false,
+                                        errorCode: '121',
+                                        message: 'update like in post failed'
+                                    });
+                                }
+                                if(data.action === 0){
+                                    remove(post.likes,like._id);
+                                }else{
+                                    post.likes.push(like._id);
+                                }
+                                
+                                post.save((err, p) => {
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        message: 'like-unlike successfully'
+                                    });
+                                });
+                            })
+                        
                         }
                     });
                 }else{
@@ -67,7 +89,7 @@ exports.postCreateNew = (req, res, next) => {
                                     return res.json({
                                         success: false,
                                         errorCode: '121',
-                                        message: 'like failed'
+                                        message: 'update like in post failed'
                                     });
                                 }
                                 post.likes.push(like._id);
@@ -85,5 +107,15 @@ exports.postCreateNew = (req, res, next) => {
             });
 			
 		}
-	});
+    });
+    
+    function remove(arr, what) {
+        var found = arr.indexOf(what);
+    
+        while (found !== -1) {
+            arr.splice(found, 1);
+            found = arr.indexOf(what);
+        }
+    }
+    
 }

@@ -53,10 +53,12 @@ exports.postCreateNew = (req, res, next) => {
                                         message: 'update like in post failed'
                                     });
                                 }
+                                
                                 if(data.action === 0){
-                                    remove(post.likes,like._id);
+                                    post.likes = remove(post.likes,req.session.user._id);
                                 }else{
-                                    post.likes.push(like._id);
+                                    if(post.likes.indexOf(req.session.user._id) < 0)
+                                        post.likes.push(req.session.user._id);
                                 }
                                 
                                 post.save((err, p) => {
@@ -102,7 +104,7 @@ exports.postCreateNew = (req, res, next) => {
                                 }
                                 console.log("cap nhat like trong post",post)
                                 console.log("them id cua like moi",like._id)
-                                post.likes.push(like._id);
+                                post.likes.push(req.session.user._id);
                                 post.save((err, p) => {
                                     return res.json({
                                         success: true,
@@ -126,6 +128,7 @@ exports.postCreateNew = (req, res, next) => {
             arr.splice(found, 1);
             found = arr.indexOf(what);
         }
+        return arr;
     }
     
 }

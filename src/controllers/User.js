@@ -177,8 +177,8 @@ exports.postCreate = (req, res, next) => {
         user.phoneNumber = req.body.phoneNumber;
         user.password = req.body.password;
         user.apartment = req.body.apartment || null;
-        user.building = req.body.apartmentBuilding;
-        user.buildingGroup = req.body.apartmentBuildingGroup;
+        user.building = req.body.apartmentBuilding || null;
+        user.buildingGroup = req.body.apartmentBuildingGroup || null;
         user.gender = req.body.gender;
         user.role = req.body.role;
         user.status = req.body.status;

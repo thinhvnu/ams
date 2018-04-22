@@ -36,7 +36,7 @@ block content
 								a.btn.btn-default(type='button', data-toggle='modal', data-target='#listMember_' + dt._id)
 									em.fa.fa-eye
 									| &nbsp;Danh sách
-								#listMember_#{dt._id}.modal.fade(role='dialog')
+								.modal.fade(role='dialog', id=('listMember_' + dt._id))
 									.modal-dialog
 										// Modal content
 										.modal-content

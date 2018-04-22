@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
  * @name apartmentModel
  */
 const apartmentModel = new mongoose.Schema({
-    apartmentName: { type: String, unique: true },
+    apartmentName: { type: String},
     area: {type: Number},
     manager: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     apartmentRooms: [{type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentRoom'}],

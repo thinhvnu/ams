@@ -4,7 +4,7 @@ var ChatGroup = require('./../models/ChatGroup');
 exports.getIndex = function (req, res) {
     ChatGroup.find({})
     .populate('building')
-    .populate('buildingGroup').exec(function (err, chatGroups) {
+    .populate('buildingGroup').populate('members').exec(function (err, chatGroups) {
 		if (err) {
 			return res.json({
 				success: false,

@@ -32,7 +32,39 @@ block content
 							td #{dt.groupName}
 							td #{dt.building ? dt.building.buildingName : ''}
 							td #{dt.buildingGroup ? dt.buildingGroup.abgName : ''}
-							td Thành viên
+							td.text-center
+								a.btn.btn-default(type='button', data-toggle='modal', data-target='#myModal')
+									em.fa.fa-eye
+									| Danh sách
+								#myModal.modal.fade(role='dialog')
+									.modal-dialog
+										// Modal content
+										.modal-content
+											.modal-header
+												button.close(type='button', data-dismiss='modal') ×
+												h4.modal-title Danh sách thành viên
+											.modal-body
+												if dt.members.length > 0
+													table.table.table-responsive.table-bordered
+														thead
+															tr
+																th STT
+																th Họ tên
+																th Hành động
+														tbody
+															each member, i in dt.members
+																tr
+																	td #{i+1}
+																	td #{member.first + ' ' + member.lastName}
+																	td 
+																		button.btn.btn-danger Cấm chat
+
+																
+															
+												else
+													p Không có thành viên.
+											.modal-footer
+												button.btn.btn-default(type='button', data-dismiss='modal') Đóng
 							td(align='center')
 								a.btn.btn-default
 									em.fa.fa-pencil

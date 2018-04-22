@@ -23,7 +23,7 @@ serviceSchema.set('toJSON', {
 
 // Get full image url with media config
 serviceSchema.virtual('iconUrl').get(function () {
-    return process.env.MEDIA_URL + '/images/service/thumb/' + this.icon;
+    return process.env.MEDIA_URL + '/images/service/origin/' + this.icon;
 });
 
 // Get full image url with media config

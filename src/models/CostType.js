@@ -19,7 +19,7 @@ costTypeSchema.set('toJSON', {
 
 // Get full image url with media config
 costTypeSchema.virtual('iconUrl').get(function () {
-    return process.env.MEDIA_URL + '/images/cost/thumb/' + this.icon;
+    return process.env.MEDIA_URL + '/images/cost/origin/' + this.icon;
 });
 
 const CostType = mongoose.model('CostType', costTypeSchema);

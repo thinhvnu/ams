@@ -19,7 +19,7 @@ postCategorySchema.set('toJSON', {
 
 // Get full image url with media config
 postCategorySchema.virtual('iconUrl').get(function () {
-    return process.env.MEDIA_URL + '/images/post/thumb/' + this.icon;
+    return process.env.MEDIA_URL + '/images/post/origin/' + this.icon;
 });
 
 const PostCategory = mongoose.model('PostCategory', postCategorySchema);

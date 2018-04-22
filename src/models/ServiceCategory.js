@@ -19,7 +19,7 @@ serviceCategorySchema.set('toJSON', {
 
 // Get full image url with media config
 serviceCategorySchema.virtual('iconUrl').get(function () {
-    return process.env.MEDIA_URL + '/images/service/thumb/' + this.icon;
+    return process.env.MEDIA_URL + '/images/service/origin/' + this.icon;
 });
 
 const ServiceCategory = mongoose.model('ServiceCategory', serviceCategorySchema);

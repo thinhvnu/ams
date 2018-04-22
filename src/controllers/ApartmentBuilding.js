@@ -21,10 +21,7 @@ exports.getIndex = function (req, res, next) {
 			});
 		} else {
 			ApartmentBuilding.find({})
-				.populate('manager', {
-					'_id': 1,
-					'userName': 1
-                })
+				.populate('manager')
                 // .populate('apartments', {
                 //     '_id': 1
                 // })
@@ -32,10 +29,7 @@ exports.getIndex = function (req, res, next) {
 					'_id': 1,
 					'abgName': 1
                 })
-				.populate('createdBy', {
-					'_id': 0,
-					'userName': 1
-				})
+				.populate('createdBy')
 				.exec(function (err, abs) {
 					if (err) {
 						console.log('err', err)

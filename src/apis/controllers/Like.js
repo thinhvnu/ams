@@ -16,6 +16,8 @@ exports.postCreateNew = (req, res, next) => {
 
 
             var data = req.body;
+            console.log("data-postid",data.postId)
+            console.log("data-action",data.action)
             
             Like.findOne({post:data.postId,createdBy:req.session.user._id}).exec(function(err,result){
                 if (err) {
@@ -26,7 +28,8 @@ exports.postCreateNew = (req, res, next) => {
                         data: req.body
                     })
                 }else if(result){
-                    console.log("result",result);
+                    console.log("like da ton tai voi user",req.session.user._id)
+                    console.log("result  like",result);
                     result.action = data.action;
                     
                     result.save(function (err, like) {
@@ -68,11 +71,13 @@ exports.postCreateNew = (req, res, next) => {
                         }
                     });
                 }else{
+                    
                     var newLike = new Like();
             
                     newLike.post = data.postId
                     newLike.action = data.action; // 0: dislike, 1: like
                     newLike.createdBy = req.session.user._id;
+                    console.log("tao like moi",newLike)
                     
                     newLike.save(function (err, like) {
                         if (err) {
@@ -83,6 +88,7 @@ exports.postCreateNew = (req, res, next) => {
                                 data: req.body
                             })
                         } else {
+                            console.log("tao like moi thanh cong",like)
                             Post.findById(data.postId, (err, post) => {
                                 // console.log("postId",data.postId);
                                 // console.log("post--------------",post);
@@ -94,6 +100,8 @@ exports.postCreateNew = (req, res, next) => {
                                         message: 'update like in post failed'
                                     });
                                 }
+                                console.log("cap nhat like trong post",post)
+                                console.log("them id cua like moi",like._id)
                                 post.likes.push(like._id);
                                 post.save((err, p) => {
                                     return res.json({

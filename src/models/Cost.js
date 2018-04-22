@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const costSchema = new mongoose.Schema({
     costType: {type: mongoose.Schema.Types.ObjectId, ref: 'CostType'},
     apartment: {type: mongoose.Schema.Types.ObjectId, ref: 'Apartment'},
-    money: { type: Number },
+    money: { type: Number, default: 0 },
     month: { type: Number },
     year: { type: Number},
     datePayment: { type: Date },

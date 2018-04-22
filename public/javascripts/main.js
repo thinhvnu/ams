@@ -534,7 +534,7 @@ function importFileCost(selector) {
           let tableHtml = '';
           if (tableEl) {
             for (let i=0, len = dataRes.data[0].length; i<len; i++) {
-              tableHtml += '<tr><td>' + dataRes.data[0][i].loai_chi_phi + '</td><td>' + dataRes.data[0][i].can_ho + '</td><td>' + dataRes.data[0][i].toa_nha + '</td><td>' + dataRes.data[0][i].chung_cu + '</td><td>' + dataRes.data[0][i].so_tien + '</td><td>' + dataRes.data[0][i].thang + '</td><td>' + dataRes.data[0][i].nam + '</td></tr>';
+              tableHtml += '<tr><td>' + dataRes.data[0][i].loai_chi_phi + '</td><td>' + dataRes.data[0][i].can_ho + '</td><td>' + dataRes.data[0][i].toa_nha + '</td><td>' + dataRes.data[0][i].chung_cu + '</td><td>' + dataRes.data[0][i].so_tien || 0 + '</td><td>' + dataRes.data[0][i].thang + '</td><td>' + dataRes.data[0][i].nam + '</td></tr>';
             }
 
             tableEl.innerHTML = tableHtml;

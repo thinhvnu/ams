@@ -2,6 +2,8 @@ const Like = require('./../../models/Like');
 const Post = require('./../../models/Post');
 
 exports.postCreateNew = (req, res, next) => {
+    req.checkBody('postId', 'PostID không được để trống').notEmpty();
+	req.checkBody('action', 'Action không được để trống').notEmpty();
     var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
             return res.json({

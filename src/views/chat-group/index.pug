@@ -33,10 +33,10 @@ block content
 							td #{dt.building ? dt.building.buildingName : ''}
 							td #{dt.buildingGroup ? dt.buildingGroup.abgName : ''}
 							td.text-center
-								a.btn.btn-default(type='button', data-toggle='modal', data-target='#myModal')
+								a.btn.btn-default(type='button', data-toggle='modal', data-target='#listMember_' + dt._id)
 									em.fa.fa-eye
 									| &nbsp;Danh sách
-								#myModal.modal.fade(role='dialog')
+								#listMember_#{dt._id}.modal.fade(role='dialog')
 									.modal-dialog
 										// Modal content
 										.modal-content

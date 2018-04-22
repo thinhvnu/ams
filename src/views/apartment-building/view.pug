@@ -178,7 +178,7 @@ block content
 										a(href='/apartment/view/' + dt._id, target='_blank')
 											.a-name #{dt.apartmentName}
 											.a-content
-												.a-content-item #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Trống'}
+												.a-content-item #{dt.manager ? 'Đã cho thuê' : 'Trống'}
 												.a-content-item
 													i.fa.fa-area-chart
 													| #{dt.area ? dt.area : 0} (m2)

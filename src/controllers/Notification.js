@@ -2,6 +2,7 @@ const Notification = require('./../models/Notification');
 const Apartment = require('./../models/Apartment');
 const NotificationLog = require('./../models/NotificationLog');
 const ServiceRequest = require('./../models/ServiceRequest');
+const FeedBack = require('./../models/FeedBack');
 
 /**
  * Helpers function
@@ -134,18 +135,37 @@ exports.getView = (req, res, next) => {
 		if (notification) {
 			notification.status = 1;
 			notification.save((err) => {
-				ServiceRequest.findById(notification.objId)
-				.populate({
-					path: 'service',
-					model: 'Service'
-				}).exec((err, sr) => {
-					if (!sr) {
-						req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
-					}
-					res.render('notification/view', {
-						data: sr || null
+				if (notification.type == 2) {
+					ServiceRequest.findById(notification.objId)
+					.populate({
+						path: 'service',
+						model: 'Service'
+					}).exec((err, sr) => {
+						if (!sr) {
+							req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
+						}
+						res.render('notification/view', {
+							type: 2,
+							data: sr || null
+						})
 					})
-				})
+				} else if (notification.type == 3) {
+					FeedBack.findById(notification.objId)
+					.populate('createdBy').exec((err, fb) => {
+						if (!fb) {
+							req.flash('errors', 'Không tìm thấy dữ liệu');
+						}
+						res.render('notification/view', {
+							type: 3,
+							data: fb || null
+						})
+					})
+				} else {
+					req.flash('errors', 'Không tìm thấy dữ liệu');
+					res.render('notification/view', {
+						data: null
+					})
+				}
 			});
 		} else {
 			req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');

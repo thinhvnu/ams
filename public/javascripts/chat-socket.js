@@ -363,9 +363,6 @@ socket.on('connect', () => {
      * Event receive message from server
      */
     socket.on('message', (data) => {
-        let messageSound = new Audio('/sounds/message.mp3');
-        messageSound.play();
-       
         /**
          * reload contact
          */
@@ -375,6 +372,9 @@ socket.on('connect', () => {
         if (data.sender.id === socket.identification.id) {
             return;
         }
+
+        let messageSound = new Audio('/sounds/message.mp3');
+        messageSound.play();
 
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.sender.id || data.sender._id || data.sender.room));
        

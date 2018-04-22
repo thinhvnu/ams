@@ -32,12 +32,12 @@ block content
 							.help-block #{errors.apartmentBuildingGroup.msg}
 				.form-group
 					.col-lg-6(class=errors && errors.floor && 'has-error')
-						label.control-label(for='floor', style='display: block; text-align: left;') Số tầng (*)
+						label.control-label(for='floor', style='display: block; text-align: left;') Số tầng
 						input.form-control.number-floor(name='floor', data-placeholder='Số tầng', style='width: 100%;')
 						if errors && errors.floor
 							.help-block #{errors.floor.msg}
 					.col-lg-6(class=errors && errors.area && 'has-error')
-						label.control-label(for='area', style='display: block; text-align: left;') Diện tích (*)
+						label.control-label(for='area', style='display: block; text-align: left;') Diện tích
 						input.form-control.building-area(name='area', data-placeholder='Diện tích (m2)', style='width: 100%;')
 						if errors && errors.area
 							.help-block #{errors.area.msg}

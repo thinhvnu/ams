@@ -67,7 +67,6 @@ exports.getCreate = (req, res, next) => {
 exports.postCreate = (req, res, next) => {
 	req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
 	req.checkBody('apartmentBuildingGroup', 'Chọn khu chung cư').notEmpty();
-	req.checkBody('floor', 'Số tầng của tòa nhà ?').notEmpty();
 	req.checkBody('manager', 'Chọn quản lý').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {
@@ -138,7 +137,6 @@ exports.getEdit = (req, res, next) => {
 exports.postUpdate = (req, res, next) => {
 	req.checkBody('buildingName', 'Tên tòa nhà không được để trống').notEmpty();
 	req.checkBody('apartmentBuildingGroup', 'Chọn khu chung cư').notEmpty();
-	req.checkBody('floor', 'Số tầng của tòa nhà ?').notEmpty();
 	req.checkBody('manager', 'Chọn quản lý').notEmpty();
 	
 	req.getValidationResult().then(function (errors) {

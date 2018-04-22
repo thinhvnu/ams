@@ -34,7 +34,7 @@ block content
 						td #{data.orderAt ? moment(data.orderAt).format('DD-MM-YYYY HH:mm') : ''}
 					tr
 						th Yêu cầu lúc
-						td #{data.createdAt ? moment(data.createdAt).local().format('DD-MM-YYYY HH:mm') : ''}
+						td #{data.createdAt ? moment(data.createdAt).format('DD-MM-YYYY h:mm:ss') : ''}
 					tr
 						th Địa chỉ
 						td #{data.address ? data.address : ''}

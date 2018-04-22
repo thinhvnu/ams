@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema({
     content: {type: String},
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'PostCategory' },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like'}],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     publishTime: {type: Date},
     seo: {
         metaTitle: {type: String},

@@ -82,7 +82,7 @@ block content
 								if data.image
 									img(src=data.imageUrl, style='width: 120px; height: 100px;margin: 0 5px;')	
 								else
-									| Không có
+									|Không có
 						tr
 							th Người báo cáo
 							td #{data.createdBy ? (data.createdBy.firstName + ' ' + data.createdBy.lastName) : ''}

@@ -32,6 +32,7 @@ block content
 						th Ghi chú
 						th Thời gian đặt lịch
 						th Trạng thái
+						th Chi tiết
 				tbody
 					each dt, i in data
 						tr
@@ -56,4 +57,7 @@ block content
 								td(style='color: #38a22c;') Đã thanh toán
 							else 
 								td Chưa thanh toán
+							td(align='center')
+								a(href='/service-request/view/' + dt._id).u-action.btn.btn-default
+									em.fa.fa-eye
 							

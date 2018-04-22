@@ -1,0 +1,69 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			//- $('.').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	if data
+		.row
+			.col-lg-12
+				header.text-center
+					.content-header Yêu cầu dịch vụ
+				#div-1.body.collapse.in(aria-expanded='true', style='')
+				table.table.table-responsive(style='background: #eee;margin-top:15px;')
+					tr
+						th Mã đơn hàng
+						td #{'#' + data.code}
+					tr
+						th Người đặt hàng
+						td #{data.fullName}
+					tr
+						th Số điện thoại
+						td #{data.phoneNumber}
+					tr
+						th Dịch vụ
+						td #{data.service ? data.service.serviceName : ''}
+					tr
+						th Thời gian đặt lịch
+						td #{data.orderAt ? moment(data.orderAt).format('DD-MM-YYYY H:m:s') : ''}
+					tr
+						th Yêu cầu lúc
+						td #{data.createdAt ? moment(data.createdAt).format('DD-MM-YYYY H:m:s') : ''}
+					tr
+						th Địa chỉ
+						td #{data.address ? data.address : ''}
+					tr
+						th Ghi chú
+						td #{data.description}
+					tr
+						th Ảnh
+						td
+							if data.images
+								- var imgs = data.imageUrl.split(',');
+								each i in imgs
+									if i
+										img(src=i, style='width: 120px; height: 100px;margin: 0 5px;')
+							else
+								| Không có
+					tr
+						th Hóa đơn
+						td
+							if data.invoice_imgs
+								- var invoice_imgs = data.invoice_imgs_vitrual.split(',');
+								each invoice_img in invoice_imgs
+									if invoice_img
+										img(src=invoice_img, style='width: 120px; height: 100px;margin: 0 5px;')
+							else
+								| Không có
+					tr
+						th Trạng thái
+						if data.done
+							td(style='color: #38a22c;') Đã thanh toán
+						else 
+							td Chưa thanh toán

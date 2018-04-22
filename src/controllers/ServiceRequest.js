@@ -19,8 +19,28 @@ exports.getIndex = function (req, res) {
 	});
 };
 
+exports.getView = (req, res, next) => {
+	try {
+		ServiceRequest.findById(req.params.requestId)
+			.populate({
+				path: 'service',
+				model: 'Service'
+			}).exec((err, sr) => {
+				if (!sr) {
+					req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
+				}
+				res.render('notification/view', {
+					data: sr || null
+				})
+			})
+	} catch (e) {
+		req.flash('errors', 'Không tìm thấy dữ liệu');
+		res.redirect('/service-request');
+	}
+}
+
 exports.getDelete = (req, res, nex) => {
-	Service.remove({ _id: req.params.serviceId }, (err) => {
+	Service.remove({ _id: req.params.requestId }, (err) => {
 	  if (err) {
 		req.flash('errors', 'Xóa dịch vụ không thành công');
 	  } else {
@@ -28,4 +48,4 @@ exports.getDelete = (req, res, nex) => {
 	  }
 	  return res.redirect('/service-request');
 	})
-  }
+}

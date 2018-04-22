@@ -10,6 +10,7 @@ const passport = require('../middleware/passport');
 
 /* get all categories. */
 router.get('/', passport.isAuthenticated, ServiceRequestController.getIndex);
+router.get('/view/:requestId', passport.isAuthenticated, ServiceRequestController.getView)
 router.get('/delete/:requestId', passport.isAuthenticated, ServiceRequestController.getDelete)
 
 module.exports = router;

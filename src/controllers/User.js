@@ -333,7 +333,8 @@ exports.postUpdate = (req, res, next) => {
                     return res.redirect('/user');
                   })
                 } else {
-                  req.flash('errors', 'Không tìm thấy dữ liệu')
+                  // req.flash('errors', 'Không tìm thấy dữ liệu')
+                  req.flash('success', 'Cập nhật thành công ' + u.firstName + ' ' + u.lastName);
                   return res.redirect('/user');
                 }
               })

@@ -149,8 +149,10 @@ exports.postCreate = (req, res, next) => {
     req.checkBody('role', 'Chọn quyền').notEmpty();
     req.checkBody('password', 'Mật khẩu ít nhất 6 kí tự').len(6);
     req.checkBody('confirmPassword', 'Xác nhận mật khẩu không trùng khớp').equals(req.body.password);
-    req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
-    req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
+    if (req.body.role != 'ADMIN') {
+      req.checkBody('apartmentBuildingGroup', 'Chọn chung cư').notEmpty();
+      req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
+    }
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
     req.getValidationResult().then(function (errors) {

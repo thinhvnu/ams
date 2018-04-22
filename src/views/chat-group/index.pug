@@ -35,7 +35,7 @@ block content
 							td.text-center
 								a.btn.btn-default(type='button', data-toggle='modal', data-target='#myModal')
 									em.fa.fa-eye
-									| Danh sách
+									| &nbsp;Danh sách
 								#myModal.modal.fade(role='dialog')
 									.modal-dialog
 										// Modal content
@@ -55,8 +55,8 @@ block content
 															each member, i in dt.members
 																tr
 																	td #{i+1}
-																	td #{member.first + ' ' + member.lastName}
-																	td 
+																	td #{member.firstName + ' ' + member.lastName}
+																	td.text-center
 																		button.btn.btn-danger Cấm chat
 
 																

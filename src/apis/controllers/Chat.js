@@ -724,6 +724,9 @@ exports.postAddMemberToGroup = (req, res, next) => {
                             return res.json({
                                 success: true,
                                 errorCode: 0,
+                                data: {
+                                    groupId: groupId
+                                },
                                 message: 'Thêm thành viên vào nhóm thành công'
                             })
                         })

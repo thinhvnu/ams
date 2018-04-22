@@ -478,5 +478,62 @@ socket.on('connect', () => {
         };
         xhttp.open('GET', url, true);
         xhttp.send();
+    });
+    /**
+     * Event new service request
+     */
+    socket.on('noti_new_report', (noti) => {
+        let messageSound = new Audio('/sounds/notification.mp3');
+        messageSound.play();
+        /**
+         * Get list notification
+         */
+        let url = '/api/notification/list-by-role';
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if(xhttp.readyState == 4 && xhttp.status == 200) {
+            let dataRes = JSON.parse(this.response);
+            if (dataRes.success) {
+                let data = dataRes.data;
+                let countNotiUnread = document.getElementById('n-unread-noti');
+
+                if (data && data.length > 0) {
+                    let count = 0;
+                    countNotiUnread.style = 'display: block';
+
+                    let notificationList = document.getElementById('header-notification-list');
+                    notificationList.innerHTML = '';
+                    for (let i=0; i<data.length; i++) {
+                        let notiItem = document.createElement('li');
+                        if (data[i].status === 1) {
+                            notiItem.style = 'background: #ffffff;border-bottom: 1px solid #ccc;';
+                        } else {
+                            count ++;
+                            notiItem.style = 'background: #edf2fa;border-bottom: 1px solid #ccc;';
+                        }
+                        let link = document.createElement('a');
+                        // link.textContent = data[i].title;
+                        link.href = '/notification/view/' + data[i]._id;
+                        link.innerHTML = '<span>' + data[i].title + '</span>';
+
+                        if (data[i].objId && data[i].objId.service ) {
+                        link.innerHTML += '<br/><b><i>' + data[i].objId.service.serviceName + '</i></b>';
+                        }
+
+                        notiItem.appendChild(link);
+                        notificationList.appendChild(notiItem);
+                    }
+                    if (count > 0)
+                        countNotiUnread.textContent = count;
+                    else
+                        countNotiUnread.style = 'display: none';
+                } else {
+                    countNotiUnread.style = 'display: none';
+                }
+            }
+            }
+        };
+        xhttp.open('GET', url, true);
+        xhttp.send();
     })
 });

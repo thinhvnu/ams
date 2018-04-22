@@ -256,6 +256,33 @@ var ioEvents = function(io) {
         })
 
         /**
+         * Event new member join group
+         */
+        socket.on('join_group', (data) => {
+            try {
+                if (data && data.groupId) {
+                    socket.join(data.groupId);
+                }
+            } catch (e) {
+
+            }
+        });
+
+        /**
+         * Event new report
+         */
+        socket.on('new_report', (data) => {
+            console.log('new report', data);
+            if (data) {
+                Notification.find({objId: data._id}).exec((err, notifications) => {
+                    for(let i=0; i<notifications.length; i++) {
+                        io.to(notifications[i].recipient).emit('noti_new_report', notifications[i]);
+                    }
+                });
+            }
+        });
+
+        /**
          * Event client disconnect
          */
         socket.on('disconnect', () => {

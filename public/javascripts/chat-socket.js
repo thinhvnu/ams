@@ -99,9 +99,9 @@ function createNewChatBox(user, isGroup = false) {
     topHeader.onclick = function() {
         chatBox.classList.toggle('box-hidden');
         if (chatBox.classList.contains('box-hidden')) {
-            chatBox.style.bottom = '-322px';
+            chatBox.style.marginBottom = '-322px';
         } else {
-            chatBox.style.bottom = '0px';
+            chatBox.style.marginBottom = '0px';
         }
     }
     chatBoxHeader.appendChild(topHeader);
@@ -131,7 +131,7 @@ function createNewChatBox(user, isGroup = false) {
     let closeBox = document.createElement('span');
     closeBox.className = 'close-box';
     closeBox.style = 'width: 20px; height: 28px; display: inline-block;'
-                    + ' background: url(/images/chat-icons-v1.png); background-position: -21px 6px;margin-right:-10px;';
+                    + ' background: url(/images/chat-icons-v1.png); background-position: -21px 6px;margin-right:-5px;';
     closeBox.onclick = function() {
         chatBox.remove();
     }

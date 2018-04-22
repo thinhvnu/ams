@@ -273,8 +273,8 @@ var ioEvents = function(io) {
          */
         socket.on('new_report', (data) => {
             console.log('new report', data);
-            if (data) {
-                Notification.find({objId: data._id}).exec((err, notifications) => {
+            if (data && data.data) {
+                Notification.find({objId: data.data._id}).exec((err, notifications) => {
                     for(let i=0; i<notifications.length; i++) {
                         io.to(notifications[i].recipient).emit('noti_new_report', notifications[i]);
                     }

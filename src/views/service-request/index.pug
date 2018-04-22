@@ -52,7 +52,7 @@ block content
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}
 							td #{dt.description}
-							td #{dt.orderAt ? moment(dt.orderAt).format('DD-MM-YYYY HH:mm') : (dt.createdAt ? moment(dt.createdAt).format('DD-MM-YYYY HH:mm') : '')}
+							td #{dt.orderAt ? moment(dt.orderAt).tz('Asia/Ho_Chi_Minh').format('DD-MM-YYYY HH:mm') : (dt.createdAt ? moment(dt.createdAt).tz('Asia/Ho_Chi_Minh').format('DD-MM-YYYY HH:mm') : '')}
 							if dt.done
 								td(style='color: #38a22c;') Đã thanh toán
 							else 

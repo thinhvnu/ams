@@ -41,7 +41,7 @@ block content
 							//- td #{nt.building.buildingName}
 							//- td #{nt.buildingGroup ? nt.buildingGroup.abgName : ''}
 							td.text-center #{(nt.status === 2) ? 'Đã xem' : 'Đã gửi'}
-							td #{moment(nt.createdAt).format('DD-MM-YYYY HH:mm')}
+							td #{moment(nt.createdAt).tz('Asia/Ho_Chi_Minh').format('DD-MM-YYYY HH:mm')}
 		.col-lg-3.col-md-3.chat-container
 			h4(style='margin: 0') Chat với cư dân
 			hr

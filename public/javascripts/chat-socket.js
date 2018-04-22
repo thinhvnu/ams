@@ -130,8 +130,8 @@ function createNewChatBox(user, isGroup = false) {
 
     let closeBox = document.createElement('span');
     closeBox.className = 'close-box';
-    closeBox.style = 'width: 12px; height: 12px; margin-top: 8px; display: inline-block;'
-                    + ' background: url(/images/chat-icons-v1.png); background-position: -26px -2px;';
+    closeBox.style = 'width: 20px; height: 28px; display: inline-block;'
+                    + ' background: url(/images/chat-icons-v1.png); background-position: -21px 6px;margin-right:-10px;';
     closeBox.onclick = function() {
         chatBox.remove();
     }

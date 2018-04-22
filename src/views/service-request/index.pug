@@ -51,7 +51,7 @@ block content
 									| Không có
 							td #{(dt.service) ? dt.service.serviceName : ''}
 							td #{dt.description}
-							td #{dt.orderAt ? moment(dt.orderAt).format('DD-MM-YYY H:m:s') : (dt.createdAt ? moment(dt.createdAt).format('DD-MM-YYY H:m:s') : '')}
+							td #{dt.orderAt ? moment(dt.orderAt).format('DD-MM-YYYY H:m:s') : (dt.createdAt ? moment(dt.createdAt).format('DD-MM-YYYY H:m:s') : '')}
 							if dt.done
 								td(style='color: #38a22c;') Đã thanh toán
 							else 

@@ -31,10 +31,10 @@ block content
 						td #{data.service ? data.service.serviceName : ''}
 					tr
 						th Thời gian đặt lịch
-						td #{data.orderAt ? data.orderAt.toLocaleString('vi-VN') : ''}
+						td #{data.orderAt ? moment(data.orderAt).format('DD-MM-YYY H:m:s') : ''}
 					tr
 						th Yêu cầu lúc
-						td #{data.createdAt ? data.createdAt.toLocaleString('vi-VN') : ''}
+						td #{data.createdAt ? moment(data.createdAt).format('DD-MM-YYY H:m:s') : ''}
 					tr
 						th Địa chỉ
 						td #{data.address ? data.address : ''}

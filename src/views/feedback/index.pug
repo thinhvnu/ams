@@ -34,4 +34,4 @@ block content
 								else
 									| Không có
 							td #{dt.createdBy ? (dt.createdBy.firstName + ' ' + dt.createdBy.lastName) : ''}
-							td #{dt.createdAt.toLocaleString('vi-VN')}
+							td #{moment(dt.createdAt).format('DD-MM-YYY H:m:s')}

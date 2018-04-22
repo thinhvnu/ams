@@ -64,6 +64,7 @@ var app = express();
 var io = require('socket.io')();
 var ioEvents = require('./src/socket/server')(io);
 app.io = io;
+app.locals.moment = require('moment');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));

@@ -352,7 +352,7 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://backend.thinhnv.net');
+const socket = io('http://homesun.vn');
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {

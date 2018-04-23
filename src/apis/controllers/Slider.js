@@ -65,7 +65,8 @@ exports.getHomeSlider = function (req, res) {
 				} else {
 					Slider.find({
 						status: 1,
-						building: null
+						building: null,
+						buildingGroup: null
 					}, {
 						'_id': 0,
 						'name': 1,

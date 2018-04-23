@@ -42,23 +42,52 @@ exports.getListBuilding = function (req, res) {
 
 exports.postSubmitData = (req, res, next) => {
     try {
-        let data = JSON.parse(req.body.data), count = 0;
+        /**
+         * Read xlsx to data
+         */
+        const XLSX = require('xlsx');
+        let wb = XLSX.readFile(req.body.filePath);
+        let sheet_name_list = wb.SheetNames;
+        let data = XLSX.utils.sheet_to_json(wb.Sheets[sheet_name_list[0]]), count = 0;
+        // return res.json(data);
         for (let i=0; i<data.length; i++) {
-            let newAbg = new ApartmentBuildingGroup();
-            newAbg.abgName = data[i].ten_chung_cu;
-            newAbg.address = data[i].dia_chi;
-            newAbg.manager = data[i].quan_ly || req.session.user._id;
-            newAbg.status = 1;
-            newAbg.createdBy = req.session.user._id;
-            newAbg.save((err, nabg) => {
-                count ++;
-                if (count >= data.length) {
-                    req.flash('success', 'Nhập liệu thành công');
-                    return res.json({
-                        success: true,
-                        errorCode: 0,
-                        message: 'Nhập liệu thành công'
-                    })
+            ApartmentBuildingGroup.findOne({abgName: data[i].ten_chung_cu}).exec((err, abg) => {
+                if (abg) {
+                    /* Update new data */
+                    abg.abgName = data[i].ten_chung_cu;
+                    abg.address = data[i].dia_chi;
+                    abg.manager = data[i].quan_ly || req.session.user._id;
+                    abg.status = 1;
+                    abg.updatedBy = req.session.user._id;
+                    abg.save((err, nabg) => {
+                        count ++;
+                        if (count >= data.length) {
+                            req.flash('success', 'Nhập liệu thành công');
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                message: 'Nhập liệu thành công'
+                            })
+                        }
+                    });
+                } else {
+                    let newAbg = new ApartmentBuildingGroup();
+                    newAbg.abgName = data[i].ten_chung_cu;
+                    newAbg.address = data[i].dia_chi;
+                    newAbg.manager = data[i].quan_ly || req.session.user._id;
+                    newAbg.status = 1;
+                    newAbg.createdBy = req.session.user._id;
+                    newAbg.save((err, nabg) => {
+                        count ++;
+                        if (count >= data.length) {
+                            req.flash('success', 'Nhập liệu thành công');
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                message: 'Nhập liệu thành công'
+                            })
+                        }
+                    });
                 }
             });
         }

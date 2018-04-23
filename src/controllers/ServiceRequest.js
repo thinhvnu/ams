@@ -29,7 +29,7 @@ exports.getView = (req, res, next) => {
 				if (!sr) {
 					req.flash('errors', 'Yêu cầu dịch vụ đã bị xóa');
 				}
-				res.render('notification/view', {
+				res.render('service-request/view', {
 					data: sr || null
 				})
 			})

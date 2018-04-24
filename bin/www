@@ -23,7 +23,7 @@ var server = http.createServer(app);
 /**
  * Create chat server
  */
-app.io.attach(server);
+global.io.attach(server);
 
 /**
  * Listen on provided port, on all network interfaces.

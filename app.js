@@ -63,7 +63,7 @@ const apiCost = require('./src/apis/routes/cost');
 var app = express();
 var io = require('socket.io')();
 var ioEvents = require('./src/socket/server')(io);
-app.io = io;
+// app.io = io;
 app.locals.moment = require('moment-timezone');
 
 // view engine setup
@@ -88,9 +88,9 @@ var ss = session({
   })
 });
 app.use(ss);
-io.use(sharedsession(ss, {
-  autoSave:true
-})); 
+// io.use(sharedsession(ss, {
+//   autoSave:true
+// })); 
 // User flash data
 app.use(flash());
 
@@ -99,6 +99,8 @@ app.use((req, res, next) => {
   // Allow request from all domain
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.locals.user = req.session.user;
+  global.io.session = req.session;
+  global.io.sessionID = req.sessionID;
   next();
 });
 

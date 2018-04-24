@@ -59,7 +59,7 @@ exports.postRegister = (req, res, next) => {
 							message: 'Người dùng đã tồn tại'
 						});
 					}
-					user.save((err) => {
+					user.save((err, u) => {
 						if (err) { 
 							return res.json({
 								success: false,
@@ -78,8 +78,14 @@ exports.postRegister = (req, res, next) => {
 								newNoti.building = null,
 								newNoti.buildingGroup = null;
 								newNoti.type = 4;
-								newNoti.objId = user._id;
-								newNoti.save();
+								newNoti.objId = u._id;
+								newNoti.save((err, nt) => {
+									try {
+										global.io.to(admins[i]._id).emit('noti_new_user', nt);
+									} catch (e) {
+
+									}
+								});
 							}
 						})
 						res.json({

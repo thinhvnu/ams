@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Apartment = require('../models/Apartment');
 const ApartmentBuildingGroup = require('../models/ApartmentBuildingGroup');
 const ApartmentBuilding = require('../models/ApartmentBuilding');
+const Notification = require('../models/Notification');
 
 var abgs = [], abs = [];
 
@@ -213,6 +214,15 @@ exports.getEdit = (req, res, next) => {
   try {
     let userId = req.params.userId;
 
+    if (req.query.notiId) {
+      Notification.findById(req.query.notiId).exec((err, notification) => {
+        if (notification) {
+          notification.status = 1;
+          notification.save();
+        }
+      })
+    }
+
     User.findById(userId)
       .populate('apartment')
       .populate('building')
@@ -220,7 +230,7 @@ exports.getEdit = (req, res, next) => {
         ApartmentBuildingGroup.find({
           status: 1
         }).exec((err, abgs) => {
-          return res.render('user/edit', {
+          res.render('user/edit', {
             current: ['user', 'exit'],
             data: user,
             roles: roles.list,

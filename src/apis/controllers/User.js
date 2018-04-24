@@ -80,6 +80,7 @@ exports.postRegister = (req, res, next) => {
 								newNoti.type = 4;
 								newNoti.objId = u._id;
 								newNoti.save((err, nt) => {
+									console.log('new noti', newNoti);
 									try {
 										global.io.to(admins[i]._id).emit('noti_new_user', nt);
 									} catch (e) {

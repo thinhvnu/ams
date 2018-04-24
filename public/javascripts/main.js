@@ -875,6 +875,9 @@ $(document).ready(function() {
             let link = document.createElement('a');
             // link.textContent = data[i].title;
             link.href = '/notification/view/' + data[i]._id;
+            if (data[i].type == 4) {
+              link.href = '/user/edit/' + data[i]._id;
+            }
             link.innerHTML = '<span>' + data[i].title + '</span>';
 
             if (data[i].objId && data[i].objId.service ) {

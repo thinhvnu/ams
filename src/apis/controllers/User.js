@@ -1,5 +1,6 @@
 const roles = require('../../libs/roles');
 const User = require('../../models/User');
+const Notification = require('../../models/Notification');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
@@ -66,7 +67,22 @@ exports.postRegister = (req, res, next) => {
 								message: 'Có lỗi xảy ra' + JSON.stringify(err)
 							});
 						}
-						return res.json({
+						
+						User.find({
+							role: 'ADMIN'
+						}).exec((err, admins) => {
+							for (let i=0; i<admins.length; i++) {
+								let newNoti = new Notification();
+								newNoti.title = 'Tài khoản đăng ký mới ' + user.firstName + ' ' + user.lastName,
+								newNoti.recipient = admins[i]._id;
+								newNoti.building = null,
+								newNoti.buildingGroup = null;
+								newNoti.type = 4;
+								newNoti.objId = user._id;
+								newNoti.save();
+							}
+						})
+						res.json({
 							success: true,
 							errorCode: 0,
 							message: 'Đăng ký tài khoản thành công'

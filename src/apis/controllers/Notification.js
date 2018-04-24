@@ -73,7 +73,7 @@ exports.getListByRole = (req, res, next) => {
     try {
         Notification.find({
             type: {
-                $in: [2, 3]
+                $in: [2, 3, 4]
             },
             recipient: req.session.user._id
         }).populate({

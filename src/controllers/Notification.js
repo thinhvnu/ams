@@ -160,6 +160,8 @@ exports.getView = (req, res, next) => {
 							data: fb || null
 						})
 					})
+				} else if (notification.type == 4) {
+					res.redirect('/user/edit/' + notification.objId);
 				} else {
 					req.flash('errors', 'Không tìm thấy dữ liệu');
 					res.render('notification/view', {

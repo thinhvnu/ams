@@ -427,7 +427,7 @@ exports.getClients = (req, res, next) => {
 
 exports.getMessages = (req, res, next) => {
     try {
-        let page = 0, pageSize = 10;
+        let page = 0, pageSize = 50;
 
         if (req.query) {
             if (req.query.page) {

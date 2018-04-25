@@ -20,7 +20,13 @@ exports.getIndex = function (req, res, next) {
 				data: JSON.parse(abs)
 			});
 		} else {
-			ApartmentBuilding.find({})
+			let condition = {};
+			if (req.session.user.role != 'ADMIN') {
+				condition = {
+					manager: req.session.user._id
+				}
+			}
+			ApartmentBuilding.find(condition)
 				.populate('manager')
                 // .populate('apartments', {
                 //     '_id': 1

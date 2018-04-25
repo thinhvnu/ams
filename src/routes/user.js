@@ -16,6 +16,9 @@ router.post('/create', userController.postCreate);
 router.get('/edit/:userId', passport.isAuthenticated, userController.getEdit);
 router.post('/update/:userId', passport.isAuthenticated, userController.postUpdate);
 
+router.get('/change-password/:userId', passport.isAuthenticated, userController.getChangePassword);
+router.post('/update-password/:userId', passport.isAuthenticated, userController.postUpdatePassword);
+
 router.get('/login', userController.getLogin);
 router.post('/login', userController.postLogin);
 

@@ -21,12 +21,13 @@ block content
 						th.hidden-xs STT
 						th avatar
 						th Họ tên
-						th Tên đăng nhập
-						th SĐT
+						//- th Tên đăng nhập
+						th Số điện thoại
 						th Giới tính
 						th.text-center Status
-						th.text-center
+						th.text-center(style='width: 50px')
 							em.fa.fa-cog
+						th.text-center Đặt lại mật khẩu
 				tbody
 					each user, i in users
 						tr
@@ -34,10 +35,12 @@ block content
 							td
 								img.img-responsive(src=user.avatarUrl style='width: 100px;')
 							td #{user.firstName + ' ' + user.lastName}
-							td #{user.userName}
+							//- td #{user.userName}
 							td #{user.phoneNumber}
 							td #{(user.gender === 1) ? 'Male' : ((user.gender === 2) ? 'Female' : 'Other')}
 							td.text-center #{user.status ? 'Active' : 'Inactive'}
-							td(align='center')
+							td(align='center', style='width: 50px;')
 								a(href='/user/edit/' + user._id).u-action.btn.btn-success
 									em.fa.fa-pencil
+							td.text-center
+								a(href='/user/change-password/' + user._id, target='_blank') Đặt lại mật khẩu

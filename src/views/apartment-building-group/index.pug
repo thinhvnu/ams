@@ -65,7 +65,8 @@ block content
 							td(align='center', style='width: 150px;text-align: center;')
 								a(href='/apartment-building-group/view/' + dt._id).u-action.btn.btn-default
 									em.fa.fa-eye
-								a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
-									em.fa.fa-pencil
-								a(href='/apartment-building-group/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa khu chung cư này không?", "/apartment-building-group/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-									em.fa.fa-trash
+								if (user.role == 'ADMIN')
+									a(href='/apartment-building-group/edit/' + dt._id).u-action.btn.btn-success
+										em.fa.fa-pencil
+									a(href='/apartment-building-group/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa khu chung cư này không?", "/apartment-building-group/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+										em.fa.fa-trash

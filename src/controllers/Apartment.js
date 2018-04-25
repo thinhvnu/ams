@@ -7,7 +7,46 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
 
 // Get all apartment building
 exports.getIndex = function (req, res, next) {
-	Apartment.find({})
+	let condition = {};
+
+	if (req.session.user.role != 'ADMIN') {
+		ApartmentBuilding.find({manager: req.session.user._id}).distinct('_id').exec((err, abIds) => {
+			console.log('abIds', abIds);
+			Apartment.find({
+				building: {
+					$in: abIds
+				}
+			})
+			.populate('manager')
+			.populate({
+				path: 'building',
+				model: 'ApartmentBuilding',
+				select: {
+					'_id': 1,
+					'buildingName': 1
+				},
+				populate: {
+					path: 'apartmentBuildingGroup',
+					model: 'ApartmentBuildingGroup',
+					select: { 'abgName': 1 }
+				}
+			})
+			.populate('createdBy')
+			.exec(function (err, apartments) {
+				if (err) {
+					console.log('err', err)
+					return next(err);
+				}
+
+				res.render('apartment/index', {
+					title: 'Danh sách tòa nhà',
+					current: ['apartment', 'index'],
+					data: apartments
+				});
+			});
+		});
+	} else {
+		Apartment.find({})
 		.populate('manager')
 		.populate({
 			path: 'building',
@@ -35,6 +74,7 @@ exports.getIndex = function (req, res, next) {
 				data: apartments
 			});
 		});
+	}
 }
 
 exports.getCreate = (req, res, next) => {

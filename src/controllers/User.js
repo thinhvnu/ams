@@ -409,28 +409,38 @@ exports.postUpdateProfile = (req, res, next) => {
   });
 };
 
+exports.getChangePassword = (req, res, next) => {
+  User.findById(req.params.userId).exec((err, user) => {
+    res.render('user/change-password', {
+      data: user
+    })
+  })
+}
+
 /**
  * POST /account/password
  * Update current password.
  */
 exports.postUpdatePassword = (req, res, next) => {
-  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('password', 'Password must be at least 4 characters long').len(6);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   const errors = req.validationErrors();
 
   if (errors) {
-    req.flash('errors', errors);
-    return res.redirect('/account');
+    req.flash('errors', 'Mật khẩu không khớp hoặc không hợp đủ 6 ký tự');
+    return res.redirect('/user/change-password/' + req.params.userId);
   }
 
-  User.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
+  User.findById(req.params.userId, (err, user) => {
     user.password = req.body.password;
     user.save((err) => {
-      if (err) { return next(err); }
-      req.flash('success', { msg: 'Password has been changed.' });
-      res.redirect('/account');
+      if (err) { 
+        req.flash('success', 'Có lỗi xảy ra');
+        return res.redirect('/user');
+      }
+      req.flash('success', 'Mật khẩu đã được thay đổi thành công');
+      res.redirect('/user');
     });
   });
 };

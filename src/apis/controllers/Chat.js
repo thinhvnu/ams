@@ -453,7 +453,11 @@ exports.getMessages = (req, res, next) => {
             .populate('sender', {
                 '_id': 1,
                 'avatar': 1,
+                'avatarUrl': 1,
                 'userName': 1,
+                'phoneNumber': 1,
+                'firstName': 1,
+                'lastName': 1
             })
             .exec(function (err, messages) {
                 if (err) {
@@ -491,7 +495,11 @@ exports.getMessages = (req, res, next) => {
             .populate('sender', {
                 '_id': 1,
                 'avatar': 1,
+                'avatarUrl': 1,
                 'userName': 1,
+                'phoneNumber': 1,
+                'firstName': 1,
+                'lastName': 1
             })
             .exec(function (err, messages) {
                 if (err) {

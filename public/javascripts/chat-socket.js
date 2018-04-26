@@ -381,7 +381,7 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://localhost:6888');
+const socket = io('http://homesun.vn');
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {

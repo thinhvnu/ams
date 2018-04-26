@@ -21,6 +21,7 @@ block content
 						th.hidden-xs STT
 						th Nội dung
 						th Ảnh
+						th Flag
 						th Người báo cáo
 						th Thời gian
 				tbody
@@ -33,5 +34,6 @@ block content
 									img(src=dt.imageUrl, style='width: 120px;height: 100px')
 								else
 									| Không có
+							td #{dt.flag}
 							td #{dt.createdBy ? (dt.createdBy.firstName + ' ' + dt.createdBy.lastName) : ''}
 							td #{moment(dt.createdAt).tz('Asia/Ho_Chi_Minh').format('DD-MM-YYYY HH:mm')}

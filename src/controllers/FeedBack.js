@@ -2,7 +2,17 @@ const FeedBack = require('../models/FeedBack');
 
 // Get all Categories
 exports.getIndex = function (req, res) {
-	FeedBack.find({}).populate({
+	let condition = {
+		flag: {$ne: 1}
+	};
+
+	if (req.query.flag == 1) {
+		condition = {
+			flag: 1
+		}
+	}
+
+	FeedBack.find(condition).populate({
 		path: 'createdBy',
 		model: 'User'
 	}).sort('-createdAt').exec(function (err, fbs) {

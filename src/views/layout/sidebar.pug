@@ -43,6 +43,10 @@
     a(href="/feedback")
         i.icon.fa.fa-comments
         span.link-title Báo cáo sai phạm
+.menu-item(class=(current && current[0]=='feedbackflag1') && 'active')
+    a(href="/feedback?flag=1")
+        i.icon.fa.fa-bell
+        span.link-title Báo cháy
 .menu-item(class=(current && current[0]=='cost') && 'active')
     a(href="/cost")
         i.icon.fa.fa-usd

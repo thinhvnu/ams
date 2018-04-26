@@ -21,6 +21,7 @@ exports.postCreate = (req, res, next) => {
                 newFeedBack.content = data.content;
                 newFeedBack.image = data.image;
                 newFeedBack.status = data.status;
+                newFeedBack.flag = data.flag || null;
                 newFeedBack.createdBy = req.session.user._id;
                 newFeedBack.save(function (err, feedback) {
                     if (err) {
@@ -45,14 +46,27 @@ exports.postCreate = (req, res, next) => {
                         }).exec((err, user) => {
                             if (user && user.building) {
                                 let newNoti = new Notification();
-                                newNoti.title = 'Báo cáo sai phạm từ ' + user.firstName + ' ' + user.lastName,
+                                if (feedback.flag == 1) {
+                                    newNoti.type = 5;
+                                    newNoti.title = 'Báo cháy từ ' + user.firstName + ' ' + user.lastName;
+                                } else {
+                                    newNoti.type = 3;
+                                    newNoti.title = 'Báo cáo sai phạm từ ' + user.firstName + ' ' + user.lastName;
+                                }
                                 newNoti.recipient = user.building.manager;
                                 newNoti.building = user.building._id,
                                 newNoti.buildingGroup = user.building.apartmentBuildingGroup._id;
                                 newNoti.createdBy = user._id;
-                                newNoti.type = 3;
                                 newNoti.objId = feedback._id;
-                                newNoti.save();
+                                newNoti.save((er, nt) => {
+                                    if (newNoti.type == 5) {
+                                        try {
+                                            global.io.to(user.building.manager).emit('noti_fire_alarm', nt);
+                                        } catch (e) {
+    
+                                        }
+                                    }
+                                });
                             }
                             User.find({
                                 role: 'ADMIN',
@@ -63,14 +77,27 @@ exports.postCreate = (req, res, next) => {
                                 console.log('admins', admins);
                                 for (let i=0; i<admins.length; i++) {
                                     let newNoti = new Notification();
-                                    newNoti.title = 'Báo cáo sai phạm từ ' + user.firstName + ' ' + user.lastName,
+                                    if (feedback.flag == 1) {
+                                        newNoti.type = 5;
+                                        newNoti.title = 'Báo cháy từ ' + user.firstName + ' ' + user.lastName;
+                                    } else {
+                                        newNoti.type = 3;
+                                        newNoti.title = 'Báo cáo sai phạm từ ' + user.firstName + ' ' + user.lastName;
+                                    }
                                     newNoti.recipient = admins[i]._id;
                                     newNoti.building = (user.building) ? user.building._id : null,
                                     newNoti.buildingGroup = user.building ? user.building.apartmentBuildingGroup._id : null;
                                     newNoti.createdBy = user._id;
-                                    newNoti.type = 3;
                                     newNoti.objId = feedback._id;
-                                    newNoti.save();
+                                    newNoti.save((er, nt) => {
+                                        if (newNoti.type == 5) {
+                                            try {
+                                                global.io.to(admins[i]._id).emit('noti_fire_alarm', nt);
+                                            } catch (e) {
+        
+                                            }
+                                        }
+                                    });
                                 }
                             })
                         });

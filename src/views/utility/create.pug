@@ -1,6 +1,5 @@
 extends ../layout/main
 block stylesheets
-	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
 	link(rel='stylesheet', href='/libs/froala-editor/css/froala_editor.css')
 	link(rel='stylesheet', href='/libs/froala-editor/css/froala_style.css')
 	link(rel='stylesheet', href='/libs/froala-editor/css/plugins/code_view.css')
@@ -15,10 +14,10 @@ block stylesheets
 	link(rel='stylesheet', href='/libs/froala-editor/css/plugins/fullscreen.css')
 	link(rel='stylesheet', href='/libs/froala-editor/css/plugins/quick_insert.css')
 	link(rel='stylesheet', href='/libs/froala-editor/css/plugins/file.css')
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 	link(rel='stylesheet', href='/stylesheets/cropper-editor.css')
 block scripts
-	script(src='/libs/cropperjs/dist/cropper.min.js')
 	script(type='text/javascript', src='/libs/froala-editor/js/froala_editor.min.js')
 	script(type='text/javascript', src='/libs/froala-editor/js/plugins/align.min.js')
 	script(type='text/javascript', src='/libs/froala-editor/js/plugins/code_beautifier.min.js')
@@ -46,6 +45,7 @@ block scripts
 	script(type='text/javascript', src='/libs/froala-editor/js/plugins/save.min.js')
 	script(type='text/javascript', src='/libs/froala-editor/js/plugins/fullscreen.min.js')
 	script(type='text/javascript', src='/libs/froala-editor/js/plugins/quote.min.js')
+	script(src='/libs/cropperjs/dist/cropper.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script(src='/javascripts/cropper-editor.js')
 	script.
@@ -65,6 +65,28 @@ block scripts
 				imageManagerLoadURL: '/media/load_images'
 			});
 		});
+	script(type='text/javascript').
+		var cropperEditor = new CropperEditor({ 
+			selector : 'utility-image',
+			uploadDir: '/images/utility/',
+			prefixFileName: 'utility',
+			thumbWidth: 640,
+			thumbHeight: 360,
+			toolbars: {
+				crop : true,
+				zoomIn: true,
+				zoomOut: true,
+				rotateLeft: true,
+				rotateRight: true,
+				submitCrop: true
+			},
+			clientOptions: {
+				viewMode: 1,
+				dragMode: 'move',
+				cropBoxResizable: false
+			}
+		});
+		cropperEditor.init();
 block content
 	.row
 		.col-lg-12

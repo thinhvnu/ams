@@ -15,27 +15,43 @@ function getCookie(cname) {
     return "";
 }
 
-function createSenderMessageItem(messval) {
+function createSenderMessageItem(data) {
     let messageItem = document.createElement('div');
-    messageItem.style = 'text-align: right;';
+    messageItem.style = 'text-align: right;margin-bottom:5px;';
     messageItem.className = 'message-item mess-send';
 
     let messageItemContent = document.createElement('div');
     messageItemContent.className = 'mess-item-content';
-    messageItemContent.style = 'display: inline-block;background: #4080ff;color: #ffffff;padding: 5px 10px;margin-bottom: 5px;border-top-left-radius: 15px;border-bottom-left-radius: 15px; border-top-right-radius: 15px;';
-    messageItemContent.textContent = messval;
+    messageItemContent.style = 'min-width: 80px;text-align:left;display: inline-block;background: #4080ff;color: #ffffff;padding: 5px 10px;margin-bottom: 5px;border-top-left-radius: 15px;border-bottom-left-radius: 15px; border-top-right-radius: 15px;';
+    messageItemContent.textContent = data.messageContent;
+
+    let timeChat = null;
+    if (data.createdAt) {
+        timeChat = document.createElement('span');
+        timeChat.className = 'time-chat';
+        let d = new Date(data.createdAt);
+        timeChat.textContent = d.getHours() + ':' + d.getMinutes() + ', ' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+        timeChat.style = 'display: block; font-size: 9px;padding-left:45px;color:rgb(99, 94, 94);margin-top:-5px;';
+    }
 
     messageItem.appendChild(messageItemContent);
+    if (timeChat) {
+        messageItem.appendChild(timeChat);
+    }
 
     return messageItem;
 }
 
 function createInboxMessageItem(data) {
+    console.log('data', data);
     let messageItem = document.createElement('div');
-    messageItem.style = 'text-align: left;';
+    messageItem.style = 'text-align: left;margin-bottom: 5px;';
     messageItem.className = 'message-item mess-ib';
 
     let avatar = document.createElement('span');
+    if (data.sender) {
+       avatar.title = data.sender.firstName + ' ' + data.sender.lastName;
+    }
     if (data.sender && data.sender.avatar) {
         avatar.className = 'mess-item-avatar';
         avatar.style = 'width: 30px;height:30px;margin-right: 8px;display:inline-block;background:url(' + data.sender.avatarUrl + ') no-repeat center center /cover';
@@ -50,11 +66,18 @@ function createInboxMessageItem(data) {
 
     let messageItemContent = document.createElement('div');
     messageItemContent.className = 'mess-item-content';
-    messageItemContent.style = 'max-width: calc(100% - 38px); overflow: hidden; text-overflow: ellipsis;vertical-align: top;display: inline-block;background: #ffffff;color: #333333;padding: 5px 10px;margin-bottom: 5px;border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;';
+    messageItemContent.style = 'min-width:80px;text-align:left;max-width: calc(100% - 38px); overflow: hidden; text-overflow: ellipsis;vertical-align: top;display: inline-block;background: #ffffff;color: #333333;padding: 5px 10px;margin-bottom: 5px;border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;';
     messageItemContent.textContent = data.messageContent;
+    
+    let timeChat = document.createElement('span');
+    timeChat.className = 'time-chat';
+    let d = new Date(data.createdAt);
+    timeChat.textContent = d.getHours() + ':' + d.getMinutes() + ', ' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+    timeChat.style = 'display: block; font-size: 9px;padding-left:45px;color:rgb(99, 94, 94);margin-top:-5px;';
 
     messageItem.appendChild(avatar);
     messageItem.appendChild(messageItemContent);
+    messageItem.appendChild(timeChat);
 
     return messageItem;
 }
@@ -207,7 +230,7 @@ function createNewChatBox(user, isGroup = false) {
             if (data && data instanceof Array) {
                 for (let i=0; i<data.length; i++) {
                     if (data[i].sender.id === socket.identification.room) {
-                        let senderMess = createSenderMessageItem(data[i].messageContent);
+                        let senderMess = createSenderMessageItem(data[i]);
                         chatBoxContent.appendChild(senderMess);
                     } else {
                         let inboxItem = createInboxMessageItem(data[i]);
@@ -266,12 +289,18 @@ function createNewChatBox(user, isGroup = false) {
                 }
 
                 socket.emit('send_message', dataSend);
+                updateReadMessageStatus((user.id || user._id || user.room), isGroup);
             }
             inputMessage.value = '';
             chatBoxContent.scrollTop = chatBoxContent.scrollHeight;
             return false;
         }
     }
+
+    inputMessage.onclick = function() {
+        updateReadMessageStatus((user.id || user._id || user.room), isGroup);
+    }
+
     mainFooterContainer.appendChild(inputMessage);
     inputMessage.select();
 
@@ -352,7 +381,7 @@ function createNewChatBox(user, isGroup = false) {
 * Connect socket
 */
 const token = getCookie('ams_token');
-const socket = io('http://homesun.vn');
+const socket = io('http://localhost:6888');
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {
@@ -415,7 +444,7 @@ socket.on('connect', () => {
         } else {
             let chatBoxContent = document.querySelector('#chat-box-item-' + (data.to.id || data.to._id || data.to.room) + ' .chat-box-content');
             if (chatBoxContent) {
-                let messEl = createSenderMessageItem(data.messageContent);
+                let messEl = createSenderMessageItem(data);
                 chatBoxContent.appendChild(messEl);
                 chatBoxContent.scrollTop = chatBoxContent.scrollHeight;
             }

@@ -69,7 +69,7 @@ exports.accessToken = (req, res, next) => {
                   message: 'Get access token successfully'
               });
             } else {
-              return res.json({ success: false, code: 3, message: 'Authentication failed. Wrong email or password.' });
+              return res.json({ success: false, code: 3, message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
             }
           })
         }

@@ -55,7 +55,7 @@ exports.getClients = (req, res, next) => {
                                 }).limit(5).exec((err, users) => {
                                     ChatGroup.find({
                                         building: u.building,
-                                        blackList: {$nin: [u._id]}
+                                        blackList: {$ne: u._id}
                                     }).limit(5).exec((err, groups) => {
                                         return res.json({
                                             success: true,

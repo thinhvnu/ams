@@ -54,8 +54,7 @@ exports.getClients = (req, res, next) => {
                                     status: 1
                                 }).limit(5).exec((err, users) => {
                                     ChatGroup.find({
-                                        building: u.building,
-                                        blackList: {$ne: u._id}
+                                        building: u.building
                                     }).limit(5).exec((err, groups) => {
                                         return res.json({
                                             success: true,
@@ -78,7 +77,7 @@ exports.getClients = (req, res, next) => {
                                     if (!recents[i].group && recents[i].partner && recents[i].partner.id !== u.id) {
                                         users.push(recents[i].partner.toObject());
                                     }
-                                    if (recents[i].group) {
+                                    if (recents[i].group && (!recents[i].group.blackList || (recents[i].group.blackList && recents[i].group.blackList.indexOf(u._id) == -1))) {
                                         groups.push(recents[i].group.toObject());
                                         groupIds.push(recents[i].group._id);
                                     }

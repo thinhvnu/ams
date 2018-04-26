@@ -149,7 +149,7 @@ exports.getView = (req, res, next) => {
 							data: sr || null
 						})
 					})
-				} else if (notification.type == 3) {
+				} else if (notification.type == 3 || notification.type == 5) {
 					FeedBack.findById(notification.objId)
 					.populate('createdBy').exec((err, fb) => {
 						if (!fb) {

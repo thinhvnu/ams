@@ -21,6 +21,70 @@ exports.getIndex = function (req, res) {
 	});
 };
 
+exports.getAddBlackList = (req, res, next) => {
+	let groupId = req.params.groupId;
+	let userId = req.query.userId;
+
+	ChatGroup.findById(groupId).exec((err, group) => {
+		if (group) {
+			if (!group.blackList) {
+				group.blackList = [];
+			}
+			group.blackList.pull(userId);
+			group.blackList.push(userId);
+			group.save((err) => {
+				return res.json({
+					success: true,
+					errorCode: 0
+				})
+			})
+		} else {
+			return res.json({
+				success: false,
+				errorCode: '111'
+			})
+		}
+	})
+}
+exports.getRemoveBlackList = (req, res, next) => {
+	let groupId = req.params.groupId;
+	let userId = req.query.userId;
+
+	ChatGroup.findById(groupId).exec((err, group) => {
+		if (group) {
+			if (!group.blackList) {
+				group.blackList = [];
+			}
+			group.blackList.pull(userId);
+			group.save((err) => {
+				return res.json({
+					success: true,
+					errorCode: 0
+				})
+			})
+		} else {
+			return res.json({
+				success: false,
+				errorCode: '111'
+			})
+		}
+	})
+}
+
+exports.getDelete = (req, res, next) => {
+	ChatGroup.findById(req.params.groupId).exec((err, group) => {
+		if (group) {
+			group.remove((err) => {
+				req.flash('success', 'Xóa nhóm chat thành công');
+				res.redirect('/chat-group');
+			})
+		} else {
+			req.flash('errors', 'Nhóm chat đã bị xóa');
+			res.redirect('/chat-group');
+		}
+	})
+}
+
 // exports.getCreate = function (req, res) {
 // 	res.render('room/create', {
 //     title: 'Create New Room',

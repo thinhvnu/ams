@@ -841,6 +841,34 @@ function updateReadMessageStatus(roomId, isGroup = false) {
   xhttp.send();
 }
 
+function addBlackList(selector, groupId, userId) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let dataRes = JSON.parse(xhttp.responseText);
+      if (dataRes.success) {
+        selector.textContent = 'Bỏ chặn'
+      }
+    }
+  };
+  xhttp.open("GET", '/chat-group/add-black-list/' + groupId + '?userId=' + userId, true);
+  xhttp.send();
+}
+
+function removeBlackList(selector, groupId, userId) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let dataRes = JSON.parse(xhttp.responseText);
+      if (dataRes.success) {
+        selector.textContent = 'Chặn chat'
+      }
+    }
+  };
+  xhttp.open("GET", '/chat-group/remove-black-list/' + groupId + '?userId=' + userId, true);
+  xhttp.send();
+}
+
 $(document).on('click', 'input', function() {
   $(this).parent().removeClass('has-error');
   $(this).nextAll('.help-block').remove();

@@ -9,6 +9,7 @@ const feedBackSchema = new mongoose.Schema({
     image: {type: String},
     content: {type: String},
     status: { type: Number }, // active, inActive
+    flag: { type: Number }, // 1: bao chay
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, {timestamps: true, usePushEach: true});

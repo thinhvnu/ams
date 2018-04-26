@@ -12,9 +12,9 @@ block scripts
 block content
 	.row
 		.col-lg-12
-			.user-actions
-				a.btn.btn-success(href='/chat-group/create') Tạo mới
-			hr
+			//- .user-actions
+			//- 	a.btn.btn-success(href='/chat-group/create') Tạo mới
+			//- hr
 			table#chatgroup-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead
 					tr
@@ -57,16 +57,16 @@ block content
 																	td #{i+1}
 																	td #{member.firstName + ' ' + member.lastName}
 																	td.text-center
-																		button.btn.btn-danger Cấm chat
-
-																
-															
+																		if (dt.blackList.indexOf(member._id) > -1)
+																			button.btn.btn-danger(onclick='removeBlackList(this, "' + dt._id + '", "' + member._id + '")') Bỏ chặn
+																		else
+																			button.btn.btn-danger(onclick='addBlackList(this, "' + dt._id + '", "' + member._id + '")') Chặn chat
 												else
 													p Không có thành viên.
 											.modal-footer
 												button.btn.btn-default(type='button', data-dismiss='modal') Đóng
 							td(align='center')
-								a.btn.btn-default
-									em.fa.fa-pencil
-								a.btn.btn-danger
+								//- a.btn.btn-default
+								//- 	em.fa.fa-pencil
+								a.btn.u-action.btn.btn-danger.confirm-action(onclick='return confirmAction("Bạn có chắc chắn muốn xóa nhóm chat này không?", "/chat-group/delete/' + dt._id + '")')
 									em.fa.fa-trash

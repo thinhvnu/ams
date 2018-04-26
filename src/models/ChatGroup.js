@@ -10,6 +10,7 @@ const chatGroupSchema = new mongoose.Schema({
     description: {type: String},
     building: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuilding'},
     buildingGroup: {type: mongoose.Schema.Types.ObjectId, ref: 'ApartmentBuildingGroup'},
+    blackList: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: { type: Number }, // active, inActive

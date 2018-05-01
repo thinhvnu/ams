@@ -847,7 +847,10 @@ function addBlackList(selector, groupId, userId) {
     if (this.readyState == 4 && this.status == 200) {
       let dataRes = JSON.parse(xhttp.responseText);
       if (dataRes.success) {
-        selector.textContent = 'Bỏ chặn'
+        selector.textContent = 'Bỏ chặn';
+        selector.onclick = function() {
+          removeBlackList(selector, groupId, userId);
+        }
       }
     }
   };
@@ -861,7 +864,10 @@ function removeBlackList(selector, groupId, userId) {
     if (this.readyState == 4 && this.status == 200) {
       let dataRes = JSON.parse(xhttp.responseText);
       if (dataRes.success) {
-        selector.textContent = 'Chặn chat'
+        selector.textContent = 'Chặn chat';
+        selector.onclick = function() {
+          addBlackList(selector, groupId, userId);
+        }
       }
     }
   };

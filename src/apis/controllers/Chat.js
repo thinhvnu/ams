@@ -369,6 +369,11 @@ exports.getClients = (req, res, next) => {
                                             }
 
                                             for (let i=0; i<gs.length; i++) {
+                                                // Remove blocked group
+                                                if (gs[i].blackList instanceof Array && gs[i].blackList.indexOf(u._id) > -1) {
+                                                    gs.splice(i, 1);
+                                                    continue;
+                                                }
                                                 // console.log('u', u);
                                                 Message.count({
                                                     recipient: gs[i]._id,

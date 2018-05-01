@@ -64,7 +64,6 @@ var app = express();
 var io = require('socket.io')();
 var ioEvents = require('./src/socket/server')(io);
 // app.io = io;
-global.io = io;
 app.locals.moment = require('moment-timezone');
 
 // view engine setup
@@ -79,7 +78,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 app.use(expressValidator());
 app.use(cookieParser());
 // Use session
-var ss = session({
+var sessionMiddleware = session({
   resave: true,
   saveUninitialized: true,
   secret: process.env.SESSION_SECRET, // realtime chat system
@@ -88,7 +87,10 @@ var ss = session({
     autoReconnect: true,
   })
 });
-app.use(ss);
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+app.use(sessionMiddleware);
 // io.use(sharedsession(ss, {
 //   autoSave:true
 // })); 
@@ -100,8 +102,8 @@ app.use((req, res, next) => {
   // Allow request from all domain
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.locals.user = req.session.user;
-  global.io.session = req.session;
-  global.io.sessionID = req.sessionID;
+  // global.io.session = req.session;
+  // global.io.sessionID = req.sessionID;
   next();
 });
 
@@ -177,5 +179,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+global.io = io;
 
 module.exports = app;

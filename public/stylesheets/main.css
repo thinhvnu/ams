@@ -80,6 +80,11 @@
     border-bottom: 5px solid #fff;
     display: block;
 }
+#header-notification-list {
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 .n-unread-noti {
     position: absolute;
     height: 18px;

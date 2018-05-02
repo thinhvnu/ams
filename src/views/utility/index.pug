@@ -42,7 +42,7 @@ block content
 									//- td
 									//- 	img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.icon, style='width: 80px;')
 									td.text-center #{dt.status ? 'Active' : 'Inactive'}
-									td(align='center')
+									td(align='center', style='width: 100px;')
 										a(href='/utility-category/edit/' + dt._id).u-action.btn.btn-success
 											em.fa.fa-pencil
 										a(href='/utility-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa danh mục này không?", "/utility-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
@@ -70,7 +70,7 @@ block content
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.image, style='width: 128px;')
 									td #{dt.category ? dt.category.name : ''}
 									td.text-center #{dt.status ? 'Public' : 'Draft'}
-									td(align='center')
+									td(align='center', style='width: 100px;')
 										a(href='/utility/edit/' + dt._id).u-action.btn.btn-success
 											em.fa.fa-pencil
 										a(href='/utility/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa tiện ích này không?", "/utility/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action

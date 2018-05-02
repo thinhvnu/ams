@@ -16,7 +16,8 @@ exports.getIndex = function (req, res) {
 		
 		ServiceCategory.find({})
 		.sort({
-			orderDisplay: 1
+			orderDisplay: 1,
+			createdAt: -1
 		})
 		.exec((err, serviceCategories) => {
 			res.render('service/index', {

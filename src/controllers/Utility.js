@@ -1,8 +1,9 @@
 const Utility = require('../models/Utility');
+const UtilityCategory = require('../models/UtilityCategory');
 
 // Get all posts
 exports.getIndex = function (req, res) {
-	Utility.find({}).exec(function (err, utilities) {
+	Utility.find({}).populate('category').exec(function (err, utilities) {
 		if (err) {
 			console.log('err', err)
 			return res.json({
@@ -11,20 +12,34 @@ exports.getIndex = function (req, res) {
 				message: 'Lỗi không xác định'
 			})
 		}
-		
-		res.render('utility/index', {
-			title: 'Tiện ích',
-			current: ['utility', 'index'],
-			data: utilities
-		});
+
+		UtilityCategory.find({})
+		.sort({
+			orderDisplay: 1,
+			createdAt: -1
+		})
+		.exec((err, utilityCategories) => {
+			res.render('utility/index', {
+				title: 'Tiện ích',
+				current: ['utility', 'index'],
+				utilityCategories: utilityCategories,
+				data: utilities
+			});
+		})
 	});
 };
 
 exports.getCreate = function (req, res) {
-	res.render('utility/create', {
-        title: 'Thêm tiện ích',
-        current: ['utility', 'create']
-    });
+	UtilityCategory.find({
+		status: 1
+	}).exec((err, categories) => {
+		res.render('utility/create', {
+			title: 'Thêm tiện ích',
+			current: ['utility', 'create'],
+			categories: categories
+		});
+	})
+	
 };
 
 exports.postCreate = function (req, res) {
@@ -33,6 +48,7 @@ exports.postCreate = function (req, res) {
 	*/ 
 	req.checkBody('utilityName', 'Tên tiện ích không được để trống').notEmpty();
 	req.checkBody('image', 'Ảnh không được để trống').notEmpty();
+	req.checkBody('category', 'Chọn danh mục').notEmpty();
 	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
 	
 	var errors = req.getValidationResult().then(function(errors) {
@@ -49,6 +65,7 @@ exports.postCreate = function (req, res) {
 			var newUtility = new Utility();
 			
 			newUtility.utilityName = data.utilityName;
+			newUtility.category = data.category;
 			newUtility.image = data.image;
 			newUtility.content = data.content;
 			newUtility.status = data.status;
@@ -67,17 +84,22 @@ exports.postCreate = function (req, res) {
 };
 
 exports.getEdit = function (req, res) {
-	Utility.findById(req.params.utilityId, (err, data) => {
-		if (data) {
-			res.render('utility/edit', {
-				title: 'Chỉnh sửa tiện ích',
-				current: ['utility', 'edit'],
-				data: data
-			});
-		} else {
-			req.flash('errors', 'Dữ liệu không tìm thấy trên máy chủ');
-			return res.redirect('/utility');
-		}
+	UtilityCategory.find({
+		status: 1
+	}).exec((err, categories) => {
+		Utility.findById(req.params.utilityId, (err, data) => {
+			if (data) {
+				res.render('utility/edit', {
+					title: 'Chỉnh sửa tiện ích',
+					current: ['utility', 'edit'],
+					categories: categories,
+					data: data
+				});
+			} else {
+				req.flash('errors', 'Dữ liệu không tìm thấy trên máy chủ');
+				return res.redirect('/utility');
+			}
+		})
 	})
 };
 
@@ -86,24 +108,22 @@ exports.postUpdate = function (req, res) {
 	* Validate create category
 	*/ 
 	req.checkBody('utilityName', 'Tên tiện ích không được để trống').notEmpty();
+	req.checkBody('category', 'Chọn danh mục').notEmpty();
 	req.checkBody('image', 'Ảnh không được để trống').notEmpty();
 	req.checkBody('content', 'Nội dung không được để trống').notEmpty();
 	
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
-			var errors = errors.mapped();
-			res.render('utility/edit', {
-				title: 'Chỉnh sửa tiện ích',
-				current: ['utility', 'create'],
-				errors: errors,
-				data: {...{_id: req.params.utilityId}, ...req.body}
-			});
+			var errors = errors.array();
+			req.flash('errors', errors[0].msg);
+			return res.redirect('/utility/edit/' + req.params.utilityId);
 		} else {
 			var data = req.body;
 			var newUtility = new Utility();
 			Utility.findById(req.params.utilityId, (err, utility) => {
 				if (utility) {
 					utility.utilityName = data.utilityName;
+					utility.category = data.category;
 					utility.image = data.image;
 					utility.content = data.content;
 					utility.status = data.status;

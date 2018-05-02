@@ -9,33 +9,69 @@ block scripts
 		$(function() {
 		$('.chosen-select').chosen();
 		$('.chosen-select-deselect').chosen({ allow_single_deselect: true, disable_search: true });
-		$('#slider-list').DataTable();
+		$('#utility-category-list, #slider-list').DataTable();
 		});
 block content
 	.row
-		.col-lg-12
-			.user-actions
-				a.btn.btn-success(href='/utility/create') Tạo mới
-			hr
-			table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
-				thead
-					tr
-						th.hidden-xs STT
-						th Tên tiện ích
-						th Ảnh
-						th.text-center Trạng thái
-						th.text-center.no-sort
-							em.fa.fa-cog
-				tbody
-					each dt, i in data
-						tr
-							td.hidden-xs #{i + 1}
-							td #{dt.utilityName}
-							td
-								img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.image, style='width: 128px;')
-							td.text-center #{dt.status ? 'Public' : 'Draft'}
-							td(align='center')
-								a(href='/utility/edit/' + dt._id).u-action.btn.btn-success
-									em.fa.fa-pencil
-								a(href='/utility/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa tiện ích này không?", "/utility/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-									em.fa.fa-trash
+		.col-lg-2.col-md-2.col-sm-2.sub-menu
+			ul.sub-menu-item.nav.nav-tabs
+				li
+					a(data-toggle='tab', href='#utilityCategory') Danh mục
+				li.active
+					a(data-toggle='tab', href='#utility') Tiện ích
+		.col-lg-10.col-md-10.col-sm-10
+			.tab-content
+				#utilityCategory.tab-pane.fade
+					.user-actions
+						a.btn.btn-success(href='/utility-category/create') Tạo mới
+					hr
+					table#utility-category-list.table.table-responsive.display(cellspacing='0', width='100%')
+						thead
+							tr
+								th.hidden-xs STT
+								th Tên danh mục
+								//- th Icon
+								th.text-center Trạng thái
+								th.text-center.no-sort
+									em.fa.fa-cog
+						tbody
+							each dt, i in utilityCategories
+								tr
+									td.order(id=dt._id) #{i + 1}
+									td #{dt.name}
+									//- td
+									//- 	img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.icon, style='width: 80px;')
+									td.text-center #{dt.status ? 'Active' : 'Inactive'}
+									td(align='center')
+										a(href='/utility-category/edit/' + dt._id).u-action.btn.btn-success
+											em.fa.fa-pencil
+										a(href='/utility-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa danh mục này không?", "/utility-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+											em.fa.fa-trash
+				#utility.tab-pane.fade.in.active
+					.user-actions
+						a.btn.btn-success(href='/utility/create') Tạo mới
+					hr
+					table#slider-list.table.table-responsive.display(cellspacing='0', width='100%')
+						thead
+							tr
+								th.hidden-xs STT
+								th Tên tiện ích
+								th Ảnh
+								th Danh mục
+								th.text-center Trạng thái
+								th.text-center.no-sort
+									em.fa.fa-cog
+						tbody
+							each dt, i in data
+								tr
+									td.hidden-xs #{i + 1}
+									td #{dt.utilityName}
+									td
+										img.img-responsive(src=process.env.MEDIA_URL + '/images/utility/thumb/' + dt.image, style='width: 128px;')
+									td #{dt.category ? dt.category.name : ''}
+									td.text-center #{dt.status ? 'Public' : 'Draft'}
+									td(align='center')
+										a(href='/utility/edit/' + dt._id).u-action.btn.btn-success
+											em.fa.fa-pencil
+										a(href='/utility/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa tiện ích này không?", "/utility/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+											em.fa.fa-trash

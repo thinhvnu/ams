@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
  */
 const utilitySchema = new mongoose.Schema({
     utilityName: { type: String, unique: true, required: true },
+    category: {type: mongoose.Schema.Types.ObjectId, ref: 'UtilityCategory'},
     image: {type: String},
     content: {type: String},
     status: { type: Number }, // active, inActive

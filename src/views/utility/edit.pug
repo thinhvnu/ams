@@ -12,7 +12,7 @@ block scripts
 	script(src='/javascripts/cropper-editor.js')
 	script.
 		$(function() {
-			$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+			$('.chosen-status, .chosen-category').chosen({ allow_single_deselect: true, disable_search: true });
 			$('#utility-content').froalaEditor({
 				heightMin: 280,
 				// Button show xs
@@ -82,6 +82,15 @@ block content
 								i.fa.fa-cloud-upload
 						if errors && errors.image
 							.help-block #{errors.image.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.category && 'has-error')
+						label.control-label(for='category', style='display: block; text-align: left;') Danh mục (*)
+						select.form-control.chosen-category(name='category', data-placeholder='Danh mục', style='width: 100%;')
+							option(value='') Chọn danh mục
+							each category in categories
+								option(value=category._id, selected=(data && JSON.stringify(data.category) === JSON.stringify(category.id)) ? true : false) #{category.name}
+						if errors && errors.category
+							.help-block #{errors.category.msg}
 				.form-group
 					.col-lg-12
 						label.control-label(for='content') Nội dung dịch vụ

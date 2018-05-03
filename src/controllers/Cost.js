@@ -95,6 +95,73 @@ exports.postCreate = function (req, res) {
 	});
 };
 
+exports.getEdit = function (req, res) {
+	Cost.findById(req.params.costId)
+	.populate({
+		path: 'apartment',
+		model: 'Apartment',
+		populate: {
+			path: 'building',
+			model: 'ApartmentBuilding',
+			populate: {
+				path: 'apartmentBuildingGroup',
+				model: 'ApartmentBuildingGroup'
+			}
+		}
+	}).exec((err, data) => {
+		CostType.find({}).exec((err, costTypes) => {
+			Abg.find({}).exec((err, abgs) => {
+				res.render('cost/edit', {
+					title: 'Sửa chi phí',
+					current: ['cost', 'edit'],
+					data: data,
+					costTypes: costTypes,
+					abgs: abgs
+				});
+			})
+		})
+	})
+};
+
+exports.postUpdate = function (req, res) {
+	/*
+	* Validate create cost type
+	*/ 
+  	req.checkBody('apartment', 'Chọn căn hộ').notEmpty();
+
+	var errors = req.getValidationResult().then(function(errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.array();
+			req.flash('errors', errors[0].msg);
+			return req.redirect('/cost/edit/' + req.params.costId)
+		}
+
+		/*
+		* End validate
+		*/
+		var costType = new CostType();
+	
+		Cost.findById(req.params.costId).exec((err, cost) => {
+			if (!cost) {
+				req.flash('errors', 'Không tìm thấy dữ liệu');
+				return res.redirect('/cost/edit/' + req.params.costId)
+			} else {
+				cost.costType = req.body.costType || cost.costType;
+				cost.apartment = req.body.apartment || cost.apartment;
+				cost.money = req.body.money || cost.money;
+				cost.month = req.body.month || cost.month;
+				cost.year = req.body.year || cost.year;
+				cost.status = 0;
+				cost.updatedBy = req.session.user._id;
+				cost.save((err, nabg) => {
+					req.flash('success', 'cập nhật thành công');
+					return res.redirect('/cost')
+				});
+			}
+		})
+	});
+};
+
 exports.getImportTemplate = (req, res, next) => {
 	console.log('req.query', req.query);
 	let buildingId = req.query.buildingId;

@@ -1,0 +1,82 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/javascripts/bootstrap-chosen.js')
+	script.
+		$(function() {
+			$('.chosen-abg, .chosen-ab, .chosen-apartment').chosen({ allow_single_deselect: true, disable_search: false });
+			$('.chosen-status').chosen({allow_single_deselect: true, disable_search: true});
+		});
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Sửa chi phí
+			hr
+			#div-1.body.collapse.in(aria-expanded='true', style='')
+			form.form-horizontal(method='POST', action='/cost/update/' + data._id)
+				.form-group
+					.col-lg-6.col-md-6
+						label.control-label(for='status', style='display: block; text-align: left;') Loại chi phí
+						select.form-control.chosen-status(name='costType', data-placeholder='Loại chi phí')
+							each ct in costTypes
+								option(value=ct._id, selected=(data && JSON.stringify(data.costType) === JSON.stringify(ct.id)) ? true : false) #{ct.name}
+					.col-lg-6.col-md-6(class=errors && errors.apartmentBuildingGroup && 'has-error')
+						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư, Quận (*)
+						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.buildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuildingGroup
+							.help-block #{errors.apartmentBuildingGroup.msg}
+				.form-group
+					.col-lg-6.col-md-6(class=errors && errors.apartmentBuilding && 'has-error')
+						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà (*)
+						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;', onchange='onSelectAb(this.value)')
+							option(value='') Chọn tòa nhà
+							if (data.building)
+								option(value=data.building._id, selected=true) #{data.building.buildingName}
+							//- each abg in abgs
+							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartmentBuilding
+							.help-block #{errors.apartmentBuilding.msg}
+					.col-lg-6.col-md-6(class=errors && errors.apartment && 'has-error')
+						label.control-label(for='apartment', style='display: block; text-align: left;') Căn hộ
+						select#choosen-apartment.form-control.chosen-apartment(name='apartment', data-placeholder='Căn hộ', style='width: 100%;')
+							option(value='') Chọn căn hộ
+							if (data.apartment)
+								option(value=data.apartment._id, selected=true) #{data.apartment.apartmentName}
+							//- each abg in abgs
+							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.apartment
+							.help-block #{errors.apartment.msg}
+				.form-group
+					.col-lg-6.col-md-6(class=errors && errors.month && 'has-error')
+						label.control-label(for='month', style='display: block; text-align: left;') Chọn tháng
+						select#choosen-month.form-control(name='month', data-placeholder='Chọn tháng', style='width: 100%;')
+							each m in [1,2,3,4,5,6,7,8,9,10,11,12]
+								option(value=m, selected=(data && data.money === m) ? true : false) #{'Tháng ' + m}
+						if errors && errors.month
+							.help-block #{errors.month.msg}
+					.col-lg-6(class=errors && errors.year && 'has-error')
+						label.control-label(for='year') Năm
+						input#year.form-control(type='text', name='year', placeholder='Năm', value=data ? data.year : (new Date()).getFullYear())
+						if errors && errors.year
+							.help-block #{errors.year.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.money && 'has-error')
+						label.control-label(for='money') Số tiền
+						input#money.form-control(type='text', name='money', placeholder='Số tiền', value=data ? data.money : '')
+						if errors && errors.money
+							.help-block #{errors.money.msg}
+					.col-lg-6.col-md-6
+						label.control-label(for='status', style='display: block; text-align: left;') Status
+						select.form-control.chosen-status(name='status', data-placeholder='Status', style='width: 150px;')
+							option(value=1, selected=(data && data.status === 1) ? true : false) Đã thanh toán
+							option(value=0, selected=(data && data.status === 0) ? true : false) Chưa thanh toán
+				hr
+				.form-group  
+					.col-lg-8
+						input#submit.btn.btn-success(type='submit', value='Lưu lại')
+				

@@ -1,9 +1,12 @@
 extends ../layout/main
 block stylesheets
+	link(rel='stylesheet', href='/stylesheets/jquery.dataTables-custom.css')
 	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
 block scripts
+	script(src='/javascripts/jquery.dataTables.min.js')
 	script(src='/javascripts/bootstrap-chosen.js')
 	script.
+		$('#cost-list').DataTable();
 		$('.chosen-abg, .chosen-ab, .chosen-cost-type, .chosen-cost-month, .chosen-cost-year').chosen({ allow_single_deselect: true, disable_search: false });
 block content
 	.row
@@ -119,6 +122,7 @@ block content
 									th Tháng
 									th Năm
 									th Trạng thái
+									th.text-center.no-sort(style='width: 100px;') Hành động
 							tbody
 								each c, i in costs
 									tr
@@ -131,3 +135,8 @@ block content
 										td #{c.month}
 										td #{c.year}
 										td.text-center #{c.status ? 'Đã thanh toán' : 'Chưa thanh toán'}
+										td(align='center',style='width: 100px;')
+											a(href='/cost/edit/' + c._id).u-action.btn.btn-success
+												em.fa.fa-pencil
+											a(href='/cost/delete/' + c._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa chi phí này không?", "/cost/delete/' + c._id + '")').u-action.btn.btn-danger.confirm-action
+												em.fa.fa-trash

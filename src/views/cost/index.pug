@@ -124,9 +124,9 @@ block content
 									tr
 										td.hidden-xs #{i+1}
 										td #{c.costType.name}
-										td #{c.apartment.apartmentName}
-										td #{c.apartment.building.buildingName}
-										td #{c.apartment.building.apartmentBuildingGroup.abgName}
+										td #{c.apartment ? c.apartment.apartmentName : ''}
+										td #{c.apartment ? c.apartment.building.buildingName : ''}
+										td #{c.apartment ? c.apartment.building.apartmentBuildingGroup.abgName : ''}
 										td #{c.money}
 										td #{c.month}
 										td #{c.year}

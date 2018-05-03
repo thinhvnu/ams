@@ -69,8 +69,9 @@ function createInboxMessageItem(data) {
     messageItemContent.style = 'min-width:80px;text-align:left;max-width: calc(100% - 38px); overflow: hidden; text-overflow: ellipsis;vertical-align: top;display: inline-block;background: #ffffff;color: #333333;padding: 5px 10px;margin-bottom: 5px;border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;';
     messageItemContent.textContent = data.messageContent;
     
+    let timeChat = null;
     if (data.createdAt) {
-        let timeChat = document.createElement('span');
+        timeChat = document.createElement('span');
         timeChat.className = 'time-chat';
         let d = new Date(data.createdAt);
         timeChat.textContent = d.getHours() + ':' + d.getMinutes() + ', ' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
@@ -79,7 +80,7 @@ function createInboxMessageItem(data) {
 
     messageItem.appendChild(avatar);
     messageItem.appendChild(messageItemContent);
-    if (data.createdAt) {
+    if (timeChat) {
         messageItem.appendChild(timeChat);
     }
 

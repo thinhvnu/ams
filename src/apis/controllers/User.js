@@ -200,6 +200,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 			});
 
 			if (user.firebaseDeviceToken.indexOf(deviceInfo) === -1) {
+				user.firebaseDeviceToken.pull(deviceInfo);
 				user.firebaseDeviceToken.push(deviceInfo);
 
 				user.save((err, u) => {

@@ -32,7 +32,7 @@ exports.sendAndroidNotification = (tokens = [], noticeData = {}) => {
             console.log('res', res.data);
         })
         .catch(e => {
-            console.log('exception', e);
+            console.log('exception android', e);
         })
     } catch (e) {
         console.log('eee', e);
@@ -70,7 +70,7 @@ exports.sendIosNotification = (tokens = [], noticeData = {}) => {
             console.log('res', res.data);
         })
         .catch(e => {
-            console.log('exception', e);
+            console.log('exception ios', e);
         })
     } catch (e) {
         console.log('eee', e);

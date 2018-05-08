@@ -154,8 +154,8 @@ block content
 					ul.nav.nav-tabs
 						li.active
 							a(data-toggle='tab', href='#newNotification') Gửi thông báo
-						li
-							a(data-toggle='tab', href='#addExist') Chọn từ danh sách
+						//- li
+						//- 	a(data-toggle='tab', href='#addExist') Chọn từ danh sách
 					.tab-content
 						#newNotification.tab-pane.fade.in.active
 							.noti-devider
@@ -164,7 +164,7 @@ block content
 									i.fa.fa-commenting-o
 								h5.detail-title &nbsp;Nhập nội dung thông báo
 							.body
-								form.form-horizontal(method='POST', action="/notification/create")
+								form.form-horizontal(method='POST', action="/notification/create?buildingId=" + data._id)
 									.row
 										.col-md-8
 											.form-group
@@ -189,8 +189,8 @@ block content
 											.row
 												.col-md-12
 													.btn.btn-default(style='width: 100%', onclick='return selectAllApartments();') Tất cả căn hộ
-											.row(style='margin-top: 15px;')
-												.col-md-12
-													.btn.btn-default(style='width: 100%') Tầng
+											//- .row(style='margin-top: 15px;')
+											//- 	.col-md-12
+											//- 		.btn.btn-default(style='width: 100%') Tầng
 									hr
 									input#submit.btn.btn-success(type='submit', value='Gửi thông báo')

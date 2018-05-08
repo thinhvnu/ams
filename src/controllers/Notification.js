@@ -30,16 +30,19 @@ exports.postCreate = function (req, res) {
 
 		var errors = req.getValidationResult().then(function(errors) {
 			if (!errors.isEmpty()) {
-				var errors = errors.mapped();
+				var errors = errors.array();
 				// res.render('room/create', {
 				// 	title: 'Create New Room',
 				// 	current: ['room', 'create'],
 				// 	errors: errors,
 				// 	data: req.body
 				// });
-				return res.json({
-					errors: errors
-				});
+				req.flash('errors', errors[0].msg);
+				if (req.query.buildingId) {
+					return res.redirect('/apartment-building/view/' + req.query.buildingId);
+				} else {
+					return res.redirect('/');
+				}
 			}
 
 			/*

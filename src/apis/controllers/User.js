@@ -182,7 +182,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 					message: JSON.stringify(err)
 				});
 			}
-
+			console.log('deviceToken', deviceToken);
 			if (!deviceToken) {
 				return res.json({
 					success: false,
@@ -226,6 +226,7 @@ exports.postFirebaseDeviceToken = (req, res, next) => {
 			}
 		})
 	} catch (e) {
+		console.log('e', e);
 		return res.json({
 			success: false,
 			errorCode: '111',

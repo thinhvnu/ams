@@ -240,7 +240,6 @@ function CropperEditor(config) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/media/upload-image', true);
             xhr.onload = function (response) {
-                console.log('this', response);
                 document.body.style.overflow = 'auto';
                 /**
                  * Function create image preview item
@@ -377,7 +376,6 @@ function deleteImage(fileName, inputSelector) {
         var inputEl = document.getElementById('cropper-editor-input-' + inputSelector);
         if (inputEl) {
             var inputImgVal = inputEl.value;
-            console.log('inputImgVal', inputImgVal);
             inputImgVal = inputImgVal.replace(','+fileName, '');
             inputImgVal = inputImgVal.replace(','+fileName + ',', '');
             inputImgVal = inputImgVal.replace(fileName, '');

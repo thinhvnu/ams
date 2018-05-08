@@ -140,7 +140,7 @@ exports.postCreateRequest = (req, res, next) => {
 										$ne: (user && user.building) ? user.building.manager : null
 									}
 								}).exec((err, admins) => {
-									console.log('admins', admins);
+									
 									for (let i=0; i<admins.length; i++) {
 										let newNoti = new Notification();
 										newNoti.title = 'Yêu cầu dịch vụ mới từ ' + newServiceRequest.fullName,

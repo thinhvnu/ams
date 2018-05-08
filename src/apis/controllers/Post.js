@@ -25,7 +25,6 @@ exports.getCategory = (req, res, next) => {
 }
 // Get all posts
 exports.getPostsOfCategory = function (req, res) {
-	console.log('categoryId', req.params.categoryId);
 	Post.find({
 		category: req.params.categoryId
 	}, {

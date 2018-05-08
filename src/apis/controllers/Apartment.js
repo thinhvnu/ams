@@ -69,7 +69,7 @@ exports.postAddNewUser = function (req, res) {
                 return next(err); 
               }
 
-              console.log('apartment', apartment);
+             
               if (apartment.user) {
                 apartment.users.pull(user._id);
               }

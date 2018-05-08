@@ -181,7 +181,7 @@ exports.getEdit = (req, res, next) => {
 				console.log('err', err)
 				return next(err);
 			}
-			console.log('manager', abg.manager._id);
+			
 			User.find({}, (err, users) => {
 				res.render('apartment-building-group/edit', {
 					title: abg.abgName,

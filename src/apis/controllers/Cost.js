@@ -64,7 +64,7 @@ exports.getApartmentCost = (req, res, next) => {
                     model: 'CostType'
                 }).exec((err, costs) => {
                     let c = [[], [], [], [], [], [], [], [], [], [], [], []];
-                    console.log("costs",costs)
+                    
                     if(costs && Array.isArray(costs)){
                         for (let j=0; j<costs.length; j++) {
                             if (costs[j].month >= 1 && costs[j].month <= 12) {

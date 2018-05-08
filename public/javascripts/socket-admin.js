@@ -82,9 +82,7 @@ socket.on('connect', () => {
 });
 
 function getCookie(name) {
-    console.log('document.cookie', document.cookie);
     match = document.cookie.match(new RegExp(name + '=([^;]+)'));
-    console.log('match', JSON.stringify(match));
     if (match) 
         return match[1];
     else 
@@ -339,7 +337,7 @@ function createLoginForm() {
                 let dataRes = http.response;
                 if(dataRes) {
                     dataRes = JSON.parse(dataRes);
-                    console.log('dataRes', dataRes);
+                   
                     localStorage.setItem('rtcs_chat_token', dataRes.token);
                     window.location.reload();
                 }

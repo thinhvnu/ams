@@ -123,7 +123,6 @@ function addUserToApartment(apartmentId) {
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
 
-      console.log('dataRes', dataRes);
       if (dataRes.errorCode === 0) {
         window.location.reload();
         return;
@@ -205,7 +204,6 @@ function addBuilding(abgId) {
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
 
-      console.log('dataRes', dataRes);
       if (dataRes.errorCode === 0) {
         window.location.reload();
         return;
@@ -271,7 +269,6 @@ function addApartment(buildingId) {
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
 
-      console.log('dataRes', dataRes);
       if (dataRes.errorCode === 0) {
         window.location.reload();
         return;
@@ -334,7 +331,6 @@ function createNewGroup() {
     if(http.readyState == 4 && http.status == 200) {
       let dataRes = JSON.parse(this.response);
 
-      console.log('dataRes', dataRes);
       if (dataRes.errorCode === 0) {
         window.location.reload();
         return;
@@ -681,7 +677,6 @@ function printBilling() {
 }
 
 function selectAllApartments() {
-  console.log(111);
   $('#listSendTo option').attr('selected', true).trigger("chosen:updated");
 }
 
@@ -831,7 +826,6 @@ function updateReadMessageStatus(roomId, isGroup = false) {
   xhttp.onreadystatechange = function() {
     if(xhttp.readyState == 4 && xhttp.status == 200) {
       let dataRes = JSON.parse(this.response);
-      console.log('dataRes', dataRes);
       if (dataRes.success) {
         getChatContacts();
       }
@@ -920,7 +914,6 @@ $(document).ready(function() {
 
             notiItem.appendChild(link);
             notificationList.appendChild(notiItem);
-            console.log('count', count);
           }
           if (count > 0)
               countNotiUnread.textContent = count;

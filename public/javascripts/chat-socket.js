@@ -43,7 +43,6 @@ function createSenderMessageItem(data) {
 }
 
 function createInboxMessageItem(data) {
-    console.log('data', data);
     let messageItem = document.createElement('div');
     messageItem.style = 'text-align: left;margin-bottom: 5px;';
     messageItem.className = 'message-item mess-ib';
@@ -88,7 +87,6 @@ function createInboxMessageItem(data) {
 }
 
 function createNewChatBox(user, isGroup = false) {
-    console.log('user', user);
     /**
      * Check exist chatbox
      */
@@ -335,7 +333,6 @@ function createNewChatBox(user, isGroup = false) {
                 },
                 messageContent: messVal
             }
-            console.log('dataSendttt', dataSend);
             socket.emit('send_message', dataSend);
         }
         inputMessage.value = '';
@@ -415,7 +412,6 @@ socket.on('connect', () => {
         if (data.to.isGroup) {
             chatBoxItem = document.getElementById('chat-box-item-' + (data.to._id || data.to._id || data.to.room));
         }
-        console.log("chatboxItem", chatBoxItem);
         if (!chatBoxItem) {
             if (data.to.isGroup){
                 createNewChatBox(data.to, true);
@@ -441,7 +437,6 @@ socket.on('connect', () => {
      * Event owner message 
      */
     socket.on('owner_message', (data) => {
-        console.log('owner_mess', data);
         let chatBoxItem = document.getElementById('chat-box-item-' + (data.to.id || data.to._id || data.to.room));
        
         if (!chatBoxItem) {

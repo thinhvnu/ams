@@ -8,52 +8,34 @@ var app = require('./../app');
 var debug = require('debug')('rtcs:server');
 var http = require('http');
 
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
-
 /**
  * Get port from environment and store in Express.
  */
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+/**
+ * Create HTTP server.
+ */
 
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+var server = http.createServer(app);
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
-  });
-} else {
-  // Workers can share any TCP connection
-  // In this case it is an HTTP server
-  /**
-   * Create HTTP server.
-   */
-
-  var server = http.createServer(app);
-
-  /**
-   * Create chat server
-   */
-  try {
-    global.io.attach(server);
-  } catch (e) {
-    console.log('err', 'cannot attach socket server');
-  }
-
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
-
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+/**
+ * Create chat server
+ */
+try {
+  global.io.attach(server);
+} catch (e) {
+  console.log('err', 'cannot attach socket server');
 }
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.

@@ -64,3 +64,10 @@ exports.getIndex = (req, res, next) => {
         });
     }
 };
+
+exports.getTest = (req, res, next) => {
+    User.findOne().exec((err, user) => {
+        let a = [];
+        a.pull(1);
+    })
+}

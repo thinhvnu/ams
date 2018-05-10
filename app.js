@@ -171,6 +171,12 @@ mongoose.connect(process.env.DB_ADDRESS, function(err, db) {
   }
 })
 
+process.on('uncaughtException', function(e) {
+  console.log('An error has occured. error is: %s and stack trace is: %s', e, e.stack);
+  console.log("Process will restart now.");
+  process.exit(1);
+});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

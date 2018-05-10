@@ -628,11 +628,8 @@ exports.postCreateGroup = (req, res, next) => {
                 ApartmentBuilding.findById(ng.building).populate('apartmentBuildingGroup').exec((err, building) => {
                     if (building) {
                         let groupMembers = [];
-                        groupMembers.pull(building.manager);
                         groupMembers.push(building.manager);
-                        groupMembers.pull(building.apartmentBuildingGroup.manager);
                         groupMembers.push(building.apartmentBuildingGroup.manager);
-                        groupMembers.pull(req.session.user._id);
                         groupMembers.push(req.session.user._id);
 
                         ng.members.pull(building.manager);

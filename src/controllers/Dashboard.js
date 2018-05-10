@@ -22,18 +22,6 @@ exports.getIndex = (req, res, next) => {
         })
         .sort('-createdAt')
         .limit(10)
-        // .populate({
-        //     path: 'apartment',
-        //     model: 'Apartment'
-        // })
-        // .populate({
-        //     path: 'building',
-        //     model: 'ApartmentBuilding'
-        // })
-        // .populate({
-        //     path: 'buildingGroup',
-        //     model: 'ApartmentBuildingGroup'
-        // })
         .exec((err, nLogs) => {
             User.find({
                 _id: {
@@ -52,14 +40,19 @@ exports.getIndex = (req, res, next) => {
                         ApartmentBuildingGroup.find({
                             status: 1
                         }).sort('-createdAt').exec((err, abgs) => {
-                            res.render('dashboard/index', {
-                                title: 'Phần mềm quản lý chung cư',
-                                current: ['dashboard', 'index'],
-                                notifications: nLogs,
-                                users: users,
-                                user: user,
-                                abgs: abgs
-                            });
+                            try {
+                                res.render('dashboard/index', {
+                                    title: 'Phần mềm quản lý chung cư',
+                                    current: ['dashboard', 'index'],
+                                    notifications: nLogs,
+                                    users: users,
+                                    user: user,
+                                    abgs: abgs
+                                });
+                            } catch (e) {
+                                next(e);
+                            }
+                            
                         });  
                     })
                 })

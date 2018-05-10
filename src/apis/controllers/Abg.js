@@ -4,25 +4,34 @@ const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 
 exports.getList = (req, res, next) => {
-    ApartmentBuildingGroup.find({}).exec((err, abgs) => {
-        if (err) {
+    try {
+        ApartmentBuildingGroup.find({}).exec((err, abgs) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    errorCode: '112',
+                    data: []
+                })
+            }
+            
             return res.json({
-                success: false,
-                errorCode: '112',
-                data: []
-            })
-        }
-        
+                success: true,
+                errorCode: 0,
+                data: abgs
+            });
+        })
+    } catch (e) {
         return res.json({
-            success: true,
-            errorCode: 0,
-            data: abgs
-        });
-    })
+            success: false,
+            errorCode: 111,
+            message: 'Error'
+        })
+    }
 }
 
 exports.getListBuilding = function (req, res) {
-    ApartmentBuilding.find({apartmentBuildingGroup: req.params.abgId})
+    try {
+        ApartmentBuilding.find({apartmentBuildingGroup: req.params.abgId})
         .exec(function (err, abs) {
             if (err) {
                 return res.json({
@@ -38,6 +47,13 @@ exports.getListBuilding = function (req, res) {
                 data: abs
             });
         });
+    } catch (e) {
+        return res.json({
+            success: false,
+            errorCode: 111,
+            message: 'Error'
+        })
+    }
 };
 
 exports.postSubmitData = (req, res, next) => {
@@ -52,42 +68,70 @@ exports.postSubmitData = (req, res, next) => {
         // return res.json(data);
         for (let i=0; i<data.length; i++) {
             ApartmentBuildingGroup.findOne({abgName: data[i].ten_chung_cu}).exec((err, abg) => {
-                if (abg) {
-                    /* Update new data */
-                    abg.abgName = data[i].ten_chung_cu;
-                    abg.address = data[i].dia_chi;
-                    abg.manager = data[i].quan_ly || req.session.user._id;
-                    abg.status = 1;
-                    abg.updatedBy = req.session.user._id;
-                    abg.save((err, nabg) => {
-                        count ++;
-                        if (count >= data.length) {
-                            req.flash('success', 'Nhập liệu thành công');
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                message: 'Nhập liệu thành công'
-                            })
-                        }
-                    });
-                } else {
-                    let newAbg = new ApartmentBuildingGroup();
-                    newAbg.abgName = data[i].ten_chung_cu;
-                    newAbg.address = data[i].dia_chi;
-                    newAbg.manager = data[i].quan_ly || req.session.user._id;
-                    newAbg.status = 1;
-                    newAbg.createdBy = req.session.user._id;
-                    newAbg.save((err, nabg) => {
-                        count ++;
-                        if (count >= data.length) {
-                            req.flash('success', 'Nhập liệu thành công');
-                            return res.json({
-                                success: true,
-                                errorCode: 0,
-                                message: 'Nhập liệu thành công'
-                            })
-                        }
-                    });
+                try {
+                    if (abg) {
+                        /* Update new data */
+                        abg.abgName = data[i].ten_chung_cu;
+                        abg.address = data[i].dia_chi;
+                        abg.manager = data[i].quan_ly || req.session.user._id;
+                        abg.status = 1;
+                        abg.updatedBy = req.session.user._id;
+                        abg.save((err, nabg) => {
+                            try {
+                                count ++;
+                                if (count >= data.length) {
+                                    req.flash('success', 'Nhập liệu thành công');
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        message: 'Nhập liệu thành công'
+                                    })
+                                }
+                            } catch (e) {
+                                return res.json({
+                                    success: false,
+                                    errorCode: 111,
+                                    message: 'Error'
+                                })
+                            }
+                        });
+                    } else {
+                        let newAbg = new ApartmentBuildingGroup();
+                        newAbg.abgName = data[i].ten_chung_cu;
+                        newAbg.address = data[i].dia_chi;
+                        newAbg.manager = data[i].quan_ly || req.session.user._id;
+                        newAbg.status = 1;
+                        newAbg.createdBy = req.session.user._id;
+                        newAbg.save((err, nabg) => {
+                            try {
+                                count ++;
+                                if (count >= data.length) {
+                                    req.flash('success', 'Nhập liệu thành công');
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        message: 'Nhập liệu thành công'
+                                    })
+                                }
+                            } catch (e) {
+                                count ++;
+                                if (count >= data.length) {
+                                    req.flash('success', 'Nhập liệu thành công');
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        message: 'Nhập liệu thành công'
+                                    })
+                                }
+                            }
+                        });
+                    }
+                } catch (e) {
+                    return res.json({
+                        success: false,
+                        errorCode: 111,
+                        message: 'Error'
+                    })
                 }
             });
         }
@@ -137,22 +181,34 @@ exports.postAddNewBuilding = (req, res, next) => {
                      * Save to apartment building group
                      */
                     ApartmentBuildingGroup.findById(req.body.abgId, (err, abg) => {
-                        if (abg) {
-                            abg.apartmentBuildings.pull(ab._id);
-                            abg.apartmentBuildings.push(ab._id);
-                            abg.save();
-                        }
-                        req.flash('success', 'Thêm tòa nhà thành công');
-                        return res.json({
-                            success: true,
-                            errorCode: 0,
-                            message: 'Successfully'
-                        })
+                       try {
+                            if (abg) {
+                                abg.apartmentBuildings.pull(ab._id);
+                                abg.apartmentBuildings.push(ab._id);
+                                abg.save();
+                            }
+                            req.flash('success', 'Thêm tòa nhà thành công');
+                            return res.json({
+                                success: true,
+                                errorCode: 0,
+                                message: 'Successfully'
+                            })
+                       } catch (e) {
+                            return res.json({
+                                success: false,
+                                errorCode: 111,
+                                message: 'Error'
+                            })
+                       }
                     })
                 });
             }
         });
     } catch (e) {
-
+        return res.json({
+            success: false,
+            errorCode: 111,
+            message: 'Error'
+        })
     }
 }

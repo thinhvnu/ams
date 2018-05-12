@@ -342,7 +342,7 @@ exports.getClients = (req, res, next) => {
                                             }
                                         }).sort('-createdAt').exec((err, grs) => {
                                             let count = 0;
-                                            let gs = grs ? groups.concat(grs) : groups;
+                                            let gs = grs;// ? groups.concat(grs) : groups;
 
                                             for (let i=0; i<users.length; i++) {
                                                 Message.count({

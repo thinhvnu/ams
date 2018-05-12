@@ -258,6 +258,7 @@ var ioEvents = function(io) {
          * Event new member join group
          */
         socket.on('join_group', (data) => {
+            console.log('socket join group', data);
             try {
                 if (data && data.groupId) {
                     socket.join(data.groupId);

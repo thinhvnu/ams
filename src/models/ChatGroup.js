@@ -16,6 +16,10 @@ const chatGroupSchema = new mongoose.Schema({
     status: { type: Number }, // active, inActive
 }, {timestamps: true, usePushEach: true});
 
+chatGroupSchema.set('toObject', {
+    virtuals: true
+});
+
 const ChatGroup = mongoose.model('ChatGroup', chatGroupSchema);
 
 module.exports = ChatGroup;

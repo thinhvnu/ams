@@ -383,7 +383,7 @@ exports.getClients = (req, res, next) => {
                                                     isRead: false
                                                 }).exec((err, gMessUnread) => {
                                                     // gs[i].messUnread = gMessUnread;
-                                                    // console.log('gMessUnread', gMessUnread);
+                                                    console.log('gMessUnread Group', gMessUnread);
                                                     Object.assign(gs[i], {messUnread: gMessUnread});
                                                     count++;
 

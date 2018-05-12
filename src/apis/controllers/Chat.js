@@ -388,7 +388,7 @@ exports.getClients = (req, res, next) => {
                                                     count++;
 
                                                     if (count >= (users.length + gs.length)) {
-                                                        // console.log('groups', gs);
+                                                        console.log('groups', gs);
                                                         return res.json({
                                                             success: true,
                                                             errorCode: 0,

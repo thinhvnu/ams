@@ -11,6 +11,7 @@ exports.isAuthenticated = (req, res, next) => {
     if (req.session.user) {
         User.findById(req.session.user._id).exec((err, u) => {
             if (u) {
+                // console.log('u', u);
                 req.session.user = u;
                 if (this.hasPermission(req.session.user, accessRouter)) {
                     res.locals.user = req.session.user;

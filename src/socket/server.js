@@ -83,7 +83,7 @@ var ioEvents = function(io) {
                  */
                 for(let i=0; i<uRooms.length; i++) {
                     console.log('uroom', uRooms[i]._id);
-                    socket.join(uRooms[i]._id);
+                    socket.join(uRooms[i]._id || uRooms[i]);
                 }
                 /**
                  * Notification join chat success

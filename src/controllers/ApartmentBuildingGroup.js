@@ -323,3 +323,24 @@ exports.getDelete = (req, res, next) => {
 		}
 	})
 }
+
+exports.getDeleteMany = async (req, res, next) => {
+	let deleteIds = JSON.parse(req.params.abgIds);
+
+	let abgs = await ApartmentBuildingGroup.find({
+		_id: {
+			$in: deleteIds
+		}
+	});
+
+	for (let i=0; i<abgs.length; i++) {
+		let buildings = await ApartmentBuilding.find({apartmentBuildingGroup: abgs[i]._id});
+		for (let j=0; j<buildings.length; j++) {
+			let a = await Apartment.deleteMany({building: {$in: buildings[j].apartments}});
+			await buildings[j].remove();
+		}
+		await abgs[i].remove();
+	}
+	req.flash('success', 'Xóa thành công');
+	res.redirect('/apartment-building-group');
+}

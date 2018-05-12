@@ -32,4 +32,7 @@ router.get('/view/:abgId', passport.isAuthenticated, abgController.getView);
 /* Get delete */
 router.get('/delete/:abgId', passport.isAuthenticated, abgController.getDelete);
 
+/* Get delete */
+router.get('/delete-many/:abgIds', passport.isAuthenticated, abgController.getDeleteMany);
+
 module.exports = router;

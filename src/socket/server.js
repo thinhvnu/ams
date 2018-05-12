@@ -257,8 +257,8 @@ var ioEvents = function(io) {
         /**
          * Event new member join group
          */
-        socket.on('join_group', (data) => {
-            let data = data.data;
+        socket.on('join_group', (dataPost) => {
+            let data = dataPost.data;
             console.log('socket join group', data);
             try {
                 if (data && data.groupId) {

@@ -30,7 +30,8 @@ block content
 							td #{dt.content}
 							td
 								if dt.image
-									img(src=dt.imageUrl, style='width: 120px;height: 100px')
+									a(href=dt.imageUrl, target='_blank')
+										img(src=dt.imageUrl, style='width: 120px;height: 100px')
 								else
 									| Không có
 							td #{dt.createdBy ? (dt.createdBy.firstName + ' ' + dt.createdBy.lastName) : ''}

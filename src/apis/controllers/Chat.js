@@ -384,7 +384,7 @@ exports.getClients = (req, res, next) => {
                                                 }).exec((err, gMessUnread) => {
                                                     // gs[i].messUnread = gMessUnread;
                                                     console.log('gMessUnread Group', gMessUnread);
-                                                    Object.assign(gs[i], {messUnread: gMessUnread});
+                                                    Object.assign(gs[i].toObject(), {messUnread: gMessUnread});
                                                     count++;
 
                                                     if (count >= (users.length + gs.length)) {

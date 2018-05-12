@@ -120,6 +120,7 @@ var ioEvents = function(io) {
          * Event send message
          */
         socket.on('send_message', (data) => {
+            console.log('send_message', data);
             let roomId = data.to.room || data.to.id || data.to._id;
             let senderId = data.sender.room || data.sender.id || data.sender._id;
             /**

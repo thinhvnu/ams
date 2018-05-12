@@ -337,9 +337,9 @@ exports.getClients = (req, res, next) => {
                                     default:
                                         ChatGroup.find({
                                             building: u.building,
-                                            _id: {
-                                                $nin: groupIds
-                                            }
+                                            // _id: {
+                                            //     $nin: groupIds
+                                            // }
                                         }).sort('-createdAt').exec((err, grs) => {
                                             let count = 0;
                                             let gs = grs;// ? groups.concat(grs) : groups;

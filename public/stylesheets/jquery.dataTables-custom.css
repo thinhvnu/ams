@@ -10,6 +10,7 @@
 .dataTables_wrapper table.dataTable {
   background: white;
   margin: 0;
+  font-size: 15px;
 }
 .dataTables_wrapper .dataTables_length {
   float: left;

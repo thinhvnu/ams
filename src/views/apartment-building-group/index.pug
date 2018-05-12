@@ -47,6 +47,7 @@ block content
 				thead
 					tr
 						th.hidden-xs STT
+						td
 						th Tên chung cư
 						th Địa chỉ
 						th Người quản lý
@@ -57,6 +58,8 @@ block content
 					each dt, i in data
 						tr
 							td.text-center.hidden-xs #{i+1}
+							td
+								input(name="apartmentDelete", type="checkbox")
 							td #{dt.abgName}
 							td #{dt.address}
 							td.text-center #{dt.manager ? (dt.manager.firstName + ' ' + dt.manager.lastName) : 'Empty'}

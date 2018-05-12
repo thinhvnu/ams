@@ -9,6 +9,13 @@ exports.isAuthenticated = (req, res, next) => {
     let accessRouter = req.originalUrl;
 
     if (req.session.user) {
+        User.findById(req.session.user._id).exec((err, u) => {
+            if (user) {
+                req.session.user = u;
+                res.locals.user = u;
+                next();
+            }
+        });
         if (this.hasPermission(req.session.user, accessRouter)) {
             res.locals.user = req.session.user;
             next();

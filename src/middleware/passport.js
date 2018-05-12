@@ -10,7 +10,7 @@ exports.isAuthenticated = (req, res, next) => {
 
     if (req.session.user) {
         User.findById(req.session.user._id).exec((err, u) => {
-            if (user) {
+            if (u) {
                 req.session.user = u;
                 res.locals.user = u;
                 next();

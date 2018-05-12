@@ -12,21 +12,19 @@ exports.isAuthenticated = (req, res, next) => {
         User.findById(req.session.user._id).exec((err, u) => {
             if (u) {
                 req.session.user = u;
-                res.locals.user = u;
-                next();
+                if (this.hasPermission(req.session.user, accessRouter)) {
+                    res.locals.user = req.session.user;
+                    next();
+                } else {
+                    if (accessRouter === '/') {
+                        next();
+                    } else {
+                        req.flash('errors', 'Bạn không có quyền thực hiện chức năng này. Liên hệ quản trị viên để được thêm chức năng');
+                        return res.redirect('/');
+                    }
+                }
             }
         });
-        if (this.hasPermission(req.session.user, accessRouter)) {
-            res.locals.user = req.session.user;
-            next();
-        } else {
-            if (accessRouter === '/') {
-                next();
-            } else {
-                req.flash('errors', 'Bạn không có quyền thực hiện chức năng này. Liên hệ quản trị viên để được thêm chức năng');
-                return res.redirect('/');
-            }
-        }
     } else {
         // check header or url parameters or post parameters for token
         var token = req.query.token || req.headers['x-access-token'] || req.headers['Authorization'] || req.headers['authorization'] || req.cookies[process.env.TOKEN_KEY];

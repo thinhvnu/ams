@@ -216,7 +216,7 @@ exports.getSendFireWarning = async (req, res, next) => {
 									 * save log
 									 */
 									let newNotificationLog = new NotificationLog();
-									newNotificationLog.notification = 'Có cháy, cư dân di tản';
+									// newNotificationLog.notification = 'Có cháy, cư dân di tản';
 									newNotificationLog.sendTo = user._id,
 									newNotificationLog.device = user.firebaseDeviceToken[k];
 									newNotificationLog.apartment = apartments[i]._id;

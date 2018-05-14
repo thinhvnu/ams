@@ -34,7 +34,7 @@ block content
 					each nt, i in notifications
 						tr
 							td.hidden-xs #{i+1}
-							td #{nt.notification.title}
+							td #{(nt.notification && nt.notification.title) ? nt.notification.title : 'Có cháy, cư dân di tản'}
 							td #{nt.sendTo ? (nt.sendTo.firstName + ' ' + nt.sendTo.lastName) : ''}
 							//- td #{JSON.parse(nt.device) && JSON.parse(nt.device).deviceName}
 							//- td #{nt.apartment.apartmentName}

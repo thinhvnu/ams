@@ -181,6 +181,77 @@ exports.getView = (req, res, next) => {
 	})
 }
 
+exports.getSendFireWarning = async (req, res, next) => {
+	try {
+		let fb = await FeedBack.findById(req.params.fbId).populate('createdBy');
+		/*
+		* End validate
+		*/
+		Apartment.find({
+			building: fb.createdBy.building
+		})
+		.populate({
+			path: 'users',
+			model: 'User'
+		})
+		.exec((err, apartments) => {
+			if (apartments) {
+				/**
+				 * Send notification
+				 */
+				let androidFcmTokens = [], iosFcmTokens = [];
+				for(let i=0; i<apartments.length; i++) {
+					if (apartments[i].users && apartments[i].users.length > 0) {
+						for(let j=0; j<apartments[i].users.length; j++) {
+							let user = apartments[i].users[j];
+							if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
+								for (let k=0; k<user.firebaseDeviceToken.length; k++) {
+									let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
+									if (deviceInfo.os === 'android') {
+										androidFcmTokens.push(deviceInfo.token);
+									} else {
+										iosFcmTokens.push(deviceInfo.token);
+									}
+									/**
+									 * save log
+									 */
+									let newNotificationLog = new NotificationLog();
+									newNotificationLog.notification = 'Có cháy, cư dân di tản';
+									newNotificationLog.sendTo = user._id,
+									newNotificationLog.device = user.firebaseDeviceToken[k];
+									newNotificationLog.apartment = apartments[i]._id;
+									newNotificationLog.building = apartments[i].building;
+									newNotificationLog.buildingGroup = apartments[i].buildingGroup;
+									if (k === 0) {
+										newNotificationLog.isFirst = true;
+									}
+									newNotificationLog.status = 1;
+									newNotificationLog.save();
+								}
+							}
+						}
+					}
+				}
+				Helpers.sendAndroidNotification(androidFcmTokens, {
+					title: 'Có cháy, cư dân di tản',
+					description: 'Có cháy, cư dân di tản'
+				});
+				Helpers.sendIosNotification(iosFcmTokens, {
+					title: 'Có cháy, cư dân di tản',
+					description: 'Có cháy, cư dân di tản'
+				});
+				/*=== END ===*/
+			}
+		})
+
+		req.flash('success', 'Gửi thông báo cảnh báo cháy thành công');
+		res.redirect('/');
+	} catch (e) {
+		req.flash('errors', 'Gửi thông báo thất bại');
+		res.redirect('/feedback?flag=1');
+	}
+}
+
 // exports.postSend = (req, res, next) => {
 // 	console.log('req.body', req.body);
 // }

@@ -26,7 +26,7 @@ exports.getIndex = function (req, res) {
 		}
 		res.render('feedback/index', {
 			title: 'Bao cao sai pham',
-			current: ['feedback', 'index'],
+			current: req.query.flag == 1 ? ['feedbackflag1', 'index'] : ['feedback', 'index'],
 			data: fbs
 		});
 	});

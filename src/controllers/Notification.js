@@ -3,6 +3,7 @@ const Apartment = require('./../models/Apartment');
 const NotificationLog = require('./../models/NotificationLog');
 const ServiceRequest = require('./../models/ServiceRequest');
 const FeedBack = require('./../models/FeedBack');
+const User = require('./../models/User');
 
 /**
  * Helpers function
@@ -197,47 +198,44 @@ exports.getSendFireWarning = async (req, res, next) => {
 		newNotification.createdBy = req.session.user._id;
 		// save the user
 		newNotification.save(function (err, notification) {
-			Apartment.find({
-				building: fb.createdBy.building
+			User.find({
+				$or: [
+					{ building: fb.createdBy.building },
+					{ role: 'ADMIN' }
+				]
 			})
-			.populate({
-				path: 'users',
-				model: 'User'
-			})
-			.exec((err, apartments) => {
-				if (apartments) {
+			.exec((err, users) => {
+				if (users) {
 					/**
 					 * Send notification
 					 */
 					let androidFcmTokens = [], iosFcmTokens = [];
-					for(let i=0; i<apartments.length; i++) {
-						if (apartments[i].users && apartments[i].users.length > 0) {
-							for(let j=0; j<apartments[i].users.length; j++) {
-								let user = apartments[i].users[j];
-								if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
-									for (let k=0; k<user.firebaseDeviceToken.length; k++) {
-										let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
-										if (deviceInfo.os === 'android') {
-											androidFcmTokens.push(deviceInfo.token);
-										} else {
-											iosFcmTokens.push(deviceInfo.token);
-										}
-										/**
-										 * save log
-										 */
-										let newNotificationLog = new NotificationLog();
-										// newNotificationLog.notification = 'Có cháy, cư dân di tản';
-										newNotificationLog.sendTo = user._id,
-										newNotificationLog.device = user.firebaseDeviceToken[k];
-										newNotificationLog.apartment = apartments[i]._id;
-										newNotificationLog.building = apartments[i].building;
-										newNotificationLog.buildingGroup = apartments[i].buildingGroup;
-										if (k === 0) {
-											newNotificationLog.isFirst = true;
-										}
-										newNotificationLog.status = 1;
-										newNotificationLog.save();
+					if (users && users.length > 0) {
+						for(let j=0; j<users.length; j++) {
+							let user = users[j];
+							if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
+								for (let k=0; k<user.firebaseDeviceToken.length; k++) {
+									let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
+									if (deviceInfo.os === 'android') {
+										androidFcmTokens.push(deviceInfo.token);
+									} else {
+										iosFcmTokens.push(deviceInfo.token);
 									}
+									/**
+									 * save log
+									 */
+									let newNotificationLog = new NotificationLog();
+									newNotificationLog.notification = notification._id;
+									newNotificationLog.sendTo = user._id,
+									newNotificationLog.device = user.firebaseDeviceToken[k];
+									newNotificationLog.apartment = user.apartment;
+									newNotificationLog.building = user.building;
+									newNotificationLog.buildingGroup = user.buildingGroup;
+									if (k === 0) {
+										newNotificationLog.isFirst = true;
+									}
+									newNotificationLog.status = 1;
+									newNotificationLog.save();
 								}
 							}
 						}

@@ -23,6 +23,7 @@ block content
 						th Ảnh
 						th Người báo cáo
 						th Thời gian
+						th Gửi thông báo
 				tbody
 					each dt, i in data
 						tr
@@ -36,3 +37,6 @@ block content
 									| Không có
 							td #{dt.createdBy ? (dt.createdBy.firstName + ' ' + dt.createdBy.lastName) : ''}
 							td #{moment(dt.createdAt).tz('Asia/Ho_Chi_Minh').format('DD-MM-YYYY HH:mm')}
+							td
+								button(onclick='return confirmAction("Gửi báo cháy đến cư dân?", "/notification/send-fire-warning/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+										em.fa.fa-trash

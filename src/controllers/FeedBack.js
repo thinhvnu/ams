@@ -25,7 +25,7 @@ exports.getIndex = function (req, res) {
 			})
 		}
 		res.render('feedback/index', {
-			title: 'Bao cao sai pham',
+			title: req.query.flag == 1 ? 'Bao chay' : 'Bao cao sai pham',
 			current: req.query.flag == 1 ? ['feedbackflag1', 'index'] : ['feedback', 'index'],
 			data: fbs
 		});

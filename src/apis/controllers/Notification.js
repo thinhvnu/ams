@@ -6,7 +6,7 @@ const client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST
 // Get all active sliders
 exports.getList = (req, res, next) => {
     try {
-        let page = 0, pageSize = 10;
+        let page = 0, pageSize = 50;
 
         if (req.query) {
             if (req.query.page) {
@@ -44,9 +44,9 @@ exports.getList = (req, res, next) => {
                         {
                             id:notifications[i].id,
                             status:notifications[i].status,
-                            title: notifications[i].notification.title,
-                            description: notifications[i].notification.description,
-                            content: notifications[i].notification.content,
+                            title: notifications[i].notification ? notifications[i].notification.title : 'Có cháy, cư dân di tản',
+                            description: notifications[i].notification ? notifications[i].notification.description : 'Có cháy, cư dân di tản',
+                            content: notifications[i].notification ? notifications[i].notification.content : 'Có cháy, cư dân di tản',
                             createdAt: notifications[i].createdAt
                         }
                     )

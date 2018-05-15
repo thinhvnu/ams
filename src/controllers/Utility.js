@@ -3,7 +3,11 @@ const UtilityCategory = require('../models/UtilityCategory');
 
 // Get all posts
 exports.getIndex = function (req, res) {
-	Utility.find({}).populate('category').exec(function (err, utilities) {
+	Utility.find({})
+	.sort({
+		orderDisplay: 1,
+		createdAt: -1
+	}).populate('category').exec(function (err, utilities) {
 		if (err) {
 			console.log('err', err)
 			return res.json({
@@ -54,12 +58,17 @@ exports.postCreate = function (req, res) {
 	var errors = req.getValidationResult().then(function(errors) {
 		if (!errors.isEmpty()) {
 			var errors = errors.mapped();
-			res.render('utility/create', {
-				title: 'Thêm tiện ích',
-				current: ['utility', 'create'],
-				errors: errors,
-				data: req.body
-			});
+			UtilityCategory.find({
+				status: 1
+			}).exec((err, categories) => {
+				res.render('utility/create', {
+					title: 'Thêm tiện ích',
+					current: ['utility', 'create'],
+					errors: errors,
+					data: req.body,
+					categories: categories
+				});
+			})
 		} else {
 			var data = req.body;
 			var newUtility = new Utility();
@@ -68,6 +77,7 @@ exports.postCreate = function (req, res) {
 			newUtility.category = data.category;
 			newUtility.image = data.image;
 			newUtility.content = data.content;
+			newUtility.orderDisplay = data.orderDisplay || 0;
 			newUtility.status = data.status;
 			newUtility.createdBy = req.session.user._id;
 			
@@ -126,6 +136,7 @@ exports.postUpdate = function (req, res) {
 					utility.category = data.category;
 					utility.image = data.image;
 					utility.content = data.content;
+					utility.orderDisplay = data.orderDisplay || 0;
 					utility.status = data.status;
 					utility.updatedBy = req.session.user._id;
 					

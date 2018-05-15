@@ -91,6 +91,11 @@ block content
 								option(value=category._id, selected=(data && JSON.stringify(data.category) === JSON.stringify(category.id)) ? true : false) #{category.name}
 						if errors && errors.category
 							.help-block #{errors.category.msg}
+					.col-lg-6(class=errors && errors.orderDisplay && 'has-error')
+						label.control-label(for='orderDisplay') Thứ tự
+						input#orderDisplay.form-control(type='number', name='orderDisplay', value=data && data.orderDisplay, default=0)
+						if errors && errors.orderDisplay
+							.help-block #{errors.orderDisplay.msg}
 				.form-group
 					.col-lg-12
 						label.control-label(for='content') Nội dung dịch vụ

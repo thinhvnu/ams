@@ -10,6 +10,7 @@ const utilitySchema = new mongoose.Schema({
     image: {type: String},
     content: {type: String},
     status: { type: Number }, // active, inActive
+    orderDisplay: {type: Number, default: 0},
     createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     updatedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 }, {timestamps: true, usePushEach: true});

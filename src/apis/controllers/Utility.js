@@ -4,6 +4,7 @@ const Utility = require('./../../models/Utility');
 // Get all utilities
 exports.getIndex = function (req, res) {
 	UtilityCategory.find({status: 1}).sort({
+		orderDisplay: 1,
 		createdAt: -1
 	}).exec((err, categories) => {
 		let count = 0, data = [];

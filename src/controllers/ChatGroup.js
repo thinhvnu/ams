@@ -85,7 +85,7 @@ exports.getDelete = (req, res, next) => {
 	})
 }
 
-// exports.getCreate = function (req, res) {
+// exports.getEdit = function (req, res) {
 // 	res.render('room/create', {
 //     title: 'Create New Room',
 //     current: ['room', 'create'],

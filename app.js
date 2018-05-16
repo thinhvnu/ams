@@ -60,6 +60,7 @@ const apiStaticPage = require('./src/apis/routes/static-page');
 const apiNotification = require('./src/apis/routes/notification');
 const apiFeedBack = require('./src/apis/routes/feedback');
 const apiCost = require('./src/apis/routes/cost');
+const apiDashboard = require('./src/apis/routes/dashboard');
 
 var app = express();
 var io = require('socket.io')();
@@ -154,6 +155,7 @@ app.use('/api/page', apiStaticPage);
 app.use('/api/notification', apiNotification);
 app.use('/api/feedback', apiFeedBack);
 app.use('/api/cost', apiCost);
+app.use('/api', apiDashboard);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

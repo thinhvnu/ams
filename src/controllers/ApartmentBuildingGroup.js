@@ -116,8 +116,6 @@ exports.getExportData = (req, res, next) => {
 		['id', 'ho_ten', 'sdt']
 	];
 
-	abgWs = XLSX.utils.aoa_to_sheet(abgData);
-
 	User.find({})
 		.select({
 			_id: 1,
@@ -147,7 +145,8 @@ exports.getExportData = (req, res, next) => {
 						])
 					}
 				}
-
+				
+				abgWs = XLSX.utils.aoa_to_sheet(abgData);
 				managerWs = XLSX.utils.aoa_to_sheet(managerData);
 
 				wb = XLSX.utils.book_new();

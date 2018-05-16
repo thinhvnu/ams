@@ -7,7 +7,7 @@ router.get('/', ChatGroupController.getIndex);
 router.get('/add-black-list/:groupId', ChatGroupController.getAddBlackList);
 router.get('/remove-black-list/:groupId', ChatGroupController.getRemoveBlackList);
 router.get('/delete/:groupId', ChatGroupController.getDelete);
-// router.get('/create', RoomController.getCreate);
-// router.post('/create', RoomController.postCreate);
+router.get('/edit/:groupId', ChatGroupController.getEdit);
+router.post('/update/:groupId', ChatGroupController.postUpdate);
 
 module.exports = router;

@@ -14,6 +14,8 @@ router.get('/', passport.isAuthenticated, abgController.getIndex);
 /* GET import template file */
 router.get('/import-template', passport.isAuthenticated, abgController.getImportTemplate);
 
+router.get('/export-data', passport.isAuthenticated, abgController.getExportData);
+
 /* API get create new abg */
 router.get('/create', passport.isAuthenticated, abgController.getCreate);
 

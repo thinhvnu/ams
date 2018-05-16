@@ -1,0 +1,47 @@
+extends ../layout/main
+block stylesheets
+	link(rel='stylesheet', href='/libs/cropperjs/dist/cropper.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-chosen.css')
+block scripts
+	script(src='/libs/cropperjs/dist/cropper.min.js')
+	script(src='/javascripts/bootstrap-chosen.js')
+
+	script.
+		$(function() {
+			$('.chosen-abg, .chosen-ab').chosen();
+			$('.chosen-status').chosen({ allow_single_deselect: true, disable_search: true });
+		});
+block content
+	.row
+		.col-lg-12
+			header
+				.content-header Hoàn thành form dữ liệu dưới
+			hr
+			form.form-horizontal(method='POST', action='/chat-group/update/' + data._id)
+				.form-group
+					.col-lg-6(class=errors && errors.groupName && 'has-error')
+						label.control-label(for='groupName') Tên nhóm (*)
+						input.form-control(type='text', name='groupname', placeholder='Nhập tên nhóm', value=data && data.groupName) 
+						if errors && errors.groupName
+							.help-block #{errors.groupName.msg}
+				.form-group
+					.col-lg-6(class=errors && errors.buildingGroup && 'has-error')
+						label.control-label(for='buildingGroup', style='display: block; text-align: left;') Khu chung cư (*)
+						select.form-control.chosen-abg(name='buildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
+							option(value='') Chọn khu chung cư
+							each abg in abgs
+								option(value=abg._id, selected=(data && JSON.stringify(data.buildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+						if errors && errors.buildingGroup
+							.help-block #{errors.buildingGroup.msg}
+					.col-lg-6(class=errors && errors.building && 'has-error')
+						label.control-label(for='building', style='display: block; text-align: left;') Tòa nhà
+						select#choosen-apartment-building.form-control.chosen-ab(name='building', data-placeholder='Tòa nhà', style='width: 100%;')
+							option(value='') Chọn tòa nhà
+							each ab in abs
+								option(value=ab._id, selected=(data && JSON.stringify(data.building) === JSON.stringify(ab.id)) ? true : false) #{ab.buildingName}
+						if errors && errors.building
+							.help-block #{errors.building.msg}
+				hr
+				.form-group  
+					.col-lg-12
+						button#submit.btn.btn-success(type='submit') Lưu lại

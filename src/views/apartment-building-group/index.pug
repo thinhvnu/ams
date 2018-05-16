@@ -43,6 +43,9 @@ block content
 							.modal-footer
 								button#abg-submit-data.btn.btn-success.pull-left Nhập liệu
 								button.btn.btn-default(type='button', data-dismiss='modal') Close
+				.btn.btn-success(onclick='return downloadFileImport("/apartment-building-group/export-data")')
+					| Xuất file &nbsp;
+					i.fa.fa-share-square
 			hr
 			table#abg-list.table.table-responsive.display(cellspacing='0', width='100%')
 				thead

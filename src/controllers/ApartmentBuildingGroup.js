@@ -105,6 +105,67 @@ exports.getImportTemplate = (req, res, next) => {
 		})
 }
 
+exports.getExportData = (req, res, next) => {
+	const XLSX = require('xlsx'), path = require('path');
+	let abgData = [], managerData = [], abgWs, managerWs, wb, filePath;
+
+	abgData = [
+		['ten_chung_cu', 'quan_ly', 'dia_chi']
+	];
+	managerData = [
+		['id', 'ho_ten', 'sdt']
+	];
+
+	abgWs = XLSX.utils.aoa_to_sheet(abgData);
+
+	User.find({})
+		.select({
+			_id: 1,
+			firstName: 1,
+			lastName: 1,
+			userName: 1,
+			phoneNumber: 1
+		})
+		.exec((err, users) => {
+			if (users) {
+				for (let i=0; i<users.length; i++) {
+					managerData.push([
+						users[i]._id,
+						users[i].firstName + ' ' + users[i].lastName,
+						users[i].phoneNumber
+					])
+				}
+			}
+
+			ApartmentBuildingGroup.find({}).exec((err, abgs) => {
+				if (abgs) {
+					for (let j=0; j<abgs.length; j++) {
+						abgData.push([
+							abgs[j].abgName,
+							abgs[j].manager,
+							abgs[j].address
+						])
+					}
+				}
+
+				managerWs = XLSX.utils.aoa_to_sheet(managerData);
+
+				wb = XLSX.utils.book_new();
+				filePath = path.join(__dirname, '/../..' + '/media/files/export/data-building-group.xlsx');
+
+				XLSX.utils.book_append_sheet(wb, abgWs, "Khu chung cư");
+				XLSX.utils.book_append_sheet(wb, managerWs, "Quản lý");
+				XLSX.writeFile(wb, filePath);
+
+				return res.json({
+					success: true,
+					errorCode: 0,
+					fileUrl: process.env.MEDIA_URL + '/files/export/data-building-group.xlsx'
+				});
+			});
+		})
+}
+
 exports.getCreate = (req, res, next) => {
 	User.find({}, (err, users) => {
 		res.render('apartment-building-group/create', {

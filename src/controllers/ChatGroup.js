@@ -1,4 +1,6 @@
 var ChatGroup = require('./../models/ChatGroup');
+var ApartmentBuildingGroup = require('./../models/ApartmentBuildingGroup');
+var ApartmentBuilding = require('./../models/ApartmentBuilding');
 
 // Get all Categories
 exports.getIndex = function (req, res) {
@@ -85,46 +87,54 @@ exports.getDelete = (req, res, next) => {
 	})
 }
 
-// exports.getEdit = function (req, res) {
-// 	res.render('room/create', {
-//     title: 'Create New Room',
-//     current: ['room', 'create'],
-//   });
-// };
+exports.getEdit = (req, res, next) => {
+	ChatGroup.findById(req.params.groupId).exec((err, data) => {
+		ApartmentBuildingGroup.find({}).exec((err, abgs) => {
+			ApartmentBuilding.find({apartmentBuildingGroup: data.buildingGroup}).exec((err, abs) => {
+				res.render('chat-group/edit', {
+					title: 'Chỉnh sửa thông tin nhóm chat',
+					current: ['chat-group', 'edit'],
+					data: data,
+					abgs: abgs,
+					abs: abs
+				});
+			});
+		});
+	});
+};
 
-// exports.postCreate = function (req, res) {
-// 	/*
-// 	* Validate create category
-// 	*/ 
-//   req.checkBody('roomName', 'Tên phòng không được để trống').notEmpty();
+exports.postUpdate = (req, res, next) => {
+	/*
+	* Validate create category
+	*/ 
+  	req.checkBody('groupname', 'Tên nhóm không được để trống').notEmpty();
+	req.checkBody('building', 'Chọn tòa nhà').notEmpty();
+	req.checkBody('buildingGroup', 'Chọn chung cư').notEmpty();
 
-// 	var errors = req.getValidationResult().then(function(errors) {
-// 		if (!errors.isEmpty()) {
-// 			var errors = errors.mapped();
-// 			res.render('room/create', {
-//         title: 'Create New Room',
-//         current: ['room', 'create'],
-// 				errors: errors,
-// 				data: req.body
-// 			});
-// 			return;
-// 		}
+	var errors = req.getValidationResult().then(function(errors) {
+		if (!errors.isEmpty()) {
+			var errors = errors.array();
+			req.flash('errors', errors[0].msg);
+			return res.redirect('/chat-group/edit/' + req.params.groupId);
+		}
 
-// 	/*
-// 	* End validate
-// 	*/
-// 	var newRoom = new Room();
-	
-//     newRoom.roomName = req.body.roomName;
-//     newRoom.description = req.body.description;
-//     newRoom.status = req.body.status;
-//     // save the user
-//     newRoom.save(function (err) {
-//         if (err) {
-//             console.log('Error in Saving: ' + err);
-//             res.send({ "result": false });
-//         }
-//         res.redirect('/room');
-//     });
-// 	});
-// };
+		/*
+		* End validate
+		*/
+		ChatGroup.findById(req.params.groupId).exec((err, group) => {
+			if (group) {
+				group.groupName = req.body.groupName || group.groupName;
+				group.building = req.body.building || group.building;
+				group.buildingGroup = req.body.buildingGroup || group.buildingGroup;
+				// save the user
+				group.save(function (err) {
+					req.flash('success', 'Cập nhật thành công');
+					res.redirect('/chat-group');
+				});
+			} else {
+				req.flash('errors', 'Không tìm thấy nhóm');
+				return res.redirect('/chat-group');
+			}
+		})
+	});
+};

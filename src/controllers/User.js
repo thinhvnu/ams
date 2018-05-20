@@ -224,17 +224,21 @@ exports.getEdit = (req, res, next) => {
     }
 
     User.findById(userId)
-      .populate('apartment')
-      .populate('building')
       .exec((err, user) => {
         ApartmentBuildingGroup.find({
           status: 1
         }).exec((err, abgs) => {
-          res.render('user/edit', {
-            current: ['user', 'exit'],
-            data: user,
-            roles: roles.list,
-            abgs: abgs
+          ApartmentBuilding.find({apartmentBuildingGroup: user.buildingGroup}).exec((err, abs) => {
+            Apartment.find({building: user.building}).exec((err, apartments) => {
+              res.render('user/edit', {
+                current: ['user', 'exit'],
+                data: user,
+                roles: roles.list,
+                abgs: abgs,
+                abs: abs,
+                apartments: apartments
+              })
+            })
           })
         })
       })

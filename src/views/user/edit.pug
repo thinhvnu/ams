@@ -128,20 +128,20 @@ block content
 						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà (*)
 						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;', onchange='onSelectAb(this.value)')
 							option(value='') Chọn tòa nhà
-							if (data.building)
-								option(value=data.building._id, selected=true) #{data.building.buildingName}
-							//- each abg in abgs
-							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+							//- if (data.building)
+							//- 	option(value=data.building._id, selected=true) #{data.building.buildingName}
+							each ab in abs
+								option(value=ab._id, selected=(data && JSON.stringify(data.building) === JSON.stringify(ab.id)) ? true : false) #{ab.buildingName}
 						if errors && errors.apartmentBuilding
 							.help-block #{errors.apartmentBuilding.msg}
 					.col-lg-4(class=errors && errors.apartment && 'has-error')
 						label.control-label(for='apartment', style='display: block; text-align: left;') Căn hộ
 						select#choosen-apartment.form-control.chosen-apartment(name='apartment', data-placeholder='Căn hộ', style='width: 100%;')
 							option(value='') Chọn căn hộ
-							if (data.apartment)
-								option(value=data.apartment._id, selected=true) #{data.apartment.apartmentName}
-							//- each abg in abgs
-							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+							//- if (data.apartment)
+							//- 	option(value=data.apartment._id, selected=true) #{data.apartment.apartmentName}
+							each a in apartments
+								option(value=a._id, selected=(data && JSON.stringify(data.apartment) === JSON.stringify(a.id)) ? true : false) #{a.apartmentName}
 						if errors && errors.apartment
 							.help-block #{errors.apartment.msg}
 				.form-group

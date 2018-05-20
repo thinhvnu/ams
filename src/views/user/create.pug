@@ -46,12 +46,12 @@ block content
 				.form-group
 					.col-lg-6(class=errors && errors.firstName && 'has-error')
 						label.control-label(for='firstname') Họ (*)
-						input#firstname.form-control(type='text', name='firstName', placeholder='Enter first name')
+						input#firstname.form-control(type='text', name='firstName', placeholder='Enter first name', value=(data && data.firstName) ? data.firstName : '')
 						if errors && errors.firstName
 							.help-block #{errors.firstName.msg}
 					.col-lg-6(class=errors && errors.lastName && 'has-error')
 						label.control-label(for='lastName') Tên (*)
-						input#lastname.form-control(type='text', name='lastName', placeholder='Last Name')
+						input#lastname.form-control(type='text', name='lastName', placeholder='Last Name', value=(data && data.lastName) ? data.lastName : '')
 						if errors && errors.lastName
 							.help-block #{errors.lastName.msg}
 				.form-group
@@ -75,7 +75,7 @@ block content
 							.help-block #{errors.avatar.msg}
 					.col-lg-6(class=errors && errors.phoneNumber && 'has-error')
 						label.control-label(for='phoneNumber') Số điện thoại (*)
-						input#phoneNumber.form-control(type='text', name='phoneNumber', placeholder='Số điện thoại')
+						input#phoneNumber.form-control(type='text', name='phoneNumber', placeholder='Số điện thoại', value=(data && data.phoneNumber) ? data.phoneNumber : '')
 						if errors && errors.phoneNumber
 							.help-block #{errors.phoneNumber.msg}
 				.form-group
@@ -84,12 +84,12 @@ block content
 						select.select-role.form-control(name='role', data-placeholder='Chọn quyền', style='width: 100%;display: block;')
 							option(value='') Chọn quyền
 							each role in roles
-								option(value=role.value) #{role.display}
+								option(value=role.value, selected=(data && data.role === role.value) ? true : false) #{role.display}
 						if errors && errors.role
 							.help-block #{errors.role.msg}
 					.col-lg-6(class=errors && errors.email && 'has-error')
 						label.control-label(for='email') Email
-						input#email.form-control(type='text', name='email', placeholder='Email')
+						input#email.form-control(type='text', name='email', placeholder='Email', value=(data && data.email) ? data.email : '')
 						if errors && errors.email
 							.help-block #{errors.email.msg}
 				.form-group
@@ -120,24 +120,27 @@ block content
 						label.control-label(for='apartmentBuildingGroup', style='display: block; text-align: left;') Khu chung cư, Quận (*)
 						select.form-control.chosen-abg(name='apartmentBuildingGroup', data-placeholder='Khu chung cư', style='width: 100%;', onchange='onSelectAbg(this.value)')
 							option(value='') Chọn khu chung cư
-							each abg in abgs
-								option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+							if abgs && abgs.length > 0
+								each abg in abgs
+									option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
 						if errors && errors.apartmentBuildingGroup
 							.help-block #{errors.apartmentBuildingGroup.msg}
 					.col-lg-4(class=errors && errors.apartmentBuilding && 'has-error')
 						label.control-label(for='apartmentBuilding', style='display: block; text-align: left;') Tòa nhà (*)
 						select#choosen-apartment-building.form-control.chosen-ab(name='apartmentBuilding', data-placeholder='Tòa nhà', style='width: 100%;', onchange='onSelectAb(this.value)')
 							option(value='') Chọn tòa nhà
-							//- each abg in abgs
-							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+							if abs && abs.length > 0
+								each ab in abs
+									option(value=ab._id, selected=(data && JSON.stringify(data.apartmentBuilding) === JSON.stringify(ab.id)) ? true : false) #{ab.buildingName}
 						if errors && errors.apartmentBuilding
 							.help-block #{errors.apartmentBuilding.msg}
 					.col-lg-4(class=errors && errors.apartment && 'has-error')
 						label.control-label(for='apartment', style='display: block; text-align: left;') Căn hộ
 						select#choosen-apartment.form-control.chosen-apartment(name='apartment', data-placeholder='Căn hộ', style='width: 100%;')
 							option(value='') Chọn căn hộ
-							//- each abg in abgs
-							//- 	option(value=abg._id, selected=(data && JSON.stringify(data.apartmentBuildingGroup) === JSON.stringify(abg.id)) ? true : false) #{abg.abgName}
+							if apartments && apartments.length > 0
+								each a in apartments
+									option(value=a._id, selected=(data && JSON.stringify(data.apartment) === JSON.stringify(a.id)) ? true : false) #{a.apartmentName}
 						if errors && errors.apartment
 							.help-block #{errors.apartment.msg}
 				hr

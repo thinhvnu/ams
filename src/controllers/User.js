@@ -146,7 +146,8 @@ exports.postCreate = (req, res, next) => {
   try {
     req.checkBody('firstName', 'Nhập họ tên').notEmpty();
     req.checkBody('lastName', 'Nhập họ tên').notEmpty();
-    req.checkBody('phoneNumber', 'Nhập số điện thoại').notEmpty().exi;
+    req.checkBody('phoneNumber', 'Nhập số điện thoại').notEmpty();
+    req.checkBody('phoneNumber', 'Số điện thoại không đúng định dạng').matches(/(08|09|01[2|6|8|9])+([0-9]{8})/);
     req.checkBody('role', 'Chọn quyền').notEmpty();
     req.checkBody('password', 'Mật khẩu ít nhất 6 kí tự').len(6);
     req.checkBody('confirmPassword', 'Xác nhận mật khẩu không trùng khớp').equals(req.body.password);
@@ -160,13 +161,18 @@ exports.postCreate = (req, res, next) => {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
         ApartmentBuildingGroup.find({status: 1}).exec((err, abgs) => {
-          res.render('user/create', {
-            title: 'Create Account',
-            roles: roles.list,
-            errors: errors,
-            data: req.body,
-            abgs: abgs
-          });
+          ApartmentBuilding.find({apartmentBuildingGroup: req.body.apartmentBuildingGroup}).exec((err, abs) => {
+            Apartment.find({building: req.body.apartmentBuilding}).exec((err, apartments) => {
+              res.render('user/create', {
+                current: ['user', 'create'],
+                data: req.body,
+                roles: roles.list,
+                abgs: abgs || [],
+                abs: abs || [],
+                apartments: apartments || []
+              })
+            })
+          })
         });
       } else {
         const user = new User();

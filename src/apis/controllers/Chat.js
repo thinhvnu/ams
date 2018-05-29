@@ -33,7 +33,14 @@ exports.getClients = (req, res, next) => {
                     message: 'Get list clients successfully'
                 });
             } else {
-                User.findById(user._id).exec((err, u) => {
+                User.findById(user._id).populate({
+                    path: 'building',
+                    model: 'ApartmentBuilding',
+                    populate: {
+                        path: 'manager',
+                        model: 'User'
+                    }
+                }).exec((err, u) => {
                     if (u) {
                         ChatRecent.find({
                             $or: [
@@ -48,34 +55,63 @@ exports.getClients = (req, res, next) => {
                             ]
                         }).sort('-updatedAt').populate('sender').populate('partner')
                         .populate('group').exec((err, recents) => {
+                            let buildingManager = {};
+                            if (u.building && u.building.manager) {
+                                buildingManager = u.building.manager;
+                            }
                             if (recents.length === 0) {
-                                User.find({
-                                    building: u.building,
-                                    status: 1
-                                }).limit(5).exec((err, users) => {
-                                    ChatGroup.find({
-                                        building: u.building
-                                    }).limit(5).exec((err, groups) => {
-                                        return res.json({
-                                            success: true,
-                                            errorCode: 0,
-                                            data: {
-                                                users: users,
-                                                groups: groups
-                                            },
-                                            message: 'Get list clients successfully'
-                                        })
+                                let users = [];
+                                if (u.building && u.building.manager) {
+                                    users.push(u.building.manager);
+                                }
+
+                                ChatGroup.find({
+                                    building: u.building
+                                }).limit(5).exec((err, groups) => {
+                                    return res.json({
+                                        success: true,
+                                        errorCode: 0,
+                                        data: {
+                                            users: users,
+                                            groups: groups
+                                        },
+                                        message: 'Get list clients successfully'
                                     })
-                                });
+                                })
+                                // User.find({
+                                //     _id: {
+                                //         $nin: [u._id, buildingManager._id]
+                                //     },
+                                //     building: u.building,
+                                //     status: 1
+                                // }).limit(5).exec((err, users) => {
+                                    
+                                // });
                             } else {
                                 let users = [], groups = [], groupIds = [];
 
                                 for (let i=0; i<recents.length; i++) {
                                     if (!recents[i].group && recents[i].sender && recents[i].sender.id !== u.id) {
-                                        users.push(recents[i].sender.toObject());
+                                        try {
+                                            if (recents[i].sender.id === buildingManager.id) {
+                                                users.unshift(recents[i].sender.toObject());
+                                            } else {
+                                                users.push(recents[i].sender.toObject());
+                                            }
+                                        } catch(e) {
+                                            users.push(recents[i].sender.toObject());
+                                        }
                                     }
                                     if (!recents[i].group && recents[i].partner && recents[i].partner.id !== u.id) {
-                                        users.push(recents[i].partner.toObject());
+                                        try {
+                                            if (recents[i].partner.id === buildingManager.id) {
+                                                users.unshift(recents[i].partner.toObject());
+                                            } else {
+                                                users.push(recents[i].partner.toObject());
+                                            }
+                                        } catch(e) {
+                                            users.push(recents[i].partner.toObject());
+                                        }
                                     }
                                     if (recents[i].group && (!recents[i].group.blackList || (recents[i].group.blackList && recents[i].group.blackList.indexOf(u._id) == -1))) {
                                         groups.push(recents[i].group.toObject());

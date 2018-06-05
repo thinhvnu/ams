@@ -198,8 +198,8 @@ exports.postCreate = (req, res, next) => {
             return next(err);
           }
           if (existingUser) {
-            req.flash('errors', { msg: 'Account with that email address already exists.' });
-            return res.redirect('/create');
+            req.flash('errors', 'Account with that email address already exists.');
+            return res.redirect('/user');
           }
           user.save((err) => {
             if (err) {

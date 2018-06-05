@@ -156,7 +156,7 @@ exports.postCreate = (req, res, next) => {
       req.checkBody('apartmentBuilding', 'Chọn tòa nhà').notEmpty();
     }
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-
+    console.log('testtttt', req.body);
     req.getValidationResult().then(function (errors) {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
@@ -191,8 +191,8 @@ exports.postCreate = (req, res, next) => {
         user.gender = req.body.gender;
         user.role = req.body.role;
         user.status = req.body.status;
-
-        User.findOne({ email: req.body.email }, (err, existingUser) => {
+        console.log('new user', user);
+        User.findOne({ phoneNumber: req.body.phoneNumber }, (err, existingUser) => {
           if (err) { 
             console.log('err', err);
             return next(err);

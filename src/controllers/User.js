@@ -160,6 +160,7 @@ exports.postCreate = (req, res, next) => {
     req.getValidationResult().then(function (errors) {
       if (!errors.isEmpty()) {
         var errors = errors.mapped();
+        console.log('errors', errors);
         ApartmentBuildingGroup.find({status: 1}).exec((err, abgs) => {
           ApartmentBuilding.find({apartmentBuildingGroup: req.body.apartmentBuildingGroup}).exec((err, abs) => {
             Apartment.find({building: req.body.apartmentBuilding}).exec((err, apartments) => {
@@ -169,7 +170,8 @@ exports.postCreate = (req, res, next) => {
                 roles: roles.list,
                 abgs: abgs || [],
                 abs: abs || [],
-                apartments: apartments || []
+                apartments: apartments || [],
+                errors: errors
               })
             })
           })
@@ -191,7 +193,10 @@ exports.postCreate = (req, res, next) => {
         user.status = req.body.status;
 
         User.findOne({ email: req.body.email }, (err, existingUser) => {
-          if (err) { return next(err); }
+          if (err) { 
+            console.log('err', err);
+            return next(err);
+          }
           if (existingUser) {
             req.flash('errors', { msg: 'Account with that email address already exists.' });
             return res.redirect('/create');
@@ -207,6 +212,7 @@ exports.postCreate = (req, res, next) => {
       }
     });
   } catch (e) {
+    console.log('exception', e);
     return res.render('/error', {
       data: e
     });

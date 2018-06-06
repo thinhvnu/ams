@@ -107,7 +107,7 @@ exports.postUpdate = (req, res, next) => {
 	/*
 	* Validate create category
 	*/ 
-  	req.checkBody('groupname', 'Tên nhóm không được để trống').notEmpty();
+  	req.checkBody('groupName', 'Tên nhóm không được để trống').notEmpty();
 	req.checkBody('building', 'Chọn tòa nhà').notEmpty();
 	req.checkBody('buildingGroup', 'Chọn chung cư').notEmpty();
 

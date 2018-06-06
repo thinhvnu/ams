@@ -21,7 +21,7 @@ block content
 				.form-group
 					.col-lg-6(class=errors && errors.groupName && 'has-error')
 						label.control-label(for='groupName') Tên nhóm (*)
-						input.form-control(type='text', name='groupname', placeholder='Nhập tên nhóm', value=data && data.groupName) 
+						input.form-control(type='text', name='groupName', placeholder='Nhập tên nhóm', value=data && data.groupName) 
 						if errors && errors.groupName
 							.help-block #{errors.groupName.msg}
 				.form-group

@@ -18,7 +18,8 @@ exports.getList = (req, res, next) => {
         }
 
         NotificationLog.find({
-            isFirst: true
+            isFirst: true,
+            sendTo: req.session.user._id
         })
             .sort('-createdAt')
             .skip(page * pageSize)

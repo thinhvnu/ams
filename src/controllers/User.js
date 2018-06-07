@@ -201,11 +201,24 @@ exports.postCreate = (req, res, next) => {
             req.flash('errors', 'Account with that email address already exists.');
             return res.redirect('/user');
           }
-          user.save((err) => {
+          user.save((err, u) => {
             if (err) {
               console.log('error create new user', err);
               return next(err);
             }
+            Apartment.findById(u.apartment).exec((err, a) => {
+              if (a) {
+                if (!a.users) {
+                  a.users = [];
+                }
+                a.users.pull(u._id);
+                a.users.push(u._id);
+                a.save((err) => {
+                })
+              } else {
+                
+              }
+            })
             res.redirect('/user');
           });
         });

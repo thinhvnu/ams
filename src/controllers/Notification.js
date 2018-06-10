@@ -91,6 +91,20 @@ exports.postCreate = function (req, res) {
 							if (apartments[i].users && apartments[i].users.length > 0) {
 								for(let j=0; j<apartments[i].users.length; j++) {
 									let user = apartments[i].users[j];
+									/**
+									 * First log
+									 */
+									let newNotificationLog = new NotificationLog();
+									newNotificationLog.notification = notification._id;
+									newNotificationLog.sendTo = user._id,
+									newNotificationLog.device = null;
+									newNotificationLog.apartment = apartments[i]._id;
+									newNotificationLog.building = apartments[i].building;
+									newNotificationLog.buildingGroup = apartments[i].buildingGroup;
+									newNotificationLog.isFirst = true;
+									newNotificationLog.status = 1;
+									newNotificationLog.save();
+									/* --- End --- */
 									if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
 										for (let k=0; k<user.firebaseDeviceToken.length; k++) {
 											let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
@@ -109,9 +123,9 @@ exports.postCreate = function (req, res) {
 											newNotificationLog.apartment = apartments[i]._id;
 											newNotificationLog.building = apartments[i].building;
 											newNotificationLog.buildingGroup = apartments[i].buildingGroup;
-											if (k === 0) {
-												newNotificationLog.isFirst = true;
-											}
+											// if (k === 0) {
+											// 	newNotificationLog.isFirst = true;
+											// }
 											newNotificationLog.status = 1;
 											newNotificationLog.save();
 										}

@@ -90,7 +90,7 @@ var sessionMiddleware = session({
   })
 });
 io.use(function(socket, next) {
-  sessionMiddleware(socket.request, socket.request.res, next);
+  sessionMiddleware(socket.request, {}, next);
 });
 app.use(sessionMiddleware);
 // io.use(sharedsession(ss, {

@@ -108,9 +108,9 @@ exports.postCreate = function (req, res) {
 									if (user && user.firebaseDeviceToken && user.firebaseDeviceToken.length > 0) {
 										for (let k=0; k<user.firebaseDeviceToken.length; k++) {
 											let deviceInfo = JSON.parse(user.firebaseDeviceToken[k]);
-											if (deviceInfo.os === 'android') {
+											if (deviceInfo.os === 'android' && androidFcmTokens.indexOf(deviceInfo.token) < 0) {
 												androidFcmTokens.push(deviceInfo.token);
-											} else {
+											} else if (androidFcmTokens.indexOf(deviceInfo.token) < 0) {
 												iosFcmTokens.push(deviceInfo.token);
 											}
 											/**

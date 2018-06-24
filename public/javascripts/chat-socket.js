@@ -384,7 +384,7 @@ function createNewChatBox(user, isGroup = false) {
 */
 const token = getCookie('ams_token');
 // const socket = io('http://' + window.location.hostname);
-const socket = io('ws://124.158.4.142:6868', {transports: ['websocket']});
+const socket = io('ws://' + window.location.hostname, {transports: ['websocket']});
 
 socket.on('connect', () => {
     socket.on('join_chat_successfully', (data) => {

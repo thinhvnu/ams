@@ -21,7 +21,7 @@ exports.getIndex = (req, res, next) => {
             select: {_id: 1, userName: 1, firstName: 1, lastName: 1, phoneNumber: 1}
         })
         .sort('-createdAt')
-        .limit(10)
+        .limit(100)
         .exec((err, nLogs) => {
             User.find({
                 _id: {
@@ -30,7 +30,7 @@ exports.getIndex = (req, res, next) => {
                 status: 1
             })
                 .sort('-createdAt')
-                .limit(100)
+                .limit(10)
                 .exec((err, users) => {
                     User.findById(req.session.user._id)
                     .populate({

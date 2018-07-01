@@ -386,7 +386,7 @@ const token = getCookie('ams_token');
 const socket = io('http://' + window.location.hostname, {transports: ['websocket']});
 // const socket = io('ws://' + window.location.hostname, {transports: ['websocket']});
 
-socket.on('connect', () => {
+socket.once('connect', () => {
     socket.on('join_chat_successfully', (data) => {
         socket.identification = data;
     });

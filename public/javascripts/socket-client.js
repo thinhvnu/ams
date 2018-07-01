@@ -1,7 +1,7 @@
 const token = localStorage.getItem('ams_chat_token');
 const socket = io('http://localhost:6888', {query: 'token=' + token});
 
-socket.on('connect', () => {
+socket.once('connect', () => {
     let data = localStorage.getItem('account');
 
     data = data ? JSON.parse(data) : null;

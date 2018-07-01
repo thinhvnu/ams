@@ -30,7 +30,7 @@ exports.getIndex = (req, res, next) => {
                 status: 1
             })
                 .sort('-createdAt')
-                .limit(10)
+                .limit(100)
                 .exec((err, users) => {
                     User.findById(req.session.user._id)
                     .populate({

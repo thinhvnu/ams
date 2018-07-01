@@ -40,7 +40,7 @@ exports.postRegister = (req, res, next) => {
 				user.birthDay = req.body.birthDay;
 				user.gender = req.body.gender;
 				user.apartmentAddress = req.body.apartmentAddress;
-				user.status = 0;
+				user.status = 1;
 			
 				User.findOne({ 
 					phoneNumber: req.body.phoneNumber

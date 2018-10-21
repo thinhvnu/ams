@@ -42,6 +42,7 @@ const notification = require('./src/routes/notification');
 const payment = require('./src/routes/payment');
 const chatGroup = require('./src/routes/chat-group');
 const feedback = require('./src/routes/feedback');
+const role = require('./src/routes/role');
 
 const apiMedia = require('./src/apis/routes/media');
 const apiAuth = require('./src/apis/routes/authenticate');
@@ -134,6 +135,7 @@ app.use('/notification', notification);
 app.use('/payment', payment);
 app.use('/chat-group', chatGroup);
 app.use('/feedback', feedback);
+app.use('/role', role);
 
 /**
  * Api router

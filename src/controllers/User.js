@@ -20,25 +20,80 @@ const passport = require('./../middleware/apiPassport');
  * GET /
  * Index page.
  */
-exports.getIndex = (req, res) => {
-  User.find({})
-    .sort('-createdAt')
-    .exec(function (err, users) {
-      if (err) {
-        console.log('err', err)
-        return res.json({
-          success: false,
-          errorCode: '121',
-          message: 'Lỗi không xác định'
-        })
+exports.getIndex = async (req, res) => {
+  let user = req.session.user;
+  switch(user.role) {
+    case 'BUILDING_GROUP_MANAGER':
+      let buildingGroupIds = [];
+      let buildingGroups = await ApartmentBuildingGroup.find({manager: user._id});
+      for (let i=0; i<buildingGroups.length; i++) {
+        buildingGroupIds.push(buildingGroups[i]._id);
       }
+      User.find({buildingGroup: {$in: buildingGroupIds}})
+      .sort('-createdAt')
+      .exec(function (err, users) {
+        if (err) {
+          console.log('err', err)
+          return res.json({
+            success: false,
+            errorCode: '121',
+            message: 'Lỗi không xác định'
+          })
+        }
 
-      res.render('user/index', {
-        title: 'Account List',
-        current: ['user', 'index'],
-        users: users
+        res.render('user/index', {
+          title: 'Account List',
+          current: ['user', 'index'],
+          users: users
+        });
       });
-    });
+      break;
+    case 'BUILDING_MANAGER':
+      let buildingIds = [];
+      let buildings = await ApartmentBuilding.find({manager: user._id});
+      for (let i=0; i<buildings.length; i++) {
+        buildingIds.push(buildings[i]._id);
+      }
+      User.find({building: {$in: buildingIds}})
+      .sort('-createdAt')
+      .exec(function (err, users) {
+        if (err) {
+          console.log('err', err)
+          return res.json({
+            success: false,
+            errorCode: '121',
+            message: 'Lỗi không xác định'
+          })
+        }
+
+        res.render('user/index', {
+          title: 'Account List',
+          current: ['user', 'index'],
+          users: users
+        });
+      });
+      break;
+    default:
+      User.find({})
+      .sort('-createdAt')
+      .exec(function (err, users) {
+        if (err) {
+          console.log('err', err)
+          return res.json({
+            success: false,
+            errorCode: '121',
+            message: 'Lỗi không xác định'
+          })
+        }
+
+        res.render('user/index', {
+          title: 'Account List',
+          current: ['user', 'index'],
+          users: users
+        });
+      });
+      break;
+  }
 };
 
 /**

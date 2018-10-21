@@ -12,7 +12,6 @@ exports.getIndex = function (req, res) {
 				message: 'Lỗi không xác định'
 			})
 		}
-		console.log('req.session.user', req.session.user);
 		res.render('role/index', {
 			title: 'Roles',
 			current: ['role', 'index'],

@@ -70,8 +70,9 @@ block content
 								th Tên danh mục
 								th Icon
 								th.text-center Trạng thái
-								th.text-center.no-sort
-									em.fa.fa-cog
+								if user.role == 'ADMIN'
+									th.text-center.no-sort
+										em.fa.fa-cog
 						tbody
 							each dt, i in serviceCategories
 								tr
@@ -80,11 +81,12 @@ block content
 									td
 										img.img-responsive(src=process.env.MEDIA_URL + '/images/service/thumb/' + dt.icon, style='width: 80px;')
 									td.text-center #{dt.status ? 'Active' : 'Inactive'}
-									td(align='center')
-										a(href='/service-category/edit/' + dt._id).u-action.btn.btn-success
-											em.fa.fa-pencil
-										a(href='/service-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa danh mục này không?", "/service-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-											em.fa.fa-trash
+									if user.role == 'ADMIN'
+										td(align='center')
+											a(href='/service-category/edit/' + dt._id).u-action.btn.btn-success
+												em.fa.fa-pencil
+											a(href='/service-category/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa danh mục này không?", "/service-category/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+												em.fa.fa-trash
 				#service.tab-pane.fade.in.active
 					.user-actions
 						a.btn.btn-success(href='/service/create') Tạo mới
@@ -99,8 +101,9 @@ block content
 								th Danh mục
 								//- th Giá (VNĐ)
 								th.text-center Trạng thái
-								th.text-center.no-sort
-									em.fa.fa-cog
+								if user.role == 'ADMIN'
+									th.text-center.no-sort
+										em.fa.fa-cog
 						tbody
 							each dt, i in data
 								tr
@@ -113,8 +116,9 @@ block content
 									//- td #{dt.price ? dt.price + ' đ' : 'Thỏa thuận'}
 									td #{dt.category ? dt.category.name : ''}
 									td.text-center #{dt.status ? 'Public' : 'Draft'}
-									td(align='center', style='width:150px;')
-										a(href='/service/edit/' + dt._id).u-action.btn.btn-success
-											em.fa.fa-pencil
-										a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
-											em.fa.fa-trash
+									if user.role == 'ADMIN'
+										td(align='center', style='width:150px;')
+											a(href='/service/edit/' + dt._id).u-action.btn.btn-success
+												em.fa.fa-pencil
+											a(href='/service/delete/' + dt._id, onclick='return confirmAction("Bạn có chắc chắn muốn xóa dịch vụ này không?", "/service/delete/' + dt._id + '")').u-action.btn.btn-danger.confirm-action
+												em.fa.fa-trash

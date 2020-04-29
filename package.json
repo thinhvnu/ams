@@ -27,7 +27,7 @@
     "font-awesome": "^4.7.0",
     "formidable": "^1.1.1",
     "froala-editor": "^2.3.4",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",

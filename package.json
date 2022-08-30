@@ -30,7 +30,7 @@
     "jquery": "^3.2.1",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.22.1",
-    "moment-timezone": "^0.5.16",
+    "moment-timezone": "^0.5.35",
     "mongoose": "^4.11.10",
     "morgan": "~1.9.0",
     "nodemailer": "^4.4.0",
